@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangApp.WebApi", "LangApp.WebApi\LangApp.WebApi.csproj", "{2737D980-E62E-44CA-9AA4-761C25F70D91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangApp.WpfClient", "LangApp.WpfClient\LangApp.WpfClient.csproj", "{7C2E7789-5BFF-4988-810D-E6A39C8AFA8F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "LangApp.Shared", "LangApp.Shared\LangApp.Shared.shproj", "{76815AB1-B81D-4825-93D7-C11F174BD15C}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		LangApp.Shared\LangApp.Shared.projitems*{76815ab1-b81d-4825-93d7-c11f174bd15c}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2737D980-E62E-44CA-9AA4-761C25F70D91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2737D980-E62E-44CA-9AA4-761C25F70D91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2737D980-E62E-44CA-9AA4-761C25F70D91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2737D980-E62E-44CA-9AA4-761C25F70D91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C2E7789-5BFF-4988-810D-E6A39C8AFA8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C2E7789-5BFF-4988-810D-E6A39C8AFA8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C2E7789-5BFF-4988-810D-E6A39C8AFA8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C2E7789-5BFF-4988-810D-E6A39C8AFA8F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C4200206-EE4F-4C41-BA52-68FA9CAEC7AC}
+	EndGlobalSection
+EndGlobal
