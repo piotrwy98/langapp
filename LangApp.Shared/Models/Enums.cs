@@ -7,5 +7,12 @@
             USER = 0,
             ADMIN = 1
         }
+
+        public enum RegisterResult
+        {
+            OK,
+            OCCUPIED_EMAIL,
+            OCCUPIED_USERNAME
+        }
     }
 }

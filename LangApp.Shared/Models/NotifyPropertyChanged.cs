@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace LangApp.Shared.Models
 {
-    public abstract class NotifyPropertyChanged
+    public abstract class NotifyPropertyChanged : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

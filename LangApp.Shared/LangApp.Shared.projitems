@@ -10,7 +10,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LogInCredentials.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NotifyPropertyChanged.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RegisterCredentials.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\UserWithToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
   </ItemGroup>
 </Project>
