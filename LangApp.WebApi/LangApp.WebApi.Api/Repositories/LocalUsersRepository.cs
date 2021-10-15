@@ -13,19 +13,24 @@ namespace LangApp.WebApi.Repositories
             new User { Id = Guid.NewGuid(), Email = "1", Password = "2" }
         };
 
-        public async Task<bool> DoesUserExistAsync(string email, string password)
-        {
-            return await Task.FromResult(_users.Any(x => x.Email == email && x.Password == password));
-        }
-
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
             return await Task.FromResult(_users);
         }
 
-        public async Task<User> GetUserAsync(Guid id)
+        public async Task<User> GetUserByIdAsync(Guid id)
         {
             return await Task.FromResult(_users.FirstOrDefault(x => x.Id == id));
+        }
+
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            return await Task.FromResult(_users.FirstOrDefault(x => x.Email == email));
+        }
+
+        public async Task<User> GetUserByUsernameAsync(string username)
+        {
+            return await Task.FromResult(_users.FirstOrDefault(x => x.Username == username));
         }
 
         public async Task CreateUserAsync(User user)

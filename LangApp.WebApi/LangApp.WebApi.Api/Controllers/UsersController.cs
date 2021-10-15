@@ -28,9 +28,9 @@ namespace LangApp.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUserAsync(Guid id)
+        public async Task<ActionResult<User>> GetUserAsync([FromBody] Guid id)
         {
-            var user = await _usersRepository.GetUserAsync(id);
+            var user = await _usersRepository.GetUserByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -40,15 +40,26 @@ namespace LangApp.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> CreateUserAsync(string email, string username, string password, UserRole userRole = UserRole.USER)
+        [AllowAnonymous]
+        public async Task<ActionResult<User>> CreateUserAsync([FromBody] RegisterCredentials credentials)
         {
+            if(await _usersRepository.GetUserByEmailAsync(credentials.Email) != null)
+            {
+                return BadRequest(RegisterResult.OCCUPIED_EMAIL);
+            }
+
+            if (await _usersRepository.GetUserByUsernameAsync(credentials.Username) != null)
+            {
+                return BadRequest(RegisterResult.OCCUPIED_USERNAME);
+            }
+
             User user = new User()
             {
                 Id = Guid.NewGuid(),
-                Email = email,
-                Username = username,
-                Password = password,
-                UserRole = userRole
+                Email = credentials.Email,
+                Username = credentials.Username,
+                Password = credentials.Password,
+                UserRole = credentials.UserRole
             };
 
             await _usersRepository.CreateUserAsync(user);
@@ -57,7 +68,7 @@ namespace LangApp.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateUserAsync(User user)
+        public async Task<ActionResult> UpdateUserAsync([FromBody] User user)
         {
             await _usersRepository.UpdateUserAsync(user);
 
@@ -65,7 +76,7 @@ namespace LangApp.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteUserAsync(Guid id)
+        public async Task<ActionResult> DeleteUserAsync([FromBody] Guid id)
         {
             await _usersRepository.DeleteUserAsync(id);
 

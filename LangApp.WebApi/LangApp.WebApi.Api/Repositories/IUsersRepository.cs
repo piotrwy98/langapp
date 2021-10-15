@@ -7,9 +7,10 @@ namespace LangApp.WebApi.Repositories
 {
     public interface IUsersRepository
     {
-        Task<bool> DoesUserExistAsync(string email, string password);
         Task<IEnumerable<User>> GetUsersAsync();
-        Task<User> GetUserAsync(Guid id);
+        Task<User> GetUserByIdAsync(Guid id);
+        Task<User> GetUserByEmailAsync(string email);
+        Task<User> GetUserByUsernameAsync(string username);
         Task CreateUserAsync(User user);
         Task UpdateUserAsync(User user);
         Task DeleteUserAsync(Guid id);

@@ -1,4 +1,5 @@
-﻿using LangApp.WebApi.Repositories;
+﻿using LangApp.Shared.Models;
+using LangApp.WebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -23,13 +24,23 @@ namespace LangApp.WebApi.Controllers
             _usersRepository = usersRepository;
         }
 
-        // POST /tokens
         [HttpPost]
-        public async Task<ActionResult<string>> CreateTokenAsync(string email, string password)
+        public async Task<ActionResult<UserWithToken>> CreateUserWithTokenAsync([FromBody] LogInCredentials credentials)
         {
-            if (await _usersRepository.DoesUserExistAsync(email, password))
+            var user = await _usersRepository.GetUserByEmailAsync(credentials.Email);
+            if (user != null)
             {
-                return await GenerateToken(email);
+                if(user.Password == credentials.Password)
+                {
+                    string token = await GenerateToken(credentials.Email);
+                    var userWithToken = new UserWithToken()
+                    {
+                        User = user,
+                        Token = token,
+                    };
+
+                    return userWithToken;
+                }
             }
 
             return Unauthorized();
