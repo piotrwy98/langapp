@@ -53,7 +53,7 @@ namespace LangApp.WebApi.UnitTests
         public async Task GetUserAsyncTest()
         {
             // Arrange
-            _usersRepository.Setup(x => x.GetUserAsync(It.IsAny<Guid>())).ReturnsAsync((User)null);
+            _usersRepository.Setup(x => x.GetUserByIdAsync(It.IsAny<Guid>())).ReturnsAsync((User) null);
 
             var controller = new UsersController(_usersRepository.Object);
 
@@ -72,7 +72,7 @@ namespace LangApp.WebApi.UnitTests
         {
             // Arrange
             User expectedUser = GetRandomUser();
-            _usersRepository.Setup(x => x.GetUserAsync(It.IsAny<Guid>())).ReturnsAsync(expectedUser);
+            _usersRepository.Setup(x => x.GetUserByIdAsync(It.IsAny<Guid>())).ReturnsAsync(expectedUser);
 
             var controller = new UsersController(_usersRepository.Object);
 
@@ -84,17 +84,65 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Should always return CreatedAtAction with created user
+        /// Should return BadRequest with RegisterResult.OCCUPIED_EMAIL when given email is occupied
         /// </summary>
         [Fact]
         public async Task CreateUserAsyncTest()
         {
             // Arrange
-            User expectedUser = GetRandomUser();
+            _usersRepository.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync(new User());
+
             var controller = new UsersController(_usersRepository.Object);
 
             // Act
-            var result = await controller.CreateUserAsync(expectedUser.Email, expectedUser.Username, expectedUser.Password, expectedUser.UserRole);
+            var result = await controller.CreateUserAsync(new RegisterCredentials());
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(result.Result);
+            Assert.Equal(RegisterResult.OCCUPIED_EMAIL, (result.Result as BadRequestObjectResult).Value);
+        }
+
+        /// <summary>
+        /// Should return BadRequest with RegisterResult.OCCUPIED_USERNAME when given username is occupied
+        /// </summary>
+        [Fact]
+        public async Task CreateUserAsyncTest2()
+        {
+            // Arrange
+            _usersRepository.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
+            _usersRepository.Setup(x => x.GetUserByUsernameAsync(It.IsAny<string>())).ReturnsAsync(new User());
+
+            var controller = new UsersController(_usersRepository.Object);
+
+            // Act
+            var result = await controller.CreateUserAsync(new RegisterCredentials());
+
+            // Assert
+            Assert.IsType<BadRequestObjectResult>(result.Result);
+            Assert.Equal(RegisterResult.OCCUPIED_USERNAME, (result.Result as BadRequestObjectResult).Value);
+        }
+
+        /// <summary>
+        /// Should return CreatedAtAction with created user when given data is unique
+        /// </summary>
+        [Fact]
+        public async Task CreateUserAsyncTest3()
+        {
+            // Arrange
+            User expectedUser = GetRandomUser();
+            _usersRepository.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
+            _usersRepository.Setup(x => x.GetUserByUsernameAsync(It.IsAny<string>())).ReturnsAsync((User) null);
+
+            var controller = new UsersController(_usersRepository.Object);
+
+            // Act
+            var result = await controller.CreateUserAsync(new RegisterCredentials()
+            {
+                Email = expectedUser.Email,
+                Username = expectedUser.Username,
+                Password = expectedUser.Password,
+                UserRole = expectedUser.UserRole
+            });
 
             // Assert
             Assert.IsType<CreatedAtActionResult>(result.Result);

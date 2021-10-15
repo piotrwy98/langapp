@@ -1,3 +1,4 @@
+using LangApp.Shared.Models;
 using LangApp.WebApi.Controllers;
 using LangApp.WebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -13,42 +14,60 @@ namespace LangApp.WebApi.UnitTests
     {
         private readonly Mock<IConfiguration> _configuration = new Mock<IConfiguration>();
         private readonly Mock<IUsersRepository> _usersRepository = new Mock<IUsersRepository>();
-        private readonly Random _random = new Random();
 
         /// <summary>
-        /// Should return Unauthorized when user authentication failed
+        /// Should return Unauthorized when email does not exist
         /// </summary>
         [Fact]
         public async Task CreateTokenAsyncTest()
         {
             // Arrange
-            _configuration.Setup(x => x["JWTSettings:SecretKey"]).Returns("just_a_sample_jwtsettings_secretkey");
-            _usersRepository.Setup(x => x.DoesUserExistAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
+            _usersRepository.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
             var controller = new TokensController(_configuration.Object, _usersRepository.Object);
 
             // Act
-            var result = await controller.CreateTokenAsync(String.Empty, String.Empty);
+            var result = await controller.CreateUserWithTokenAsync(new LogInCredentials() { Email = String.Empty, Password = String.Empty });
 
             // Assert
             Assert.IsType<UnauthorizedResult>(result.Result);
         }
 
         /// <summary>
-        /// Should return string token when user authentication passed
+        /// Should return Unauthorized when password is not valid
         /// </summary>
         [Fact]
         public async Task CreateTokenAsyncTest2()
         {
             // Arrange
-            _configuration.Setup(x => x["JWTSettings:SecretKey"]).Returns("just_a_sample_jwtsettings_secretkey");
-            _usersRepository.Setup(x => x.DoesUserExistAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
+            _usersRepository.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync(new User());
             var controller = new TokensController(_configuration.Object, _usersRepository.Object);
 
             // Act
-            var result = await controller.CreateTokenAsync(String.Empty, String.Empty);
+            var result = await controller.CreateUserWithTokenAsync(new LogInCredentials() { Email = String.Empty, Password = String.Empty });
 
             // Assert
-            Assert.IsType<string>(result.Value);
+            Assert.IsType<UnauthorizedResult>(result.Result);
+        }
+
+        /// <summary>
+        /// Should return UserWithToken when user authentication passed
+        /// </summary>
+        [Fact]
+        public async Task CreateTokenAsyncTest3()
+        {
+            // Arrange
+            User expectedUser = new User() { Password = "password" };
+            _configuration.Setup(x => x["JWTSettings:SecretKey"]).Returns("just_a_sample_jwtsettings_secretkey");
+            _usersRepository.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync(expectedUser);
+            var controller = new TokensController(_configuration.Object, _usersRepository.Object);
+
+            // Act
+            var result = await controller.CreateUserWithTokenAsync(new LogInCredentials() { Email = String.Empty, Password = expectedUser.Password });
+
+            // Assert
+            Assert.IsType<UserWithToken>(result.Value);
+            Assert.NotNull(result.Value.Token);
+            Assert.Equal(expectedUser, result.Value.User);
         }
     }
 }
