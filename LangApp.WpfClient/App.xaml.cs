@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LangApp.WpfClient.Views.Windows;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,10 @@ namespace LangApp.WpfClient
     /// </summary>
     public partial class App : Application
     {
+        private void ApplicationStartup(object sender, StartupEventArgs e)
+        {
+            var loginRegisterWindow = new LoginRegisterWindow();
+            loginRegisterWindow.Show();
+        }
     }
 }
