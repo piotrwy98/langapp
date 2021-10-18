@@ -25,14 +25,14 @@ namespace LangApp.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserWithToken>> CreateUserWithTokenAsync([FromBody] LogInCredentials credentials)
+        public async Task<ActionResult<UserWithToken>> CreateUserWithTokenAsync([FromBody] LogInData data)
         {
-            var user = await _usersRepository.GetUserByEmailAsync(credentials.Email);
+            var user = await _usersRepository.GetUserByEmailAsync(data.Email);
             if (user != null)
             {
-                if(user.Password == credentials.Password)
+                if(user.Password == data.Password)
                 {
-                    string token = await GenerateToken(credentials.Email);
+                    string token = await GenerateToken(data.Email);
                     var userWithToken = new UserWithToken()
                     {
                         User = user,

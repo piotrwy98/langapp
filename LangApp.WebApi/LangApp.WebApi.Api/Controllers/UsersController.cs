@@ -28,7 +28,7 @@ namespace LangApp.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUserAsync([FromBody] Guid id)
+        public async Task<ActionResult<User>> GetUserAsync(Guid id)
         {
             var user = await _usersRepository.GetUserByIdAsync(id);
             if (user == null)
@@ -41,14 +41,14 @@ namespace LangApp.WebApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<User>> CreateUserAsync([FromBody] RegisterCredentials credentials)
+        public async Task<ActionResult<User>> CreateUserAsync([FromBody] RegisterData data)
         {
-            if(await _usersRepository.GetUserByEmailAsync(credentials.Email) != null)
+            if(await _usersRepository.GetUserByEmailAsync(data.Email) != null)
             {
                 return BadRequest(RegisterResult.OCCUPIED_EMAIL);
             }
 
-            if (await _usersRepository.GetUserByUsernameAsync(credentials.Username) != null)
+            if (await _usersRepository.GetUserByUsernameAsync(data.Username) != null)
             {
                 return BadRequest(RegisterResult.OCCUPIED_USERNAME);
             }
@@ -56,10 +56,10 @@ namespace LangApp.WebApi.Controllers
             User user = new User()
             {
                 Id = Guid.NewGuid(),
-                Email = credentials.Email,
-                Username = credentials.Username,
-                Password = credentials.Password,
-                UserRole = credentials.UserRole
+                Email = data.Email,
+                Username = data.Username,
+                Password = data.Password,
+                UserRole = data.UserRole
             };
 
             await _usersRepository.CreateUserAsync(user);
@@ -76,7 +76,7 @@ namespace LangApp.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteUserAsync([FromBody] Guid id)
+        public async Task<ActionResult> DeleteUserAsync(Guid id)
         {
             await _usersRepository.DeleteUserAsync(id);
 

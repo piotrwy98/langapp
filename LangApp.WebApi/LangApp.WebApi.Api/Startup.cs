@@ -1,20 +1,14 @@
+using LangApp.WebApi.Api.Repositories;
 using LangApp.WebApi.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace LangApp.WebApi
 {
@@ -31,6 +25,7 @@ namespace LangApp.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IUsersRepository, LocalUsersRepository>();
+            services.AddSingleton<ITranslationsRepository, LocalTranslationsRepository>();
 
             services.AddControllers(options =>
                 options.SuppressAsyncSuffixInActionNames = false
