@@ -65,7 +65,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Should return user when user exists
+        /// Should return user when the user exists
         /// </summary>
         [Fact]
         public async Task GetUserAsyncTest2()
@@ -95,7 +95,7 @@ namespace LangApp.WebApi.UnitTests
             var controller = new UsersController(_usersRepository.Object);
 
             // Act
-            var result = await controller.CreateUserAsync(new RegisterCredentials());
+            var result = await controller.CreateUserAsync(new RegisterData());
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result.Result);
@@ -115,7 +115,7 @@ namespace LangApp.WebApi.UnitTests
             var controller = new UsersController(_usersRepository.Object);
 
             // Act
-            var result = await controller.CreateUserAsync(new RegisterCredentials());
+            var result = await controller.CreateUserAsync(new RegisterData());
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result.Result);
@@ -136,7 +136,7 @@ namespace LangApp.WebApi.UnitTests
             var controller = new UsersController(_usersRepository.Object);
 
             // Act
-            var result = await controller.CreateUserAsync(new RegisterCredentials()
+            var result = await controller.CreateUserAsync(new RegisterData()
             {
                 Email = expectedUser.Email,
                 Username = expectedUser.Username,

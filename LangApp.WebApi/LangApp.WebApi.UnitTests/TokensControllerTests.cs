@@ -26,7 +26,7 @@ namespace LangApp.WebApi.UnitTests
             var controller = new TokensController(_configuration.Object, _usersRepository.Object);
 
             // Act
-            var result = await controller.CreateUserWithTokenAsync(new LogInCredentials() { Email = String.Empty, Password = String.Empty });
+            var result = await controller.CreateUserWithTokenAsync(new LogInData() { Email = String.Empty, Password = String.Empty });
 
             // Assert
             Assert.IsType<UnauthorizedResult>(result.Result);
@@ -43,7 +43,7 @@ namespace LangApp.WebApi.UnitTests
             var controller = new TokensController(_configuration.Object, _usersRepository.Object);
 
             // Act
-            var result = await controller.CreateUserWithTokenAsync(new LogInCredentials() { Email = String.Empty, Password = String.Empty });
+            var result = await controller.CreateUserWithTokenAsync(new LogInData() { Email = String.Empty, Password = String.Empty });
 
             // Assert
             Assert.IsType<UnauthorizedResult>(result.Result);
@@ -62,7 +62,7 @@ namespace LangApp.WebApi.UnitTests
             var controller = new TokensController(_configuration.Object, _usersRepository.Object);
 
             // Act
-            var result = await controller.CreateUserWithTokenAsync(new LogInCredentials() { Email = String.Empty, Password = expectedUser.Password });
+            var result = await controller.CreateUserWithTokenAsync(new LogInData() { Email = String.Empty, Password = expectedUser.Password });
 
             // Assert
             Assert.IsType<UserWithToken>(result.Value);
