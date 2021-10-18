@@ -17,7 +17,7 @@
             <SolidColorBrush x:Key="TertiaryBackgroundColor" Color="#242B3B"/>
 
             <SolidColorBrush x:Key="PrimaryForegroundColor" Color="White"/>
-            <SolidColorBrush x:Key="SecondaryForegroundColor" Color="#0079E4"/>
+            <SolidColorBrush x:Key="SecondaryForegroundColor" Color="#03A9F4"/>
             
             <Style x:Key="WindowStateButton" TargetType="Button">
                 <Setter Property="Height" Value="20"/>

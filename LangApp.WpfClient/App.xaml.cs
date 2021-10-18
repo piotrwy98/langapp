@@ -1,10 +1,4 @@
 ﻿using LangApp.WpfClient.Views.Windows;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace LangApp.WpfClient
@@ -16,8 +10,10 @@ namespace LangApp.WpfClient
     {
         private void ApplicationStartup(object sender, StartupEventArgs e)
         {
-            var loginRegisterWindow = new LoginRegisterWindow();
-            loginRegisterWindow.Show();
+            //var loginRegisterWindow = new LoginRegisterWindow();
+            //loginRegisterWindow.Show();
+
+            new MainWindow().Show();
         }
     }
 }

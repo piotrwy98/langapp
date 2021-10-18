@@ -8,15 +8,15 @@ namespace LangApp.WpfClient.Services
 {
     public abstract class TokensService : HttpClientService
     {
-        public async static Task<UserWithToken> GetUserWithToken(string email, string password)
+        public async static Task<UserWithToken> GetUserWithTokenAsync(string email, string password)
         {
-            var credentials = new LogInCredentials()
+            var logInData = new LogInData()
             {
                 Email = email,
                 Password = password
             };
 
-            var content = new StringContent(JsonConvert.SerializeObject(credentials), Encoding.UTF8, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(logInData), Encoding.UTF8, "application/json");
             HttpResponseMessage response = await HttpClient.PostAsync("https://localhost:44356/tokens", content).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)

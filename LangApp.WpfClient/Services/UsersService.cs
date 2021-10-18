@@ -9,9 +9,9 @@ namespace LangApp.WpfClient.Services
 {
     public abstract class UsersService : HttpClientService
     {
-        public async static Task<RegisterResult> CreateUser(string email, string username, string password, UserRole userRole)
+        public async static Task<RegisterResult> CreateUserAsync(string email, string username, string password, UserRole userRole)
         {
-            var credentials = new RegisterCredentials()
+            var registerData = new RegisterData()
             {
                 Email = email,
                 Username = username,
@@ -19,18 +19,16 @@ namespace LangApp.WpfClient.Services
                 UserRole = userRole
             };
 
-            var content = new StringContent(JsonConvert.SerializeObject(credentials), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await HttpClient.PostAsync("https://localhost:44356/users", content).ConfigureAwait(false);
+            var content = new StringContent(JsonConvert.SerializeObject(registerData), Encoding.UTF8, "application/json");
+            var response = await HttpClient.PostAsync("https://localhost:44356/users", content).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
                 return RegisterResult.OK;
             }
-            else
-            {
-                string json = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<RegisterResult>(json);
-            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<RegisterResult>(json);
         }
     }
 }

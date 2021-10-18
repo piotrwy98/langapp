@@ -170,7 +170,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
             try
             {
-                userWithToken = await TokensService.GetUserWithToken(Email.Trim(), Password);
+                userWithToken = await TokensService.GetUserWithTokenAsync(Email.Trim(), Password);
             }
             catch (HttpRequestException)
             {
@@ -228,7 +228,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
             try
             {
-                registerResult = await UsersService.CreateUser(Email.Trim(), Username.Trim(), Password.Trim(), UserRole.USER);
+                registerResult = await UsersService.CreateUserAsync(Email.Trim(), Username.Trim(), Password.Trim(), UserRole.USER);
 
             }
             catch (HttpRequestException)

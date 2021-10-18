@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="LangApp.WpfClient.Views.Controlls.DictionaryControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:LangApp.WpfClient.Views.Controlls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" FontSize="14" 
+             Foreground="{StaticResource PrimaryForegroundColor}" RenderOptions.BitmapScalingMode="HighQuality">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0" Margin="0 0 0 20">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Słownik:" VerticalAlignment="Center" FontWeight="Medium" Margin="0 0 10 10"/>
+            <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Dictionaries}" SelectedItem="{Binding SelectedDictionary}" Margin="0 0 0 10"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Szukaj:" VerticalAlignment="Center" Margin="0 0 10 0" FontWeight="Medium"/>
+            <TextBox Grid.Row="1" Grid.Column="1" md:HintAssist.Hint="Wyszukiwana fraza">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding SearchValueChangedCommand}" PassEventArgsToCommand="True"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+
+            <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal">
+                <RadioButton IsChecked="{Binding SearchByFirstLanguage}" Margin="10 0">
+                    <Image Source="{Binding FirstLanguageFlagSource}" Height="30"/>
+                </RadioButton>
+                <RadioButton>
+                    <Image Source="{Binding SecondLanguageFlagSource}" Height="30"/>
+                </RadioButton>
+            </StackPanel>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Sortuj:" VerticalAlignment="Center" Margin="0 10 10 0" FontWeight="Medium"/>
+            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0 10 0 0">
+                <RadioButton Content="{md:PackIcon Kind=SortAlphabeticalAscending, Size=26}" IsChecked="{Binding SortAscending}"/>
+                <RadioButton Content="{md:PackIcon Kind=SortAlphabeticalDescending, Size=26}" Margin="20 0 0 0"/>
+            </StackPanel>
+        </Grid>
+
+        <TextBlock Grid.Row="1" FontStyle="Italic">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DictionaryCollectionView.Count}" Value="0">
+                            <Setter Property="Text" Value="Brak wyników wyszukiwania"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0 -20 0 5">
+            <TextBlock Text="{Binding SelectedDictionary.FirstLanguage.Name}" Width="200" Foreground="{StaticResource SecondaryForegroundColor}" FontSize="18"/>
+            <TextBlock Text="{Binding SelectedDictionary.SecondLanguage.Name}" Foreground="{StaticResource SecondaryForegroundColor}" FontSize="18"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding SelectedDictionary.Dictionary}" FontSize="16">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <StackPanel Name="DictionaryPosition_StackPanel" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 7">
+                                <TextBlock Text="{Binding Key}" Width="200"/>
+                                <TextBlock Text="{Binding Value}"/>
+                            </StackPanel>
+                            <Separator HorizontalAlignment="Left" Width="{Binding ActualWidth, ElementName=DictionaryPosition_StackPanel}" Background="{StaticResource SecondaryForegroundColor}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
