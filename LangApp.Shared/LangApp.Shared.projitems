@@ -9,11 +9,17 @@
     <Import_RootNamespace>LangApp.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Category.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Controllers\TranslationData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\LogInCredentials.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Language.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Controllers\LogInData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Level.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NotifyPropertyChanged.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\RegisterCredentials.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\UserWithToken.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Controllers\RegisterData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Translation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Controllers\UserWithToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Word.cs" />
   </ItemGroup>
 </Project>
