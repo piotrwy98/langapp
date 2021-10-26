@@ -1,4 +1,5 @@
 using LangApp.Shared.Models;
+using LangApp.Shared.Models.Controllers;
 using LangApp.WebApi.Controllers;
 using LangApp.WebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;

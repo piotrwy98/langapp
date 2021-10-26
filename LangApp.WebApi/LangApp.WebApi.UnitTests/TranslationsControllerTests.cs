@@ -1,13 +1,10 @@
 ﻿using LangApp.Shared.Models;
-using LangApp.Shared.Models.ControllerParams;
+using LangApp.Shared.Models.Controllers;
 using LangApp.WebApi.Api.Controllers;
 using LangApp.WebApi.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -16,7 +13,6 @@ namespace LangApp.WebApi.UnitTests
     public class TranslationsControllerTests
     {
         private readonly Mock<ITranslationsRepository> _translationsRepository = new Mock<ITranslationsRepository>();
-        private readonly Random _random = new Random();
 
         private Translation GetRandomTranslation()
         {
@@ -38,7 +34,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Should always return all existing translations
+        /// Should always return every translation with given language
         /// </summary>
         [Fact]
         public async Task GetTranslationsAsyncTest()
