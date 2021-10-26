@@ -1,7 +1,7 @@
 ﻿using LangApp.Shared.Models;
 using LangApp.WpfClient.Models;
 using LangApp.WpfClient.Views.Controlls;
-using System;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace LangApp.WpfClient.ViewModels.Windows
@@ -10,33 +10,24 @@ namespace LangApp.WpfClient.ViewModels.Windows
     {
         #region Commands
         public ICommand MainScreenCheckedCommand { get; set; }
+        public ICommand LearnCheckedCommand { get; set; }
         public ICommand DictionaryCheckedCommand { get; set; }
         #endregion
 
         #region Properties
-        private object _currentView;
-        public object CurrentView
-        {
-            get
-            {
-                return _currentView;
-            }
-            set
-            {
-                _currentView = value;
-                OnPropertyChanged();
-            }
-        }
+        public Configuration Configuration { get; set; } = Configuration.GetInstance();
         #endregion
 
         #region Controls
         private MainScreenControl _mainScreenControl = new MainScreenControl();
+        private LearnSettingsControl _learnSettingsControl = new LearnSettingsControl();
         private DictionaryControl _dictionaryControl = new DictionaryControl();
         #endregion
 
         public MainViewModel()
         {
             MainScreenCheckedCommand = new RelayCommand(MainScreenChecked);
+            LearnCheckedCommand = new RelayCommand(LearnChecked);
             DictionaryCheckedCommand = new RelayCommand(DictionaryChecked);
 
             MainScreenChecked();
@@ -44,12 +35,17 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
         private void MainScreenChecked(object obj = null)
         {
-            CurrentView = _mainScreenControl;
+            Configuration.CurrentView = _mainScreenControl;
+        }
+
+        private void LearnChecked(object obj = null)
+        {
+            Configuration.CurrentView = _learnSettingsControl;
         }
 
         private void DictionaryChecked(object obj = null)
         {
-            CurrentView = _dictionaryControl;
+            Configuration.CurrentView = _dictionaryControl;
         }
     }
 }

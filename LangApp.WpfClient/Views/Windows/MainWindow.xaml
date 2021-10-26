@@ -6,7 +6,7 @@
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:LangApp.WpfClient"
         mc:Ignorable="d"
-        Height="450" Width="800" WindowStyle="None" ResizeMode="CanResizeWithGrip"
+        Height="700" Width="1200" WindowStyle="None" ResizeMode="CanResizeWithGrip"
         AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen"
         MouseDown="Window_MouseDown">
     <Window.Resources>
@@ -56,7 +56,7 @@
                     </StackPanel>
                 </RadioButton>
 
-                <RadioButton Style="{StaticResource MenuButton}">
+                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding LearnCheckedCommand}">
                     <StackPanel Orientation="Horizontal">
                         <md:PackIcon Kind="LearnOutline" Width="35" Height="35" VerticalAlignment="Center" Margin="15 0"/>
                         <TextBlock Text="Nauka" VerticalAlignment="Center"/>
@@ -91,7 +91,7 @@
                     <Button Content="✕" Style="{StaticResource WindowStateButton}" Margin="5 0" Click="CloseWindow_Button_Click"/>
                 </StackPanel>
 
-                <ContentControl Grid.Row="1" Content="{Binding CurrentView}" Margin="10 5 10 10"/>
+                <ContentControl Grid.Row="1" Content="{Binding Configuration.CurrentView}" Margin="10 5 10 10"/>
             </Grid>
         </Border>
     </Grid>

@@ -1,4 +1,5 @@
 ﻿using LangApp.Shared.Models;
+using LangApp.Shared.Models.Controllers;
 using LangApp.WpfClient.Models;
 using LangApp.WpfClient.Services;
 using LangApp.WpfClient.Views.Windows;

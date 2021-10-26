@@ -77,6 +77,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Controlls\LearnSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Controlls\MainScreenControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -94,20 +98,26 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\BilingualDictionary.cs" />
+    <Compile Include="Models\CategoryToChoose.cs" />
     <Compile Include="Models\Configuration.cs" />
     <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="Models\TranslationsList.cs" />
+    <Compile Include="Services\CategoriesService.cs" />
     <Compile Include="Services\HttpClientService.cs" />
     <Compile Include="Services\LanguagesService.cs" />
     <Compile Include="Services\TokensService.cs" />
     <Compile Include="Services\TranslationsService.cs" />
     <Compile Include="Services\UsersService.cs" />
     <Compile Include="ViewModels\Controlls\DictionaryViewModel.cs" />
+    <Compile Include="ViewModels\Controlls\LearnSettingsViewModel.cs" />
     <Compile Include="ViewModels\Controlls\MainScreenViewModel.cs" />
     <Compile Include="ViewModels\Windows\LoginRegisterViewModel.cs" />
     <Compile Include="ViewModels\Windows\MainViewModel.cs" />
     <Compile Include="Views\Controlls\DictionaryControl.xaml.cs">
       <DependentUpon>DictionaryControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controlls\LearnSettingsControl.xaml.cs">
+      <DependentUpon>LearnSettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controlls\MainScreenControl.xaml.cs">
       <DependentUpon>MainScreenControl.xaml</DependentUpon>

@@ -1,9 +1,10 @@
 ﻿using LangApp.Shared.Models;
 using LangApp.WpfClient.Services;
+using System.Windows.Controls;
 
 namespace LangApp.WpfClient.Models
 {
-    public class Configuration
+    public class Configuration : NotifyPropertyChanged
     {
         private static Configuration _instance;
 
@@ -17,6 +18,7 @@ namespace LangApp.WpfClient.Models
             return _instance;
         }
 
+        #region Properties
         private string _token;
         public string Token
         {
@@ -32,5 +34,20 @@ namespace LangApp.WpfClient.Models
         }
 
         public User User { get; set; }
+
+        private UserControl _currentView;
+        public UserControl CurrentView
+        {
+            get
+            {
+                return _currentView;
+            }
+            set
+            {
+                _currentView = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
     }
 }
