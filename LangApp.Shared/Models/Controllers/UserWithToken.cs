@@ -1,4 +1,4 @@
-﻿namespace LangApp.Shared.Models
+﻿namespace LangApp.Shared.Models.Controllers
 {
     public class UserWithToken
     {

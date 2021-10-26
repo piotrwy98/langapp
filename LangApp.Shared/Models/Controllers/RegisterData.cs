@@ -1,6 +1,6 @@
 ﻿using static LangApp.Shared.Models.Enums;
 
-namespace LangApp.Shared.Models
+namespace LangApp.Shared.Models.Controllers
 {
     public class RegisterData
     {

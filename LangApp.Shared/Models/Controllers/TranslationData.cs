@@ -1,4 +1,4 @@
-﻿namespace LangApp.Shared.Models.ControllerParams
+﻿namespace LangApp.Shared.Models.Controllers
 {
     public class TranslationData
     {

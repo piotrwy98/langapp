@@ -10,6 +10,8 @@ namespace LangApp.Shared.Models
 
         public string Name { get; set; }
 
+        public string ImagePath { get; set; }
+
         public override string ToString()
         {
             if(Level != null)
