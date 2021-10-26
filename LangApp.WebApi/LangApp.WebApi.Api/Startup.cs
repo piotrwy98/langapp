@@ -26,6 +26,7 @@ namespace LangApp.WebApi
         {
             services.AddSingleton<IUsersRepository, LocalUsersRepository>();
             services.AddSingleton<ITranslationsRepository, LocalTranslationsRepository>();
+            services.AddSingleton<ICategoriesRepository, LocalCategoriesRepository>();
 
             services.AddControllers(options =>
                 options.SuppressAsyncSuffixInActionNames = false
