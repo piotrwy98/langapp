@@ -1,0 +1,121 @@
+﻿<UserControl x:Class="LangApp.WpfClient.Views.Controls.LearnControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:LangApp.WpfClient.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Foreground="{StaticResource PrimaryForegroundColor}">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="30"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+            </Grid.Resources>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Zadanie "/>
+                <TextBlock Text="{Binding QuestionCounter}"/>
+                <TextBlock Text="/"/>
+                <TextBlock Text="{Binding NumberOfQuestions}"/>
+            </StackPanel>
+
+            <TextBlock Text="{Binding Timer}" HorizontalAlignment="Right"/>
+        </Grid>
+
+        <StackPanel Grid.Row="1">
+            <StackPanel Orientation="Horizontal" Margin="0 10 0 20">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{StaticResource SecondaryForegroundColor}"/>
+                        <Setter Property="FontSize" Value="30"/>
+                    </Style>
+                </StackPanel.Resources>
+                
+                <TextBlock Text="Jakie jest tłumaczenie słowa "/>
+                <TextBlock Text="{Binding TranslationPair.Value.FirstLanguageTranslation}" FontWeight="Bold"/>
+                <TextBlock Text="?"/>
+            </StackPanel>
+
+            <Border Height="400" CornerRadius="20" Margin="100 0">
+                <Border.Background>
+                    <ImageBrush Stretch="UniformToFill" ImageSource="{Binding TranslationPair.Key.ImagePath}"/>
+                </Border.Background>
+            </Border>
+
+            <TextBox Text="{Binding OpenAnswer}" md:HintAssist.Hint="Tłumaczenie" Width="400" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="30" Margin="20" Visibility="Collapsed"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="20">
+                <StackPanel.Resources>
+                    <Style TargetType="RadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
+                        <Setter Property="FontSize" Value="32"/>
+                        <Setter Property="Margin" Value="25 10"/>
+                    </Style>
+                </StackPanel.Resources>
+
+                <RadioButton Grid.Row="0" Grid.Column="0" Content="{Binding ClosedAnswers[0]}" Command="{Binding ClosedAnswerCheckedCommand}" CommandParameter="0" IsChecked="{Binding IsFirstClosedAnswerChecked}"/>
+                <RadioButton Grid.Row="0" Grid.Column="1" Content="{Binding ClosedAnswers[1]}" Command="{Binding ClosedAnswerCheckedCommand}" CommandParameter="1"/>
+                <RadioButton Grid.Row="1" Grid.Column="0" Content="{Binding ClosedAnswers[2]}" Command="{Binding ClosedAnswerCheckedCommand}" CommandParameter="2"/>
+                <RadioButton Grid.Row="1" Grid.Column="1" Content="{Binding ClosedAnswers[3]}" Command="{Binding ClosedAnswerCheckedCommand}" CommandParameter="3"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10 0 0 0" Visibility="{Binding IsCorrectVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <md:PackIcon Kind="CheckCircle" Width="42" Height="42" Foreground="LawnGreen" Margin="0 0 5 0"/>
+                <TextBlock Text="{Binding CorrectMessage}" FontSize="30" Foreground="LawnGreen" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10 0 0 0" Visibility="{Binding IsIncorrectVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <md:PackIcon Kind="Error" Width="42" Height="42" Foreground="PaleVioletRed" Margin="0 0 5 0"/>
+                <TextBlock Text="{Binding IncorrectMessage}" FontSize="30" Foreground="PaleVioletRed" VerticalAlignment="Center"/>
+                <Button Content="Pokaż poprawne" Command="{Binding ShowAnswerCommand}" Height="42" Background="PaleVioletRed" BorderBrush="PaleVioletRed" Margin="10 0 0 0" Visibility="{Binding IsShowAnswerVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                <StackPanel Orientation="Horizontal" Visibility="{Binding IsAnswerVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="PaleVioletRed"/>
+                            <Setter Property="FontSize" Value="30"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <TextBlock Text=", poprawne: "/>
+                    <TextBlock Text="{Binding TranslationPair.Value.SecondLanguageTranslation}" FontWeight="Bold"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Width" Value="200"/>
+                    <Setter Property="Height" Value="50"/>
+                </Style>
+            </StackPanel.Resources>
+
+            <Button Content="Zakończ" Command="{Binding ExitCommand}" Background="PaleVioletRed" BorderBrush="PaleVioletRed"/>
+            <Button Content="Pomiń" Command="{Binding SkipCommand}" Margin="20 0" Background="Gray" BorderBrush="Gray"/>
+            <Button Command="{Binding CheckCommand}" Background="LawnGreen" BorderBrush="LawnGreen">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Content" Value="Sprawdź"/>
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CanGoFurther}" Value="True">
+                                <Setter Property="Content" Value="Dalej"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

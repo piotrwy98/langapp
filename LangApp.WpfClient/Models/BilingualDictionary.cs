@@ -13,7 +13,7 @@ namespace LangApp.WpfClient.Models
 
         public Language SecondLanguage { get; set; }
 
-        public IDictionary<string, string> Dictionary { get; set; }
+        public IDictionary<Word, TranslationSet> Dictionary { get; set; }
 
         public override string ToString()
         {

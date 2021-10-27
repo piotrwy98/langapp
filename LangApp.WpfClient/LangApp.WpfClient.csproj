@@ -73,15 +73,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Views\Controlls\DictionaryControl.xaml">
+    <Page Include="Views\Controls\DictionaryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controlls\LearnSettingsControl.xaml">
+    <Page Include="Views\Controls\LearnControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controlls\MainScreenControl.xaml">
+    <Page Include="Views\Controls\LearnFinishControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\LearnSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\MainScreenControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -100,7 +108,9 @@
     <Compile Include="Models\BilingualDictionary.cs" />
     <Compile Include="Models\CategoryToChoose.cs" />
     <Compile Include="Models\Configuration.cs" />
+    <Compile Include="Models\QuestionType.cs" />
     <Compile Include="Models\RelayCommand.cs" />
+    <Compile Include="Models\TranslationSet.cs" />
     <Compile Include="Models\TranslationsList.cs" />
     <Compile Include="Services\CategoriesService.cs" />
     <Compile Include="Services\HttpClientService.cs" />
@@ -108,18 +118,26 @@
     <Compile Include="Services\TokensService.cs" />
     <Compile Include="Services\TranslationsService.cs" />
     <Compile Include="Services\UsersService.cs" />
-    <Compile Include="ViewModels\Controlls\DictionaryViewModel.cs" />
-    <Compile Include="ViewModels\Controlls\LearnSettingsViewModel.cs" />
-    <Compile Include="ViewModels\Controlls\MainScreenViewModel.cs" />
+    <Compile Include="ViewModels\Controls\DictionaryViewModel.cs" />
+    <Compile Include="ViewModels\Controls\LearnFinishViewModel.cs" />
+    <Compile Include="ViewModels\Controls\LearnSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Controls\LearnViewModel.cs" />
+    <Compile Include="ViewModels\Controls\MainScreenViewModel.cs" />
     <Compile Include="ViewModels\Windows\LoginRegisterViewModel.cs" />
     <Compile Include="ViewModels\Windows\MainViewModel.cs" />
-    <Compile Include="Views\Controlls\DictionaryControl.xaml.cs">
+    <Compile Include="Views\Controls\DictionaryControl.xaml.cs">
       <DependentUpon>DictionaryControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controlls\LearnSettingsControl.xaml.cs">
+    <Compile Include="Views\Controls\LearnControl.xaml.cs">
+      <DependentUpon>LearnControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\LearnFinishControl.xaml.cs">
+      <DependentUpon>LearnFinishControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\LearnSettingsControl.xaml.cs">
       <DependentUpon>LearnSettingsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controlls\MainScreenControl.xaml.cs">
+    <Compile Include="Views\Controls\MainScreenControl.xaml.cs">
       <DependentUpon>MainScreenControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Windows\LoginRegisterWindow.xaml.cs">

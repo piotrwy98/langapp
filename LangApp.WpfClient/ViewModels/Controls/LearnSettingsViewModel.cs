@@ -4,10 +4,10 @@ using LangApp.WpfClient.Services;
 using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Input;
-using System.Windows.Controls;
-using LangApp.WpfClient.Views.Controlls;
+using LangApp.WpfClient.Views.Controls;
+using System;
 
-namespace LangApp.WpfClient.ViewModels.Controlls
+namespace LangApp.WpfClient.ViewModels.Controls
 {
     public class LearnSettingsViewModel : NotifyPropertyChanged
     {
@@ -19,6 +19,8 @@ namespace LangApp.WpfClient.ViewModels.Controlls
         public ICommand OpenClickCommand { get; set; }
 
         public ICommand SpeakClickCommand { get; set; }
+
+        public ICommand StartLearningCommand { get; set; }
         #endregion
 
         #region Properties
@@ -82,6 +84,7 @@ namespace LangApp.WpfClient.ViewModels.Controlls
             ClosedClickCommand = new RelayCommand(ClosedClick);
             OpenClickCommand = new RelayCommand(OpenClick);
             SpeakClickCommand = new RelayCommand(SpeakClick);
+            StartLearningCommand = new RelayCommand(StartLearning);
 
             var categories = CategoriesService.GetInstance().Categories;
             Categories = new List<CategoryToChoose>();
@@ -122,6 +125,21 @@ namespace LangApp.WpfClient.ViewModels.Controlls
                 category.IsChosen = !category.IsChosen;
                 OnPropertyChanged("CanStartLearning");
             }
+        }
+
+        private void StartLearning(object obj)
+        {
+            List<Guid> categoriesIds = new List<Guid>();
+            foreach(var category in Categories)
+            {
+                if(category.IsChosen)
+                {
+                    categoriesIds.Add(category.Category.Id);
+                }
+            }
+
+            Configuration.GetInstance().LearnControl = new LearnControl(LanguagesService.GetInstance().Languages[1].Id, categoriesIds, _isClosedChosen, _isOpenChosen, _isSpeakChosen);
+            Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnControl;
         }
     }
 }

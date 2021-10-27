@@ -1,7 +1,7 @@
-﻿using LangApp.WpfClient.ViewModels.Controlls;
+﻿using LangApp.WpfClient.ViewModels.Controls;
 using System.Windows.Controls;
 
-namespace LangApp.WpfClient.Views.Controlls
+namespace LangApp.WpfClient.Views.Controls
 {
     /// <summary>
     /// Interaction logic for LearnSettingsControl.xaml

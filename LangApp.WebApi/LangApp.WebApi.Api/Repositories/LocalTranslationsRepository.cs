@@ -10,11 +10,11 @@ namespace LangApp.WebApi.Api.Repositories
     {
         private static readonly List<Word> _words = new List<Word>()
         {
-            new Word { Id = Guid.NewGuid() },
-            new Word { Id = Guid.NewGuid() },
-            new Word { Id = Guid.NewGuid() },
-            new Word { Id = Guid.NewGuid() },
-            new Word { Id = Guid.NewGuid() }
+            new Word { Id = Guid.NewGuid(), ImagePath = "https://cdn.pixabay.com/photo/2015/11/24/04/01/golden-retriever-1059490_960_720.jpg" },
+            new Word { Id = Guid.NewGuid(), ImagePath = "https://cdn.pixabay.com/photo/2015/11/23/10/39/cat-1058095_960_720.jpg" },
+            new Word { Id = Guid.NewGuid(), ImagePath = "https://cdn.pixabay.com/photo/2018/09/25/21/32/monkey-3703230_960_720.jpg" },
+            new Word { Id = Guid.NewGuid(), ImagePath = "https://cdn.pixabay.com/photo/2013/05/29/22/25/elephant-114543_960_720.jpg" },
+            new Word { Id = Guid.NewGuid(), ImagePath = "https://cdn.pixabay.com/photo/2021/06/12/17/51/great-spotted-woodpecker-6331448_960_720.jpg" }
         };
 
         private static readonly List<Language> _languages = new List<Language>()

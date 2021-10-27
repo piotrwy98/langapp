@@ -1,7 +1,6 @@
 ﻿using LangApp.Shared.Models;
 using LangApp.WpfClient.Models;
 using LangApp.WpfClient.Services;
-using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Input;
 using System.Windows.Controls;
@@ -10,7 +9,7 @@ using System.ComponentModel;
 using System;
 using System.Windows.Media.Imaging;
 
-namespace LangApp.WpfClient.ViewModels.Controlls
+namespace LangApp.WpfClient.ViewModels.Controls
 {
     public class DictionaryViewModel : NotifyPropertyChanged
     {
@@ -85,9 +84,9 @@ namespace LangApp.WpfClient.ViewModels.Controlls
                     DictionaryCollectionView.SortDescriptions.RemoveAt(0);
 
                 if (_sortAscending)
-                    DictionaryCollectionView.SortDescriptions.Add(new SortDescription("Key", ListSortDirection.Ascending));
+                    DictionaryCollectionView.SortDescriptions.Add(new SortDescription("Value.FirstLanguageTranslation", ListSortDirection.Ascending));
                 else
-                    DictionaryCollectionView.SortDescriptions.Add(new SortDescription("Key", ListSortDirection.Descending));
+                    DictionaryCollectionView.SortDescriptions.Add(new SortDescription("Value.FirstLanguageTranslation", ListSortDirection.Descending));
             }
         }
 
@@ -128,62 +127,9 @@ namespace LangApp.WpfClient.ViewModels.Controlls
         {
             SearchValueChangedCommand = new RelayCommand(SearchValueChanged);
 
-            Dictionaries = new List<BilingualDictionary>();
-            GenerateDictionaries();
+            Dictionaries = TranslationsService.GetInstance().Dictionaries;
             SelectedDictionary = Dictionaries[0];
             SortAscending = true;
-        }
-
-        private void GenerateDictionaries()
-        {
-            var translationsLists = TranslationsService.GetInstance().TranslationsLists;
-
-            for(int firstLangIndex = 0; firstLangIndex < translationsLists.Count; firstLangIndex++)
-            {
-                for (int secondLangIndex = firstLangIndex + 1; secondLangIndex < translationsLists.Count; secondLangIndex++)
-                {
-                    var firstDicitionary = GetDictionary(firstLangIndex, secondLangIndex);
-
-                    Dictionaries.Add(new BilingualDictionary()
-                    {
-                        FirstLanguage = translationsLists[firstLangIndex].Language,
-                        SecondLanguage = translationsLists[secondLangIndex].Language,
-                        Dictionary = firstDicitionary
-                    });
-
-                    var secondDictionary = new Dictionary<string, string>();
-
-                    foreach (var pair in firstDicitionary)
-                    {
-                        secondDictionary.Add(pair.Value, pair.Key);
-                    }
-
-                    Dictionaries.Add(new BilingualDictionary()
-                    {
-                        FirstLanguage = translationsLists[secondLangIndex].Language,
-                        SecondLanguage = translationsLists[firstLangIndex].Language,
-                        Dictionary = secondDictionary
-                    });
-                }
-            }
-        }
-
-        private Dictionary<string, string> GetDictionary(int firstLangIndex, int secondLangIndex)
-        {
-            var dictionary = new Dictionary<string, string>();
-            var translationsLists = TranslationsService.GetInstance().TranslationsLists;
-
-            foreach(var translation in translationsLists[firstLangIndex].Translations)
-            {
-                Translation secondTranslation = translationsLists[secondLangIndex].Translations.FirstOrDefault(x => x.Word.Id == translation.Word.Id);
-
-                if(secondTranslation != null)
-                {
-                    dictionary.Add(translation.Value, secondTranslation.Value);
-                }
-            }
-
-            return dictionary;
         }
 
         private void SearchValueChanged(object obj)
@@ -206,12 +152,12 @@ namespace LangApp.WpfClient.ViewModels.Controlls
             {
                 DictionaryCollectionView.Filter = o =>
                 {
-                    var pair = (KeyValuePair<string, string>)o;
+                    var pair = (KeyValuePair<Word, TranslationSet>)o;
 
                     if (SearchByFirstLanguage)
-                        return pair.Key.ToLowerInvariant().Trim().Contains(_searchedText);
+                        return pair.Value.FirstLanguageTranslation.ToLowerInvariant().Trim().Contains(_searchedText);
                     else
-                        return pair.Value.ToLowerInvariant().Trim().Contains(_searchedText);
+                        return pair.Value.SecondLanguageTranslation.ToLowerInvariant().Trim().Contains(_searchedText);
                 };
             }
 

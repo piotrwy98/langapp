@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="LangApp.WpfClient.Views.Controlls.LearnSettingsControl"
+﻿<UserControl x:Class="LangApp.WpfClient.Views.Controls.LearnSettingsControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:local="clr-namespace:LangApp.WpfClient.Views.Controlls"
+             xmlns:local="clr-namespace:LangApp.WpfClient.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" FontSize="20" Foreground="{StaticResource SecondaryForegroundColor}"
              FontWeight="Medium" RenderOptions.BitmapScalingMode="HighQuality">
@@ -15,7 +15,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Button Grid.Row="0" Content="Rozpocznij naukę" Height="40" IsEnabled="{Binding CanStartLearning}" Margin="14 10"/>
+        <Button Grid.Row="0" Content="Rozpocznij naukę" Command="{Binding StartLearningCommand}" IsEnabled="{Binding CanStartLearning}" Height="40" Margin="14 10"/>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0 0 16 0">
             <StackPanel>

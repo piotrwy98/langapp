@@ -28,6 +28,7 @@ namespace LangApp.WebApi.UnitTests
                 Word = new Word()
                 {
                     Id = Guid.NewGuid(),
+                    ImagePath = Guid.NewGuid().ToString()
                 },
                 Value = Guid.NewGuid().ToString()
             };

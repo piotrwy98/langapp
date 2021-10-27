@@ -1,5 +1,6 @@
 ﻿using LangApp.Shared.Models;
 using LangApp.WpfClient.Services;
+using LangApp.WpfClient.Views.Controls;
 using System.Windows.Controls;
 
 namespace LangApp.WpfClient.Models
@@ -48,6 +49,10 @@ namespace LangApp.WpfClient.Models
                 OnPropertyChanged();
             }
         }
+
+        public LearnSettingsControl LearnSettingsControl { get; } = new LearnSettingsControl();
+
+        public LearnControl LearnControl { get; set; }
         #endregion
     }
 }

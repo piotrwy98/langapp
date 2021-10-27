@@ -1,7 +1,6 @@
 ﻿using LangApp.Shared.Models;
 using LangApp.WpfClient.Models;
-using LangApp.WpfClient.Views.Controlls;
-using System.Windows.Controls;
+using LangApp.WpfClient.Views.Controls;
 using System.Windows.Input;
 
 namespace LangApp.WpfClient.ViewModels.Windows
@@ -20,7 +19,6 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
         #region Controls
         private MainScreenControl _mainScreenControl = new MainScreenControl();
-        private LearnSettingsControl _learnSettingsControl = new LearnSettingsControl();
         private DictionaryControl _dictionaryControl = new DictionaryControl();
         #endregion
 
@@ -40,7 +38,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
         private void LearnChecked(object obj = null)
         {
-            Configuration.CurrentView = _learnSettingsControl;
+            Configuration.CurrentView = Configuration.LearnSettingsControl;
         }
 
         private void DictionaryChecked(object obj = null)
