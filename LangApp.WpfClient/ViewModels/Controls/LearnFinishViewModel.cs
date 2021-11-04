@@ -33,12 +33,12 @@ namespace LangApp.WpfClient.ViewModels.Controls
         private void ChangeCategory(object obj)
         {
             Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnSettingsControl;
+
         }
 
         private void LearnAgain(object obj)
         {
-            (Configuration.GetInstance().LearnControl.DataContext as LearnViewModel).Reset();
-            Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnControl;
+            (Configuration.GetInstance().LearnSettingsControl.DataContext as LearnSettingsViewModel).StartLearning();
         }
     }
 }

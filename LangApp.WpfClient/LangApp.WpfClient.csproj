@@ -158,9 +158,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\BilingualDictionary.cs" />
     <Compile Include="Models\CategoryToChoose.cs" />
     <Compile Include="Models\Configuration.cs" />
+    <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\QuestionType.cs" />
     <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="Models\TranslationSet.cs" />

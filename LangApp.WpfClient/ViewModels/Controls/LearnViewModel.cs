@@ -37,6 +37,8 @@ namespace LangApp.WpfClient.ViewModels.Controls
         #endregion
 
         #region Properties
+        public bool IsTest { get; }
+
         private KeyValuePair<Word, TranslationSet> _translationPair;
         public KeyValuePair<Word, TranslationSet> TranslationPair
         {
@@ -213,7 +215,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             }
         }
 
-        private bool _canGoToFurther;
+        private bool _canGoToFurther = true;
         public bool CanGoFurther
         {
             get
@@ -248,7 +250,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         {
             get
             {
-                TimeSpan timeSpan = _stopWatch.Elapsed;
+                TimeSpan timeSpan = DateTime.Now - _startTime;
                 return string.Format("{0:00}:{1:00}", timeSpan.Minutes, timeSpan.Seconds);
             }
         }
@@ -385,12 +387,16 @@ namespace LangApp.WpfClient.ViewModels.Controls
         private BilingualDictionary _dictionary;
         private Random _random;
         private List<Guid> _previousWordsIds;
+        private List<Answer> _answers;
+        private string _pronunciationResult;
+        private int _properClosedAnswerIndex;
+        private int _selectedClosedAnswerIndex;
+
         private DispatcherTimer _dispatcherGeneralTimer;
         private DispatcherTimer _dispatcherRecordTimer;
         private DispatcherTimer _dispatcherRecordPlayTimer;
-        private Stopwatch _stopWatch;
-        private int _properClosedAnswerIndex;
-        private int _selectedClosedAnswerIndex;
+        private DateTime _startTime;
+        private DateTime _questionAppearedTime;
 
         private WaveIn _waveIn;
         private MemoryStream _waveMemoryStream;
@@ -400,8 +406,9 @@ namespace LangApp.WpfClient.ViewModels.Controls
         private double _recordPlayValueToAdd;
         #endregion
 
-        public LearnViewModel(Guid languageId, List<Guid> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen)
+        public LearnViewModel(bool isTest, Guid languageId, List<Guid> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen)
         {
+            IsTest = isTest;
             _languageId = languageId;
             _categoriesIds = categoriesIds;
             _isClosedChosen = isClosedChosen;
@@ -413,8 +420,11 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 x.SecondLanguage.Id == _languageId);
             _random = new Random();
             _previousWordsIds = new List<Guid>();
+            _answers = new List<Answer>();
 
             /// timery
+            _startTime = DateTime.Now;
+
             _dispatcherGeneralTimer = new DispatcherTimer();
             _dispatcherGeneralTimer.Interval = TimeSpan.FromSeconds(1);
             _dispatcherGeneralTimer.Tick += (sender, e) => 
@@ -446,9 +456,6 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     StopRecordPlay();
                 }
             };
-
-            _stopWatch = new Stopwatch();
-            _stopWatch.Start();
             ///
 
             /// nagrywanie dzwięku
@@ -497,6 +504,32 @@ namespace LangApp.WpfClient.ViewModels.Controls
         {
             if(CanGoFurther)
             {
+                string userAnswer = null;
+
+                switch(_questionType)
+                {
+                    case QuestionType.CLOSED:
+                        userAnswer = _closedAnswers[_properClosedAnswerIndex];
+                        break;
+
+                    case QuestionType.OPEN:
+                        userAnswer = _openAnswer.Trim();
+                        break;
+
+                    case QuestionType.PRONUNCIATION:
+                        userAnswer = GetPronunciationResult();
+                        break;
+                }
+
+                _answers.Add(new Answer()
+                {
+                    Index = QuestionCounter,
+                    QuestionType = _questionType.GetName(),
+                    UserAnswer = userAnswer,
+                    CorrectAnswer = TranslationPair.Value.SecondLanguageTranslation,
+                    Duration = DateTime.Now - _questionAppearedTime
+                });
+
                 GetNextQuestion();
             }
             else
@@ -513,6 +546,19 @@ namespace LangApp.WpfClient.ViewModels.Controls
             }
         }
 
+        private string GetPronunciationResult()
+        {
+            if(_pronunciationResult != null)
+            {
+                return _pronunciationResult;
+            }
+
+            string result = Task.Run(() => SpeechToTextService.GetText(_audioInputStream)).Result;
+            _pronunciationResult = result.Replace(".", "").ToLowerInvariant();
+
+            return _pronunciationResult;
+        }
+
         private bool IsAnswerCorrect()
         {
             switch(_questionType)
@@ -522,11 +568,10 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
                 case QuestionType.OPEN:
                     return _openAnswer != null &&
-                        TranslationPair.Value.SecondLanguageTranslation == _openAnswer.Trim().ToLowerInvariant();
+                        TranslationPair.Value.SecondLanguageTranslation == _openAnswer.Trim();
 
                 case QuestionType.PRONUNCIATION:
-                    string text = Task.Run(() => SpeechToTextService.GetText(_audioInputStream)).Result;
-                    return TranslationPair.Value.SecondLanguageTranslation == text.Replace(".", "").ToLowerInvariant();
+                    return TranslationPair.Value.SecondLanguageTranslation == GetPronunciationResult();
             }
 
             return false;
@@ -556,8 +601,14 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 OpenAnswer = string.Empty;
                 IsFirstClosedAnswerChecked = true;
                 _selectedClosedAnswerIndex = 0;
+                _pronunciationResult = null;
+                _questionAppearedTime = DateTime.Now;
                 IsShowAnswerVisible = true;
-                CanGoFurther = false;
+
+                if (!IsTest)
+                {
+                    CanGoFurther = false;
+                }
 
                 if(IsRecording)
                 {
@@ -675,17 +726,17 @@ namespace LangApp.WpfClient.ViewModels.Controls
         private void Finish()
         {
             Configuration.GetInstance().CurrentView = new LearnFinishControl(Timer, QuestionCounter, NumberOfQuestions);
-            _dispatcherGeneralTimer.Stop();
-            _stopWatch.Reset();
-        }
+            
+            if(IsTest)
+            {
+                Configuration.GetInstance().TestControl = null;
+            }
+            else
+            {
+                Configuration.GetInstance().LearnControl = null;
+            }
 
-        public void Reset()
-        {
-            QuestionCounter = 0;
-            _dispatcherGeneralTimer.Start();
-            _stopWatch.Start();
-            OnPropertyChanged("Timer");
-            GetNextQuestion();
+            _dispatcherGeneralTimer.Stop();
         }
 
         private void Record(object obj)

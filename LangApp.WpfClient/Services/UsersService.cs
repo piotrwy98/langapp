@@ -20,7 +20,7 @@ namespace LangApp.WpfClient.Services
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(registerData), Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync("https://localhost:44356/users", content).ConfigureAwait(false);
+            var response = await HttpClient.PostAsync("https://localhost:5000/users", content).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {

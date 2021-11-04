@@ -8,10 +8,10 @@ namespace LangApp.WpfClient.Views.Controls
     /// </summary>
     public partial class LearnSettingsControl : UserControl
     {
-        public LearnSettingsControl()
+        public LearnSettingsControl(bool isTest)
         {
             InitializeComponent();
-            DataContext = new LearnSettingsViewModel();
+            DataContext = new LearnSettingsViewModel(isTest);
         }
     }
 }

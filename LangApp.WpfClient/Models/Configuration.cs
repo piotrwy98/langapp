@@ -50,9 +50,33 @@ namespace LangApp.WpfClient.Models
             }
         }
 
-        public LearnSettingsControl LearnSettingsControl { get; } = new LearnSettingsControl();
+        public LearnSettingsControl LearnSettingsControl { get; } = new LearnSettingsControl(false);
+
+        public LearnSettingsControl TestSettingsControl { get; } = new LearnSettingsControl(true);
 
         public LearnControl LearnControl { get; set; }
+
+        private LearnControl _testControl;
+        public LearnControl TestControl
+        {
+            get
+            {
+                return _testControl;
+            }
+            set
+            {
+                _testControl = value;
+                OnPropertyChanged("IsNotDuringTest");
+            }
+        }
+
+        public bool IsNotDuringTest
+        {
+            get
+            {
+                return _testControl == null;
+            }
+        }
         #endregion
     }
 }

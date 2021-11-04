@@ -10,6 +10,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
         #region Commands
         public ICommand MainScreenCheckedCommand { get; set; }
         public ICommand LearnCheckedCommand { get; set; }
+        public ICommand TestCheckedCommand { get; set; }
         public ICommand DictionaryCheckedCommand { get; set; }
         #endregion
 
@@ -26,6 +27,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
         {
             MainScreenCheckedCommand = new RelayCommand(MainScreenChecked);
             LearnCheckedCommand = new RelayCommand(LearnChecked);
+            TestCheckedCommand = new RelayCommand(TestChecked);
             DictionaryCheckedCommand = new RelayCommand(DictionaryChecked);
 
             MainScreenChecked();
@@ -38,7 +40,22 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
         private void LearnChecked(object obj = null)
         {
-            Configuration.CurrentView = Configuration.LearnSettingsControl;
+            if (Configuration.LearnControl != null)
+            {
+                Configuration.CurrentView = Configuration.LearnControl;
+            }
+            else
+            {
+                Configuration.CurrentView = Configuration.LearnSettingsControl;
+            }
+        }
+
+        private void TestChecked(object obj = null)
+        {
+            if (Configuration.IsNotDuringTest)
+            {
+                Configuration.CurrentView = Configuration.TestSettingsControl;
+            }
         }
 
         private void DictionaryChecked(object obj = null)

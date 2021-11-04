@@ -17,7 +17,7 @@ namespace LangApp.WpfClient.Services
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(logInData), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await HttpClient.PostAsync("https://localhost:44356/tokens", content).ConfigureAwait(false);
+            HttpResponseMessage response = await HttpClient.PostAsync("https://localhost:5000/tokens", content).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {

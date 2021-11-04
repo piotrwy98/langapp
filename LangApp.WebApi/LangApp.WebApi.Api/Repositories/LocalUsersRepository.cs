@@ -10,7 +10,7 @@ namespace LangApp.WebApi.Repositories
     {
         private readonly List<User> _users = new List<User>()
         {
-            new User { Id = Guid.NewGuid(), Email = "1", Password = "2" }
+            new User { Id = Guid.NewGuid(), Email = "test@wp.pl", Password = "test" }
         };
 
         public async Task<IEnumerable<User>> GetUsersAsync()

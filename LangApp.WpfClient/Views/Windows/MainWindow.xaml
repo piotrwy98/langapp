@@ -24,10 +24,14 @@
             <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundColor}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontSize" Value="18"/>
+            <Setter Property="IsEnabled" Value="{Binding Configuration.IsNotDuringTest}"/>
 
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
                     <Setter Property="Background" Value="{StaticResource PrimaryBackgroundColor}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="Gray"/>
                 </Trigger>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
@@ -47,33 +51,52 @@
 
         <Border Grid.Column="0" CornerRadius="10 0 0 10" Background="{StaticResource SecondaryBackgroundColor}">
             <StackPanel>
+                <StackPanel.Resources>
+                    <Style TargetType="md:PackIcon">
+                        <Setter Property="Width" Value="35"/>
+                        <Setter Property="Height" Value="35"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="15 0"/>
+                    </Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </StackPanel.Resources>
+                
                 <md:PackIcon Kind="UserCircle" Foreground="{StaticResource PrimaryForegroundColor}" HorizontalAlignment="Center" Height="75" Width="75" Margin="0 30"/>
 
                 <RadioButton Style="{StaticResource MenuButton}" Command="{Binding MainScreenCheckedCommand}" IsChecked="True">
                     <StackPanel Orientation="Horizontal">
-                        <md:PackIcon Kind="Home" Width="35" Height="35" VerticalAlignment="Center" Margin="15 0"/>
-                        <TextBlock Text="Ekran główny" VerticalAlignment="Center"/>
+                        <md:PackIcon Kind="Home"/>
+                        <TextBlock Text="Ekran główny"/>
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource MenuButton}" Command="{Binding LearnCheckedCommand}">
                     <StackPanel Orientation="Horizontal">
-                        <md:PackIcon Kind="LearnOutline" Width="35" Height="35" VerticalAlignment="Center" Margin="15 0"/>
-                        <TextBlock Text="Nauka" VerticalAlignment="Center"/>
+                        <md:PackIcon Kind="LearnOutline"/>
+                        <TextBlock Text="Nauka"/>
+                    </StackPanel>
+                </RadioButton>
+
+                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding TestCheckedCommand}" IsEnabled="True">
+                    <StackPanel Orientation="Horizontal">
+                        <md:PackIcon Kind="CheckboxMarkedCircleOutline"/>
+                        <TextBlock Text="Test"/>
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource MenuButton}" Command="{Binding DictionaryCheckedCommand}">
                     <StackPanel Orientation="Horizontal">
-                        <md:PackIcon Kind="BookOpenPageVariant" Width="35" Height="35" VerticalAlignment="Center" Margin="15 0"/>
-                        <TextBlock Text="Słownik" VerticalAlignment="Center"/>
+                        <md:PackIcon Kind="BookOpenPageVariant"/>
+                        <TextBlock Text="Słownik"/>
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource MenuButton}">
                     <StackPanel Orientation="Horizontal">
-                        <md:PackIcon Kind="Settings" Width="35" Height="35" VerticalAlignment="Center" Margin="15 0"/>
-                        <TextBlock Text="Ustawienia" VerticalAlignment="Center"/>
+                        <md:PackIcon Kind="Settings"/>
+                        <TextBlock Text="Ustawienia"/>
                     </StackPanel>
                 </RadioButton>
             </StackPanel>

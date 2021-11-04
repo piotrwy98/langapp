@@ -24,6 +24,8 @@ namespace LangApp.WpfClient.ViewModels.Controls
         #endregion
 
         #region Properties
+        public bool IsTest { get; }
+
         public List<CategoryToChoose> Categories { get; }
 
         private bool _isClosedChosen;
@@ -78,8 +80,9 @@ namespace LangApp.WpfClient.ViewModels.Controls
         }
         #endregion
 
-        public LearnSettingsViewModel()
+        public LearnSettingsViewModel(bool isTest)
         {
+            IsTest = isTest;
             CategoryClickCommand = new RelayCommand(CategoryClick);
             ClosedClickCommand = new RelayCommand(ClosedClick);
             OpenClickCommand = new RelayCommand(OpenClick);
@@ -127,7 +130,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             }
         }
 
-        private void StartLearning(object obj)
+        public void StartLearning(object obj = null)
         {
             List<Guid> categoriesIds = new List<Guid>();
             foreach(var category in Categories)
@@ -138,8 +141,16 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 }
             }
 
-            Configuration.GetInstance().LearnControl = new LearnControl(LanguagesService.GetInstance().Languages[1].Id, categoriesIds, _isClosedChosen, _isOpenChosen, _isSpeakChosen);
-            Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnControl;
+            if(IsTest)
+            {
+                Configuration.GetInstance().TestControl = new LearnControl(true, LanguagesService.GetInstance().Languages[1].Id, categoriesIds, _isClosedChosen, _isOpenChosen, _isSpeakChosen);
+                Configuration.GetInstance().CurrentView = Configuration.GetInstance().TestControl;
+            }
+            else
+            {
+                Configuration.GetInstance().LearnControl = new LearnControl(false, LanguagesService.GetInstance().Languages[1].Id, categoriesIds, _isClosedChosen, _isOpenChosen, _isSpeakChosen);
+                Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnControl;
+            }
         }
     }
 }
