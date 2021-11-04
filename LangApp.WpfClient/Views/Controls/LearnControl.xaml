@@ -52,9 +52,7 @@
                 </Border.Background>
             </Border>
 
-            <TextBox Text="{Binding OpenAnswer}" md:HintAssist.Hint="Tłumaczenie" Width="400" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="30" Margin="20" Visibility="Collapsed"/>
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="20">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="20" Visibility="{Binding ClosedAnswerVisibility}">
                 <StackPanel.Resources>
                     <Style TargetType="RadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
                         <Setter Property="FontSize" Value="32"/>
@@ -67,7 +65,69 @@
                 <RadioButton Grid.Row="1" Grid.Column="0" Content="{Binding ClosedAnswers[2]}" Command="{Binding ClosedAnswerCheckedCommand}" CommandParameter="2"/>
                 <RadioButton Grid.Row="1" Grid.Column="1" Content="{Binding ClosedAnswers[3]}" Command="{Binding ClosedAnswerCheckedCommand}" CommandParameter="3"/>
             </StackPanel>
-            
+
+            <TextBox Text="{Binding OpenAnswer}" md:HintAssist.Hint="Tłumaczenie" Width="400" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="30" Margin="20" Visibility="{Binding OpenAnswerVisibility}"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 20" Visibility="{Binding PronunciationAnswerVisibility}">
+                <Button
+                  Style="{StaticResource MaterialDesignFloatingActionButton}"
+                  Height="75" Width="75" Margin="0 0 100 0"
+                  Command="{Binding RecordCommand}" IsEnabled="{Binding IsRecordPlaying, Converter={StaticResource InvertBooleanConverter}}"
+                  md:ButtonProgressAssist.IsIndicatorVisible="{Binding IsRecording}"
+                  md:ButtonProgressAssist.Value="{Binding RecordProgress}"
+                  md:ButtonProgressAssist.IndicatorForeground="White"
+                  Background="Red" BorderBrush="Red" Foreground="White">
+                    <md:PackIcon Height="40" Width="40">
+                        <md:PackIcon.Style>
+                            <Style TargetType="md:PackIcon">
+                                <Setter Property="Kind" Value="Stop"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsRecordComplete}" Value="True">
+                                        <Setter Property="Kind" Value="Microphone"/>
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.8"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </md:PackIcon.Style>
+                    </md:PackIcon>
+                </Button>
+
+                <Button
+                  Style="{StaticResource MaterialDesignFloatingActionButton}"
+                  Height="75" Width="75"
+                  Command="{Binding RecordPlayCommand}" IsEnabled="{Binding IsPlayButtonEnabled}"
+                  md:ButtonProgressAssist.IsIndicatorVisible="{Binding IsRecordPlaying}"
+                  md:ButtonProgressAssist.Value="{Binding RecordPlayProgress}"
+                  md:ButtonProgressAssist.IndicatorForeground="White"
+                  Background="Green" BorderBrush="Green" Foreground="White">
+                    <md:PackIcon Height="40" Width="40">
+                        <md:PackIcon.Style>
+                            <Style TargetType="md:PackIcon">
+                                <Setter Property="Kind" Value="Stop"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsRecordPlayComplete}" Value="True">
+                                        <Setter Property="Kind" Value="Play"/>
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.8"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </md:PackIcon.Style>
+                    </md:PackIcon>
+                </Button>
+            </StackPanel>
+
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10 0 0 0" Visibility="{Binding IsCorrectVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <md:PackIcon Kind="CheckCircle" Width="42" Height="42" Foreground="LawnGreen" Margin="0 0 5 0"/>
                 <TextBlock Text="{Binding CorrectMessage}" FontSize="30" Foreground="LawnGreen" VerticalAlignment="Center"/>
@@ -102,8 +162,8 @@
             </StackPanel.Resources>
 
             <Button Content="Zakończ" Command="{Binding ExitCommand}" Background="PaleVioletRed" BorderBrush="PaleVioletRed"/>
-            <Button Content="Pomiń" Command="{Binding SkipCommand}" Margin="20 0" Background="Gray" BorderBrush="Gray"/>
-            <Button Command="{Binding CheckCommand}" Background="LawnGreen" BorderBrush="LawnGreen">
+            <Button Content="Pomiń" Command="{Binding SkipCommand}" Margin="20 0" Background="Gray" BorderBrush="Gray" IsEnabled="{Binding CanGoFurther, Converter={StaticResource InvertBooleanConverter}}"/>
+            <Button Command="{Binding CheckCommand}" Background="LawnGreen" BorderBrush="LawnGreen" IsEnabled="{Binding IsCheckButtonEnabled}">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Content" Value="Sprawdź"/>

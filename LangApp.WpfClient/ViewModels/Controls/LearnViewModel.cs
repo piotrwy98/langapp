@@ -2,10 +2,17 @@
 using LangApp.WpfClient.Models;
 using LangApp.WpfClient.Services;
 using LangApp.WpfClient.Views.Controls;
+using Microsoft.CognitiveServices.Speech.Audio;
+using NAudio.Utils;
+using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Media;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -13,16 +20,20 @@ namespace LangApp.WpfClient.ViewModels.Controls
 {
     public class LearnViewModel : NotifyPropertyChanged
     {
+        #region Constants
+        private static readonly int SAMPLE_RATE = 44100;
+        private static readonly int BITS_PER_SAMPLE = 16;
+        private static readonly int AUDIO_CHANNELS = 2;
+        #endregion
+
         #region Commands
         public ICommand ExitCommand { get; set; }
-
         public ICommand SkipCommand { get; set; }
-
         public ICommand CheckCommand { get; set; }
-
         public ICommand ShowAnswerCommand { get; set; }
-
         public ICommand ClosedAnswerCheckedCommand { get; set; }
+        public ICommand RecordCommand { get; set; }
+        public ICommand RecordPlayCommand { get; set; }
         #endregion
 
         #region Properties
@@ -37,6 +48,61 @@ namespace LangApp.WpfClient.ViewModels.Controls
             {
                 _translationPair = value;
                 OnPropertyChanged();
+            }
+        }
+
+        private QuestionType _questionType;
+        public QuestionType QuestionType
+        {
+            get
+            {
+                return _questionType;
+            }
+            set
+            {
+                _questionType = value;
+                OnPropertyChanged();
+                OnPropertyChanged("ClosedAnswerVisibility");
+                OnPropertyChanged("OpenAnswerVisibility");
+                OnPropertyChanged("PronunciationAnswerVisibility");
+
+                if(_questionType == QuestionType.CLOSED)
+                {
+                    PrepareClosedAnswers();
+                }
+            }
+        }
+
+        public Visibility ClosedAnswerVisibility
+        {
+            get
+            {
+                if (_questionType == QuestionType.CLOSED)
+                    return Visibility.Visible;
+
+                return Visibility.Collapsed;
+            }
+        }
+
+        public Visibility OpenAnswerVisibility
+        {
+            get
+            {
+                if (_questionType == QuestionType.OPEN)
+                    return Visibility.Visible;
+
+                return Visibility.Collapsed;
+            }
+        }
+
+        public Visibility PronunciationAnswerVisibility
+        {
+            get
+            {
+                if (_questionType == QuestionType.PRONUNCIATION)
+                    return Visibility.Visible;
+
+                return Visibility.Collapsed;
             }
         }
 
@@ -158,6 +224,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             {
                 _canGoToFurther = value;
                 OnPropertyChanged();
+                OnPropertyChanged("IsCheckButtonEnabled");
             }
         }
 
@@ -199,6 +266,113 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 OnPropertyChanged();
             }
         }
+
+        private bool _isRecording;
+        public bool IsRecording
+        {
+            get
+            {
+                return _isRecording;
+            }
+            set
+            {
+                _isRecording = value;
+                OnPropertyChanged();
+                OnPropertyChanged("IsCheckButtonEnabled");
+            }
+        }
+
+        private bool _isRecordComplete = true;
+        public bool IsRecordComplete
+        {
+            get
+            {
+                return _isRecordComplete;
+            }
+            set
+            {
+                _isRecordComplete = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _recordProgress;
+        public int RecordProgress
+        {
+            get
+            {
+                return _recordProgress;
+            }
+            set
+            {
+                _recordProgress = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isRecordPlaying;
+        public bool IsRecordPlaying
+        {
+            get
+            {
+                return _isRecordPlaying;
+            }
+            set
+            {
+                _isRecordPlaying = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isRecordPlayComplete = true;
+        public bool IsRecordPlayComplete
+        {
+            get
+            {
+                return _isRecordPlayComplete;
+            }
+            set
+            {
+                _isRecordPlayComplete = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _recordPlayProgress;
+        public double RecordPlayProgress
+        {
+            get
+            {
+                return _recordPlayProgress;
+            }
+            set
+            {
+                _recordPlayProgress = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isPlayButtonEnabled;
+        public bool IsPlayButtonEnabled
+        {
+            get
+            {
+                return _isPlayButtonEnabled;
+            }
+            set
+            {
+                _isPlayButtonEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsCheckButtonEnabled
+        {
+            get
+            {
+                return !IsRecording || CanGoFurther;
+            }
+        }
         #endregion
 
         #region Variables
@@ -211,11 +385,19 @@ namespace LangApp.WpfClient.ViewModels.Controls
         private BilingualDictionary _dictionary;
         private Random _random;
         private List<Guid> _previousWordsIds;
-        private QuestionType _questionType;
-        private DispatcherTimer _dispatcherTimer;
+        private DispatcherTimer _dispatcherGeneralTimer;
+        private DispatcherTimer _dispatcherRecordTimer;
+        private DispatcherTimer _dispatcherRecordPlayTimer;
         private Stopwatch _stopWatch;
         private int _properClosedAnswerIndex;
         private int _selectedClosedAnswerIndex;
+
+        private WaveIn _waveIn;
+        private MemoryStream _waveMemoryStream;
+        private WaveFileWriter _waveFileWriter;
+        private PushAudioInputStream _audioInputStream;
+        private SoundPlayer _soundPlayer;
+        private double _recordPlayValueToAdd;
         #endregion
 
         public LearnViewModel(Guid languageId, List<Guid> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen)
@@ -232,31 +414,73 @@ namespace LangApp.WpfClient.ViewModels.Controls
             _random = new Random();
             _previousWordsIds = new List<Guid>();
 
-            _dispatcherTimer = new DispatcherTimer();
-            _dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
-            _dispatcherTimer.Tick += DispatcherTimer_Tick;
-            _dispatcherTimer.Start();
+            /// timery
+            _dispatcherGeneralTimer = new DispatcherTimer();
+            _dispatcherGeneralTimer.Interval = TimeSpan.FromSeconds(1);
+            _dispatcherGeneralTimer.Tick += (sender, e) => 
+            {
+                OnPropertyChanged("Timer");
+            };
+            _dispatcherGeneralTimer.Start();
+
+            _dispatcherRecordTimer = new DispatcherTimer();
+            _dispatcherRecordTimer.Interval = TimeSpan.FromMilliseconds(40);
+            _dispatcherRecordTimer.Tick += (sender, e) =>
+            {
+                RecordProgress++;
+
+                if(_recordProgress >= 100)
+                {
+                    StopRecord();
+                }
+            };
+
+            _dispatcherRecordPlayTimer = new DispatcherTimer();
+            _dispatcherRecordPlayTimer.Interval = TimeSpan.FromMilliseconds(40);
+            _dispatcherRecordPlayTimer.Tick += (sender, e) =>
+            {
+                RecordPlayProgress += _recordPlayValueToAdd;
+
+                if (_recordPlayProgress >= 100)
+                {
+                    StopRecordPlay();
+                }
+            };
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
+            ///
+
+            /// nagrywanie dzwięku
+            _waveIn = new WaveIn();
+            _waveIn.DeviceNumber = 0; // domyślny mikrofon
+            _waveIn.DataAvailable += (sender, e) =>
+            {
+                _waveFileWriter.Write(e.Buffer, 0, e.BytesRecorded);
+                _audioInputStream.Write(e.Buffer);
+            };
+            _waveIn.WaveFormat = new WaveFormat(SAMPLE_RATE, BITS_PER_SAMPLE, AUDIO_CHANNELS);
+
+            _audioInputStream = AudioInputStream.CreatePushStream(
+                AudioStreamFormat.GetWaveFormatPCM((uint)SAMPLE_RATE, (byte)BITS_PER_SAMPLE, (byte)AUDIO_CHANNELS));
+
+            _soundPlayer = new SoundPlayer();
+            ///
 
             ExitCommand = new RelayCommand(Exit);
             SkipCommand = new RelayCommand(Skip);
             CheckCommand = new RelayCommand(Check);
             ShowAnswerCommand = new RelayCommand(ShowAnswer);
             ClosedAnswerCheckedCommand = new RelayCommand(ClosedAnswerChecked);
+            RecordCommand = new RelayCommand(Record);
+            RecordPlayCommand = new RelayCommand(RecordPlay);
 
             GetNextQuestion();
         }
 
-        private void DispatcherTimer_Tick(object sender, EventArgs e)
-        {
-            OnPropertyChanged("Timer");
-        }
-
         private void Exit(object obj)
         {
-            if(!CanGoFurther)
+            if (!CanGoFurther)
             {
                 QuestionCounter--;
             }
@@ -300,8 +524,9 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     return _openAnswer != null &&
                         TranslationPair.Value.SecondLanguageTranslation == _openAnswer.Trim().ToLowerInvariant();
 
-                case QuestionType.PRONOUNCIATION:
-                    return false;
+                case QuestionType.PRONUNCIATION:
+                    string text = Task.Run(() => SpeechToTextService.GetText(_audioInputStream)).Result;
+                    return TranslationPair.Value.SecondLanguageTranslation == text.Replace(".", "").ToLowerInvariant();
             }
 
             return false;
@@ -334,6 +559,18 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 IsShowAnswerVisible = true;
                 CanGoFurther = false;
 
+                if(IsRecording)
+                {
+                    StopRecord();
+                }
+
+                if(IsRecordPlaying)
+                {
+                    StopRecordPlay();
+                }
+
+                IsPlayButtonEnabled = false;
+
                 if (_previousWordsIds.Count == _dictionary.Dictionary.Count)
                 {
                     _previousWordsIds.Clear();
@@ -345,30 +582,66 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     TranslationPair = _dictionary.Dictionary.ElementAt(index);
                 } while (_previousWordsIds.Contains(TranslationPair.Key.Id));
 
-                ///
-                var closedAnswersWords = new List<Guid>() { TranslationPair.Key.Id };
-                var closedAnswers = new string[4];
-                closedAnswers[0] = TranslationPair.Value.SecondLanguageTranslation;
-                KeyValuePair<Word, TranslationSet> translationPair;
-
-                for (int i = 1; i < 4; i++)
-                {
-                    do
-                    {
-                        int index = _random.Next(0, _dictionary.Dictionary.Count);
-                        translationPair = _dictionary.Dictionary.ElementAt(index);
-                    } while (closedAnswersWords.Contains(translationPair.Key.Id));
-
-                    closedAnswersWords.Add(translationPair.Key.Id);
-                    closedAnswers[i] = translationPair.Value.SecondLanguageTranslation;
-                }
-
-                ClosedAnswers = closedAnswers.OrderBy(x => x).ToArray();
-                _properClosedAnswerIndex = Array.IndexOf(_closedAnswers, TranslationPair.Value.SecondLanguageTranslation);
-                ///
-
                 _previousWordsIds.Add(TranslationPair.Key.Id);
-                _questionType = QuestionType.CLOSED;
+
+                int questionTypeIndex;
+
+                if(_isClosedChosen && _isOpenChosen && _isSpeakChosen)
+                {
+                    questionTypeIndex = _random.Next(0, 3);
+                    QuestionType = (QuestionType) questionTypeIndex;
+                }
+                else if(_isClosedChosen && _isOpenChosen)
+                {
+                    questionTypeIndex = _random.Next(0, 2);
+
+                    if (questionTypeIndex == 0)
+                    {
+                        QuestionType = QuestionType.CLOSED;
+                    }
+                    else
+                    {
+                        QuestionType = QuestionType.OPEN;
+                    }
+                }
+                else if (_isClosedChosen && _isSpeakChosen)
+                {
+                    questionTypeIndex = _random.Next(0, 2);
+
+                    if (questionTypeIndex == 0)
+                    {
+                        QuestionType = QuestionType.CLOSED;
+                    }
+                    else
+                    {
+                        QuestionType = QuestionType.PRONUNCIATION;
+                    }
+                }
+                else if (_isOpenChosen && _isSpeakChosen)
+                {
+                    questionTypeIndex = _random.Next(0, 2);
+
+                    if (questionTypeIndex == 0)
+                    {
+                        QuestionType = QuestionType.OPEN;
+                    }
+                    else
+                    {
+                        QuestionType = QuestionType.PRONUNCIATION;
+                    }
+                }
+                else if(_isClosedChosen)
+                {
+                    QuestionType = QuestionType.CLOSED;
+                }
+                else if (_isOpenChosen)
+                {
+                    QuestionType = QuestionType.OPEN;
+                }
+                else
+                {
+                    QuestionType = QuestionType.PRONUNCIATION;
+                }
             }
             else
             {
@@ -376,20 +649,109 @@ namespace LangApp.WpfClient.ViewModels.Controls
             }
         }
 
+        private void PrepareClosedAnswers()
+        {
+            var closedAnswersWords = new List<Guid>() { TranslationPair.Key.Id };
+            var closedAnswers = new string[4];
+            closedAnswers[0] = TranslationPair.Value.SecondLanguageTranslation;
+            KeyValuePair<Word, TranslationSet> translationPair;
+
+            for (int i = 1; i < 4; i++)
+            {
+                do
+                {
+                    int index = _random.Next(0, _dictionary.Dictionary.Count);
+                    translationPair = _dictionary.Dictionary.ElementAt(index);
+                } while (closedAnswersWords.Contains(translationPair.Key.Id));
+
+                closedAnswersWords.Add(translationPair.Key.Id);
+                closedAnswers[i] = translationPair.Value.SecondLanguageTranslation;
+            }
+
+            ClosedAnswers = closedAnswers.OrderBy(x => x).ToArray();
+            _properClosedAnswerIndex = Array.IndexOf(_closedAnswers, TranslationPair.Value.SecondLanguageTranslation);
+        }
+
         private void Finish()
         {
             Configuration.GetInstance().CurrentView = new LearnFinishControl(Timer, QuestionCounter, NumberOfQuestions);
-            _dispatcherTimer.Stop();
+            _dispatcherGeneralTimer.Stop();
             _stopWatch.Reset();
         }
 
         public void Reset()
         {
             QuestionCounter = 0;
-            _dispatcherTimer.Start();
+            _dispatcherGeneralTimer.Start();
             _stopWatch.Start();
             OnPropertyChanged("Timer");
             GetNextQuestion();
+        }
+
+        private void Record(object obj)
+        {
+            if (!IsRecording)
+            {
+                IsRecording = true;
+                IsRecordComplete = false;
+                RecordProgress = 0;
+                IsPlayButtonEnabled = false;
+
+                var waveFormat = new WaveFormat(SAMPLE_RATE, BITS_PER_SAMPLE, AUDIO_CHANNELS);
+                _waveMemoryStream = new MemoryStream();
+                _waveFileWriter = new WaveFileWriter(new IgnoreDisposeStream(_waveMemoryStream), waveFormat);
+
+                _dispatcherRecordTimer.Start();
+                _waveIn.StartRecording();
+            }
+            else
+            {
+                StopRecord();
+            }
+        }
+
+        private void StopRecord()
+        {
+            _dispatcherRecordTimer.Stop();
+            _waveIn.StopRecording();
+
+            IsRecording = false;
+            IsRecordComplete = true;
+            IsPlayButtonEnabled = true;
+
+            _recordPlayValueToAdd = 100 / (_waveFileWriter.TotalTime.TotalMilliseconds / _dispatcherRecordPlayTimer.Interval.TotalMilliseconds);
+
+            _waveFileWriter.Close();
+            _audioInputStream.Close();
+            _waveMemoryStream.Position = 0;
+            _soundPlayer.Stream = _waveMemoryStream;
+            _soundPlayer.LoadAsync();
+        }
+
+        private void RecordPlay(object obj)
+        {
+            if (!IsRecordPlaying)
+            {
+                RecordPlayProgress = 0;
+                IsRecordPlaying = true;
+                IsRecordPlayComplete = false;
+
+                _dispatcherRecordPlayTimer.Start();
+                _soundPlayer.Play();
+            }
+            else
+            {
+                StopRecordPlay();
+            }
+        }
+
+        private void StopRecordPlay()
+        {
+            IsRecordPlaying = false;
+            IsRecordPlayComplete = true;
+
+            _dispatcherRecordPlayTimer.Stop();
+            _soundPlayer.Stop();
         }
     }
 }

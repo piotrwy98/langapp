@@ -13,8 +13,8 @@ namespace LangApp.WpfClient.Services
         private LanguagesService()
         {
             Languages = new List<Language>();
-            Languages.Add(new Language { Id = new Guid("00000000000000000000000000000000"), Code = "pl", Name = "Polski", FlagUri = "../../Resources/Flags/pl.png" });
-            Languages.Add(new Language { Id = new Guid("00000000000000000000000000000001"), Code = "en", Name = "Angielski", FlagUri = "../../Resources/Flags/en.png" });
+            Languages.Add(new Language { Id = new Guid("00000000000000000000000000000000"), Code = "pl", Name = "Polski", FlagUri = "../../../Resources/Flags/pl.png" });
+            Languages.Add(new Language { Id = new Guid("00000000000000000000000000000001"), Code = "en", Name = "Angielski", FlagUri = "../../../Resources/Flags/en.png" });
         }
 
         public static LanguagesService GetInstance()

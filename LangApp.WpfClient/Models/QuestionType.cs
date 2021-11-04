@@ -4,6 +4,6 @@
     {
         CLOSED,
         OPEN,
-        PRONOUNCIATION
+        PRONUNCIATION
     }
 }
