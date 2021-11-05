@@ -134,6 +134,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Controls\LearnDetailsControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Controls\LearnFinishControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -175,6 +179,7 @@
     <Compile Include="Services\TranslationsService.cs" />
     <Compile Include="Services\UsersService.cs" />
     <Compile Include="ViewModels\Controls\DictionaryViewModel.cs" />
+    <Compile Include="ViewModels\Controls\LearnDetailsViewModel.cs" />
     <Compile Include="ViewModels\Controls\LearnFinishViewModel.cs" />
     <Compile Include="ViewModels\Controls\LearnSettingsViewModel.cs" />
     <Compile Include="ViewModels\Controls\LearnViewModel.cs" />
@@ -186,6 +191,9 @@
     </Compile>
     <Compile Include="Views\Controls\LearnControl.xaml.cs">
       <DependentUpon>LearnControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\LearnDetailsControls.xaml.cs">
+      <DependentUpon>LearnDetailsControls.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\LearnFinishControl.xaml.cs">
       <DependentUpon>LearnFinishControl.xaml</DependentUpon>

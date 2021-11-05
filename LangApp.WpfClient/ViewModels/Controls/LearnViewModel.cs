@@ -509,7 +509,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 switch(_questionType)
                 {
                     case QuestionType.CLOSED:
-                        userAnswer = _closedAnswers[_properClosedAnswerIndex];
+                        userAnswer = _closedAnswers[_selectedClosedAnswerIndex];
                         break;
 
                     case QuestionType.OPEN:
@@ -527,6 +527,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     QuestionType = _questionType.GetName(),
                     UserAnswer = userAnswer,
                     CorrectAnswer = TranslationPair.Value.SecondLanguageTranslation,
+                    IsAnswerCorrect = userAnswer == TranslationPair.Value.SecondLanguageTranslation,
                     Duration = DateTime.Now - _questionAppearedTime
                 });
 
@@ -725,9 +726,10 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         private void Finish()
         {
-            Configuration.GetInstance().CurrentView = new LearnFinishControl(Timer, QuestionCounter, NumberOfQuestions);
-            
-            if(IsTest)
+            Configuration.GetInstance().LearnFinishControl = new LearnFinishControl(IsTest, DateTime.Now - _startTime, NumberOfQuestions, _answers);
+            Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnFinishControl;
+
+            if (IsTest)
             {
                 Configuration.GetInstance().TestControl = null;
             }

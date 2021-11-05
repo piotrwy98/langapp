@@ -6,41 +6,55 @@
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:LangApp.WpfClient.Views.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Foreground="{StaticResource SecondaryForegroundColor}">
+             d:DesignHeight="450" d:DesignWidth="800" Foreground="{Binding ResultColorBrush}">
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Zakończono naukę" HorizontalAlignment="Center" FontSize="60"/>
-            <md:PackIcon Kind="LearnOutline" Width="400" Height="400" HorizontalAlignment="Center"/>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        
+        <Grid.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundColor}"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            
+            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Width" Value="240"/>
+                <Setter Property="Height" Value="50"/>
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+        </Grid.Resources>
+        
+        <StackPanel Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="{Binding ResultText}" Foreground="{Binding ResultColorBrush}" HorizontalAlignment="Center" FontSize="60"/>
+            <md:PackIcon Kind="{Binding ResultIcon}" Width="400" Height="400" HorizontalAlignment="Center" Margin="0 0 0 40"/>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <StackPanel.Resources>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="FontSize" Value="30"/>
-                        <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundColor}"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                    </Style>
-                </StackPanel.Resources>
-                
+            <StackPanel Orientation="Horizontal" Visibility="{Binding IsTest, Converter={StaticResource InverseBoolToVisConverter}}">
                 <TextBlock Text="Wykonano "/>
-                <TextBlock Text="{Binding QuestionCounter}"/>
+                <TextBlock Text="{Binding Answers.Count}"/>
                 <TextBlock Text="/"/>
                 <TextBlock Text="{Binding NumberOfQuestions}"/>
                 <TextBlock Text=" zadań z czasem "/>
-                <TextBlock Text="{Binding Timer}"/>
+                <TextBlock Text="{Binding Timer, StringFormat=mm\\:ss\\.fff}"/>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 80 0 0">
-                <StackPanel.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                        <Setter Property="Width" Value="250"/>
-                        <Setter Property="Height" Value="50"/>
-                        <Setter Property="FontSize" Value="20"/>
-                    </Style>
-                </StackPanel.Resources>
-                
-                <Button Content="Zmień kategorie" Command="{Binding ChangeCategoryCommand}" Background="Gray" BorderBrush="Gray"/>
-                <Button Content="Wykonaj ponownie" Command="{Binding LearnAgainCommand}" Margin="50 0 0 0"/>
+            <StackPanel Orientation="Horizontal" Visibility="{Binding IsTest, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock Text="Poprawność odpowiedzi to "/>
+                <TextBlock Text="{Binding ResultPercent, StringFormat=N0}" FontWeight="Bold"/>
+                <TextBlock Text="%" FontWeight="Bold"/>
+                <TextBlock Text=" z "/>
+                <TextBlock Text="{Binding NumberOfQuestions}"/>
+                <TextBlock Text=" pytań w czasie "/>
+                <TextBlock Text="{Binding Timer, StringFormat=mm\\:ss\\.fff}"/>
             </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 40">
+            <Button Content="Zmień kategorie" Command="{Binding ChangeCategoryCommand}" Background="Gray" BorderBrush="Gray"/>
+            <Button Content="Pokaż szczegóły" Command="{Binding ShowDetailsCommand}" Margin="50 0"/>
+            <Button Content="Wykonaj ponownie" Command="{Binding LearnAgainCommand}" Background="Gray" BorderBrush="Gray"/>
         </StackPanel>
     </Grid>
 </UserControl>

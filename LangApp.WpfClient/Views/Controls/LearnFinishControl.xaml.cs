@@ -1,4 +1,7 @@
-﻿using LangApp.WpfClient.ViewModels.Controls;
+﻿using LangApp.WpfClient.Models;
+using LangApp.WpfClient.ViewModels.Controls;
+using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
 
 namespace LangApp.WpfClient.Views.Controls
@@ -8,10 +11,10 @@ namespace LangApp.WpfClient.Views.Controls
     /// </summary>
     public partial class LearnFinishControl : UserControl
     {
-        public LearnFinishControl(string timer, int questionCounter, int numberOfQuestions)
+        public LearnFinishControl(bool isTest, TimeSpan timer, int numberOfQuestions, List<Answer> answers)
         {
             InitializeComponent();
-            DataContext = new LearnFinishViewModel(timer, questionCounter, numberOfQuestions);
+            DataContext = new LearnFinishViewModel(isTest, timer, numberOfQuestions, answers);
         }
     }
 }

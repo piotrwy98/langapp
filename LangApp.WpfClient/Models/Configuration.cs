@@ -77,6 +77,8 @@ namespace LangApp.WpfClient.Models
                 return _testControl == null;
             }
         }
+
+        public LearnFinishControl LearnFinishControl { get; set; }
         #endregion
     }
 }

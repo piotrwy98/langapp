@@ -12,14 +12,19 @@ namespace LangApp.WpfClient.Models
 
         public string CorrectAnswer { get; set; }
 
-        public bool IsAnswerCorrect
+        public bool IsAnswerCorrect { get; set; }
+
+        public TimeSpan Duration { get; set; }
+
+        public string AnswerResult
         {
             get
             {
-                return UserAnswer == CorrectAnswer;
+                if (IsAnswerCorrect)
+                    return "Poprawna";
+
+                return "Niepoprawna";
             }
         }
-
-        public TimeSpan Duration { get; set; }
     }
 }
