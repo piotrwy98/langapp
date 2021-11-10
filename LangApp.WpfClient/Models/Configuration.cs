@@ -1,5 +1,6 @@
 ﻿using LangApp.Shared.Models;
 using LangApp.WpfClient.Services;
+using LangApp.WpfClient.ViewModels;
 using LangApp.WpfClient.Views.Controls;
 using System.Windows.Controls;
 
@@ -34,7 +35,7 @@ namespace LangApp.WpfClient.Models
             }
         }
 
-        public User User { get; set; }
+        public User User { get; set; } = new User() { Id = 1 };
 
         private UserControl _currentView;
         public UserControl CurrentView

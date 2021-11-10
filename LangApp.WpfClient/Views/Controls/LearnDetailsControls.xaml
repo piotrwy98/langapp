@@ -16,10 +16,10 @@
         <TextBlock Grid.Row="0" Text="Szczegółowe wyniki" Foreground="White" FontSize="30" Margin="0 0 0 20"/>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <DataGrid ItemsSource="{Binding Answers}" Background="Transparent" FontSize="16" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False">
+            <DataGrid ItemsSource="{Binding Answers}" Background="Transparent" FontSize="16" IsReadOnly="True" AutoGenerateColumns="False" CanUserResizeRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Lp." Binding="{Binding Index}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Rezultat" Binding="{Binding AnswerResult}" IsReadOnly="True" FontWeight="Medium">
+                    <DataGridTextColumn Header="Lp." Binding="{Binding Index}"/>
+                    <DataGridTextColumn Header="Rezultat" Binding="{Binding AnswerResult}" FontWeight="Medium">
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
                                 <Setter Property="Foreground" Value="LawnGreen"/>
@@ -31,10 +31,10 @@
                             </Style>
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Twoja odpowiedź" Binding="{Binding UserAnswer}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Poprawna odpowiedź" Binding="{Binding CorrectAnswer}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Typ pytania" Binding="{Binding QuestionType}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Czas odpowiedzi" Binding="{Binding Duration, StringFormat=mm\\:ss\\.fff}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Twoja odpowiedź" Binding="{Binding UserAnswer}"/>
+                    <DataGridTextColumn Header="Poprawna odpowiedź" Binding="{Binding CorrectAnswer}"/>
+                    <DataGridTextColumn Header="Typ pytania" Binding="{Binding QuestionType}"/>
+                    <DataGridTextColumn Header="Czas odpowiedzi" Binding="{Binding Duration, StringFormat=mm\\:ss\\.fff}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>

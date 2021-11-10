@@ -15,6 +15,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
     {
         #region Commands
         public ICommand SearchValueChangedCommand { get; set; }
+        public ICommand StarMouseLeftButtonDownCommand { get; set; }
         #endregion
 
         #region Properties
@@ -64,29 +65,6 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 _dictionaryCollectionView = value;
                 OnPropertyChanged();
                 RefreshSearching();
-                SortAscending = SortAscending;
-            }
-        }
-
-        private bool _sortAscending;
-        public bool SortAscending
-        {
-            get
-            {
-                return _sortAscending;
-            }
-            set
-            {
-                _sortAscending = value;
-                OnPropertyChanged();
-
-                if(DictionaryCollectionView.SortDescriptions.Count > 0)
-                    DictionaryCollectionView.SortDescriptions.RemoveAt(0);
-
-                if (_sortAscending)
-                    DictionaryCollectionView.SortDescriptions.Add(new SortDescription("Value.FirstLanguageTranslation", ListSortDirection.Ascending));
-                else
-                    DictionaryCollectionView.SortDescriptions.Add(new SortDescription("Value.FirstLanguageTranslation", ListSortDirection.Descending));
             }
         }
 
@@ -96,7 +74,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             {
                 BitmapImage image = new BitmapImage();
                 image.BeginInit();
-                image.UriSource = new Uri(SelectedDictionary.FirstLanguage.FlagUri, UriKind.Relative);
+                image.UriSource = new Uri(SelectedDictionary.FirstLanguage.ImagePath, UriKind.Relative);
                 image.CacheOption = BitmapCacheOption.OnLoad;
                 image.EndInit();
 
@@ -110,7 +88,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             {
                 BitmapImage image = new BitmapImage();
                 image.BeginInit();
-                image.UriSource = new Uri(SelectedDictionary.SecondLanguage.FlagUri, UriKind.Relative);
+                image.UriSource = new Uri(SelectedDictionary.SecondLanguage.ImagePath, UriKind.Relative);
                 image.CacheOption = BitmapCacheOption.OnLoad;
                 image.EndInit();
 
@@ -126,10 +104,10 @@ namespace LangApp.WpfClient.ViewModels.Controls
         public DictionaryViewModel()
         {
             SearchValueChangedCommand = new RelayCommand(SearchValueChanged);
+            StarMouseLeftButtonDownCommand = new RelayCommand(StarMouseLeftButtonDown);
 
             Dictionaries = TranslationsService.GetInstance().Dictionaries;
             SelectedDictionary = Dictionaries[0];
-            SortAscending = true;
         }
 
         private void SearchValueChanged(object obj)
@@ -139,6 +117,35 @@ namespace LangApp.WpfClient.ViewModels.Controls
             {
                 _searchedText = (args.Source as TextBox).Text.ToLowerInvariant().Trim();
                 RefreshSearching();
+            }
+        }
+
+        private void StarMouseLeftButtonDown(object obj)
+        {
+            var pair = obj as KeyValuePair<Word, TranslationSet>?;
+            if(pair != null)
+            {
+                if(pair.Value.Value.IsFavourite)
+                {
+                    // usuwamy z ulubionych
+                    if(FavouriteWordsService.RemoveFavouriteWordAsync(pair.Value.Value.FavouriteWordId.Value).Result)
+                    {
+                        pair.Value.Value.FavouriteWordId = null;
+                    }
+                }
+                else
+                {
+                    // dodajemy do ulubionych
+                    var favouriteWord = FavouriteWordsService.CreateFavouriteWordAsync
+                        (Configuration.GetInstance().User, pair.Value.Key,
+                        _selectedDictionary.FirstLanguage,
+                        _selectedDictionary.SecondLanguage).Result;
+
+                    if(favouriteWord != null)
+                    {
+                        pair.Value.Value.FavouriteWordId = favouriteWord.Id;
+                    }
+                }
             }
         }
 
@@ -155,9 +162,9 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     var pair = (KeyValuePair<Word, TranslationSet>)o;
 
                     if (SearchByFirstLanguage)
-                        return pair.Value.FirstLanguageTranslation.ToLowerInvariant().Trim().Contains(_searchedText);
+                        return pair.Value.FirstLanguageTranslation.Value.ToLowerInvariant().Trim().Contains(_searchedText);
                     else
-                        return pair.Value.SecondLanguageTranslation.ToLowerInvariant().Trim().Contains(_searchedText);
+                        return pair.Value.SecondLanguageTranslation.Value.ToLowerInvariant().Trim().Contains(_searchedText);
                 };
             }
 

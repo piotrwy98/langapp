@@ -50,20 +50,9 @@
                     <Image Source="{Binding SecondLanguageFlagSource}" Height="30"/>
                 </RadioButton>
             </StackPanel>
-
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Sortuj:" VerticalAlignment="Center" Margin="0 10 10 0" FontWeight="Medium"/>
-            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0 10 0 0">
-                <RadioButton Content="{md:PackIcon Kind=SortAlphabeticalAscending, Size=26}" IsChecked="{Binding SortAscending}"/>
-                <RadioButton Content="{md:PackIcon Kind=SortAlphabeticalDescending, Size=26}" Margin="20 0 0 0"/>
-            </StackPanel>
         </Grid>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 0 0 10">
-            <TextBlock Text="{Binding SelectedDictionary.FirstLanguage.Name}" Width="200" Foreground="{StaticResource SecondaryForegroundColor}" FontSize="18"/>
-            <TextBlock Text="{Binding SelectedDictionary.SecondLanguage.Name}" Foreground="{StaticResource SecondaryForegroundColor}" FontSize="18"/>
-        </StackPanel>
-
-        <TextBlock Grid.Row="2" FontStyle="Italic">
+        <TextBlock Grid.Row="2" Foreground="Red" FontSize="16">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -77,20 +66,41 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding SelectedDictionary.Dictionary}" FontSize="16">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <StackPanel Name="DictionaryPosition_StackPanel" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 7">
-                                <TextBlock Text="{Binding Value.FirstLanguageTranslation}" Width="200"/>
-                                <TextBlock Text="{Binding Value.SecondLanguageTranslation}"/>
-                            </StackPanel>
-                            <Separator HorizontalAlignment="Left" Width="{Binding ActualWidth, ElementName=DictionaryPosition_StackPanel}" Background="{StaticResource SecondaryForegroundColor}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+        <FrameworkElement x:Name="ProxyElement" DataContext="{Binding}"/>
+        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" Margin="0 10 0 0">
+            <DataGrid ItemsSource="{Binding SelectedDictionary.Dictionary}" Background="Transparent" FontSize="16" IsReadOnly="True" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <md:PackIcon Foreground="Gold" Background="Transparent" VerticalAlignment="Center" Width="24" Height="24" Cursor="Hand">
+                                    <md:PackIcon.Style>
+                                        <Style TargetType="md:PackIcon">
+                                            <Setter Property="Kind" Value="StarOutline"/>
+                                            <Setter Property="ToolTip" Value="Dodaj do ulubionych"/>
+                                            
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Value.IsFavourite}" Value="True">
+                                                    <Setter Property="Kind" Value="Star"/>
+                                                    <Setter Property="ToolTip" Value="Usuń z ulubionych"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </md:PackIcon.Style>
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.StarMouseLeftButtonDownCommand, Source={x:Reference ProxyElement}}" CommandParameter="{Binding}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </md:PackIcon>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="{Binding DataContext.SelectedDictionary.FirstLanguage.Name, Source={x:Reference ProxyElement}}" Binding="{Binding Value.FirstLanguageTranslation.Value}" MinWidth="200"/>
+                    <DataGridTextColumn Header="{Binding DataContext.SelectedDictionary.SecondLanguage.Name, Source={x:Reference ProxyElement}}" Binding="{Binding Value.SecondLanguageTranslation.Value}"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </ScrollViewer>
     </Grid>
 </UserControl>

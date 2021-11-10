@@ -1,4 +1,5 @@
-﻿using LangApp.Shared.Models.Controllers;
+﻿using LangApp.Shared.Models;
+using LangApp.Shared.Models.Controllers;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
@@ -9,18 +10,18 @@ namespace LangApp.WpfClient.Services
 {
     public abstract class UsersService : HttpClientService
     {
-        public async static Task<RegisterResult> CreateUserAsync(string email, string username, string password, UserRole userRole)
+        public async static Task<RegisterResult> CreateUserAsync(string email, string username, string password, UserRole role)
         {
-            var registerData = new RegisterData()
+            var user = new User()
             {
                 Email = email,
                 Username = username,
                 Password = password,
-                UserRole = userRole
+                Role = role
             };
 
-            var content = new StringContent(JsonConvert.SerializeObject(registerData), Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync("https://localhost:5000/users", content).ConfigureAwait(false);
+            var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+            var response = await HttpClient.PostAsync("http://localhost:5000/users", content).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {

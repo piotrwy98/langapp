@@ -1,5 +1,4 @@
-﻿using LangApp.Shared.Models;
-using LangApp.WpfClient.Models;
+﻿using LangApp.WpfClient.Models;
 using LangApp.WpfClient.Views.Controls;
 using System.Windows.Input;
 
@@ -12,6 +11,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
         public ICommand LearnCheckedCommand { get; set; }
         public ICommand TestCheckedCommand { get; set; }
         public ICommand DictionaryCheckedCommand { get; set; }
+        public ICommand FavouriteWordsCheckedCommand { get; set; }
         #endregion
 
         #region Properties
@@ -21,6 +21,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
         #region Controls
         private MainScreenControl _mainScreenControl = new MainScreenControl();
         private DictionaryControl _dictionaryControl = new DictionaryControl();
+        private FavouriteWordsControl _favouriteWordsControl = new FavouriteWordsControl();
         #endregion
 
         public MainViewModel()
@@ -29,6 +30,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
             LearnCheckedCommand = new RelayCommand(LearnChecked);
             TestCheckedCommand = new RelayCommand(TestChecked);
             DictionaryCheckedCommand = new RelayCommand(DictionaryChecked);
+            FavouriteWordsCheckedCommand = new RelayCommand(FavouriteWordsChecked);
 
             MainScreenChecked();
         }
@@ -61,6 +63,11 @@ namespace LangApp.WpfClient.ViewModels.Windows
         private void DictionaryChecked(object obj = null)
         {
             Configuration.CurrentView = _dictionaryControl;
+        }
+
+        private void FavouriteWordsChecked(object obj)
+        {
+            Configuration.CurrentView = _favouriteWordsControl;
         }
     }
 }

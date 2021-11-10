@@ -1,4 +1,5 @@
 ﻿using LangApp.Shared.Models;
+using LangApp.WpfClient.ViewModels;
 
 namespace LangApp.WpfClient.Models
 {

@@ -130,6 +130,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Controls\FavouriteWordsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Controls\LearnControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -167,11 +171,14 @@
     <Compile Include="Models\CategoryToChoose.cs" />
     <Compile Include="Models\Configuration.cs" />
     <Compile Include="Models\Extensions.cs" />
+    <Compile Include="Models\ImageConverter.cs" />
     <Compile Include="Models\QuestionType.cs" />
     <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="Models\TranslationSet.cs" />
     <Compile Include="Models\TranslationsList.cs" />
+    <Compile Include="ViewModels\NotifyPropertyChanged.cs" />
     <Compile Include="Services\CategoriesService.cs" />
+    <Compile Include="Services\FavouriteWordsService.cs" />
     <Compile Include="Services\HttpClientService.cs" />
     <Compile Include="Services\LanguagesService.cs" />
     <Compile Include="Services\SpeechToTextService.cs" />
@@ -179,6 +186,7 @@
     <Compile Include="Services\TranslationsService.cs" />
     <Compile Include="Services\UsersService.cs" />
     <Compile Include="ViewModels\Controls\DictionaryViewModel.cs" />
+    <Compile Include="ViewModels\Controls\FavouriteWordsViewModel.cs" />
     <Compile Include="ViewModels\Controls\LearnDetailsViewModel.cs" />
     <Compile Include="ViewModels\Controls\LearnFinishViewModel.cs" />
     <Compile Include="ViewModels\Controls\LearnSettingsViewModel.cs" />
@@ -188,6 +196,9 @@
     <Compile Include="ViewModels\Windows\MainViewModel.cs" />
     <Compile Include="Views\Controls\DictionaryControl.xaml.cs">
       <DependentUpon>DictionaryControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\FavouriteWordsControl.xaml.cs">
+      <DependentUpon>FavouriteWordsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\LearnControl.xaml.cs">
       <DependentUpon>LearnControl.xaml</DependentUpon>

@@ -30,7 +30,7 @@ namespace LangApp.WpfClient.Services
                 TranslationsLists.Add(new TranslationsList()
                 {
                     Language = language,
-                    Translations = (List<Translation>)GetTranslationsAsync(language.Id).Result
+                    Translations = (List<Translation>) GetTranslationsAsync(language.Id).Result
                 });
             }
 
@@ -48,7 +48,7 @@ namespace LangApp.WpfClient.Services
             return _instace;
         }
 
-        private async Task<IEnumerable<Translation>> GetTranslationsAsync(Guid languageId)
+        private async Task<IEnumerable<Translation>> GetTranslationsAsync(uint languageId)
         {
             var response = await HttpClient.GetAsync("http://localhost:5000/translations/languageId=" + languageId).ConfigureAwait(false);
 
@@ -83,7 +83,8 @@ namespace LangApp.WpfClient.Services
                         secondDictionary.Add(pair.Key, new TranslationSet()
                         {
                             FirstLanguageTranslation = pair.Value.SecondLanguageTranslation,
-                            SecondLanguageTranslation = pair.Value.FirstLanguageTranslation
+                            SecondLanguageTranslation = pair.Value.FirstLanguageTranslation,
+                            FavouriteWordId = pair.Value.FavouriteWordId
                         });
                     }
 
@@ -107,10 +108,18 @@ namespace LangApp.WpfClient.Services
 
                 if (secondTranslation != null)
                 {
+                    var favouriteWord = FavouriteWordsService.GetInstance().FavouriteWords.
+                            FirstOrDefault(x => x.Word.Id == translation.Word.Id &&
+                            ((x.FirstLanguage.Id == translation.Language.Id &&
+                            x.SecondLanguage.Id == secondTranslation.Language.Id) ||
+                            (x.FirstLanguage.Id == secondTranslation.Language.Id &&
+                            x.SecondLanguage.Id == translation.Language.Id)));
+
                     dictionary.Add(translation.Word, new TranslationSet()
                     {
-                        FirstLanguageTranslation = translation.Value,
-                        SecondLanguageTranslation = secondTranslation.Value,
+                        FirstLanguageTranslation = translation,
+                        SecondLanguageTranslation = secondTranslation,
+                        FavouriteWordId = favouriteWord?.Id
                     });
                 }
             }

@@ -1,5 +1,4 @@
-﻿using LangApp.Shared.Models;
-using LangApp.WpfClient.Models;
+﻿using LangApp.WpfClient.Models;
 using LangApp.WpfClient.Services;
 using System.Linq;
 using System.Collections.Generic;
@@ -132,7 +131,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         public void StartLearning(object obj = null)
         {
-            List<Guid> categoriesIds = new List<Guid>();
+            List<uint> categoriesIds = new List<uint>();
             foreach(var category in Categories)
             {
                 if(category.IsChosen)

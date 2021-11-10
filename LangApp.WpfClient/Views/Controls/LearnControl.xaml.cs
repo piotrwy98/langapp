@@ -10,7 +10,7 @@ namespace LangApp.WpfClient.Views.Controls
     /// </summary>
     public partial class LearnControl : UserControl
     {
-        public LearnControl(bool isTest, Guid languageId, List<Guid> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen)
+        public LearnControl(bool isTest, uint languageId, List<uint> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen)
         {
             InitializeComponent();
             DataContext = new LearnViewModel(isTest, languageId, categoriesIds, isClosedChosen, isOpenChosen, isSpeakChosen);

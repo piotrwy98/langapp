@@ -10,10 +10,10 @@ namespace LangApp.WpfClient
     {
         private void ApplicationStartup(object sender, StartupEventArgs e)
         {
-            //var loginRegisterWindow = new LoginRegisterWindow();
-            //loginRegisterWindow.Show();
+            var loginRegisterWindow = new LoginRegisterWindow();
+            loginRegisterWindow.Show();
 
-            new MainWindow().Show();
+            //new MainWindow().Show();
         }
     }
 }

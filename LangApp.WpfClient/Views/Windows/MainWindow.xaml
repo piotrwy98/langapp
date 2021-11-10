@@ -45,7 +45,7 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="250"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
@@ -90,6 +90,13 @@
                     <StackPanel Orientation="Horizontal">
                         <md:PackIcon Kind="BookOpenPageVariant"/>
                         <TextBlock Text="Słownik"/>
+                    </StackPanel>
+                </RadioButton>
+
+                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding FavouriteWordsCheckedCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <md:PackIcon Kind="Star"/>
+                        <TextBlock Text="Ulubione słowa"/>
                     </StackPanel>
                 </RadioButton>
 

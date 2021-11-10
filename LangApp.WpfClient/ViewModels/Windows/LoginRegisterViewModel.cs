@@ -1,5 +1,4 @@
-﻿using LangApp.Shared.Models;
-using LangApp.Shared.Models.Controllers;
+﻿using LangApp.Shared.Models.Controllers;
 using LangApp.WpfClient.Models;
 using LangApp.WpfClient.Services;
 using LangApp.WpfClient.Views.Windows;
@@ -241,7 +240,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
             switch(registerResult)
             {
                 case RegisterResult.OK:
-                    SuccessMessageText = "Błędne dane logowania";
+                    SuccessMessageText = "Pomyślnie utworzono konto";
                     GoToLogIn();
                     break;
 

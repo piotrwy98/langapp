@@ -7,7 +7,6 @@ using NAudio.Utils;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
@@ -34,6 +33,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         public ICommand ClosedAnswerCheckedCommand { get; set; }
         public ICommand RecordCommand { get; set; }
         public ICommand RecordPlayCommand { get; set; }
+        public ICommand StarMouseLeftButtonDownCommand { get; set; }
         #endregion
 
         #region Properties
@@ -378,15 +378,15 @@ namespace LangApp.WpfClient.ViewModels.Controls
         #endregion
 
         #region Variables
-        private Guid _languageId;
-        private List<Guid> _categoriesIds;
+        private uint _languageId;
+        private List<uint> _categoriesIds;
         private bool _isClosedChosen;
         private bool _isOpenChosen;
         private bool _isSpeakChosen;
 
         private BilingualDictionary _dictionary;
         private Random _random;
-        private List<Guid> _previousWordsIds;
+        private List<uint> _previousWordsIds;
         private List<Answer> _answers;
         private string _pronunciationResult;
         private int _properClosedAnswerIndex;
@@ -406,7 +406,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         private double _recordPlayValueToAdd;
         #endregion
 
-        public LearnViewModel(bool isTest, Guid languageId, List<Guid> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen)
+        public LearnViewModel(bool isTest, uint languageId, List<uint> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen)
         {
             IsTest = isTest;
             _languageId = languageId;
@@ -419,7 +419,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 x.FirstLanguage.Id == LanguagesService.GetInstance().Languages[0].Id &&
                 x.SecondLanguage.Id == _languageId);
             _random = new Random();
-            _previousWordsIds = new List<Guid>();
+            _previousWordsIds = new List<uint>();
             _answers = new List<Answer>();
 
             /// timery
@@ -481,6 +481,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             ClosedAnswerCheckedCommand = new RelayCommand(ClosedAnswerChecked);
             RecordCommand = new RelayCommand(Record);
             RecordPlayCommand = new RelayCommand(RecordPlay);
+            StarMouseLeftButtonDownCommand = new RelayCommand(StarMouseLeftButtonDown);
 
             GetNextQuestion();
         }
@@ -526,8 +527,8 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     Index = QuestionCounter,
                     QuestionType = _questionType.GetName(),
                     UserAnswer = userAnswer,
-                    CorrectAnswer = TranslationPair.Value.SecondLanguageTranslation,
-                    IsAnswerCorrect = userAnswer == TranslationPair.Value.SecondLanguageTranslation,
+                    CorrectAnswer = TranslationPair.Value.SecondLanguageTranslation.Value,
+                    IsAnswerCorrect = userAnswer == TranslationPair.Value.SecondLanguageTranslation.Value,
                     Duration = DateTime.Now - _questionAppearedTime
                 });
 
@@ -569,10 +570,10 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
                 case QuestionType.OPEN:
                     return _openAnswer != null &&
-                        TranslationPair.Value.SecondLanguageTranslation == _openAnswer.Trim();
+                        TranslationPair.Value.SecondLanguageTranslation.Value == _openAnswer.Trim();
 
                 case QuestionType.PRONUNCIATION:
-                    return TranslationPair.Value.SecondLanguageTranslation == GetPronunciationResult();
+                    return TranslationPair.Value.SecondLanguageTranslation.Value == GetPronunciationResult();
             }
 
             return false;
@@ -703,9 +704,9 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         private void PrepareClosedAnswers()
         {
-            var closedAnswersWords = new List<Guid>() { TranslationPair.Key.Id };
+            var closedAnswersWords = new List<uint>() { TranslationPair.Key.Id };
             var closedAnswers = new string[4];
-            closedAnswers[0] = TranslationPair.Value.SecondLanguageTranslation;
+            closedAnswers[0] = TranslationPair.Value.SecondLanguageTranslation.Value;
             KeyValuePair<Word, TranslationSet> translationPair;
 
             for (int i = 1; i < 4; i++)
@@ -717,11 +718,11 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 } while (closedAnswersWords.Contains(translationPair.Key.Id));
 
                 closedAnswersWords.Add(translationPair.Key.Id);
-                closedAnswers[i] = translationPair.Value.SecondLanguageTranslation;
+                closedAnswers[i] = translationPair.Value.SecondLanguageTranslation.Value;
             }
 
             ClosedAnswers = closedAnswers.OrderBy(x => x).ToArray();
-            _properClosedAnswerIndex = Array.IndexOf(_closedAnswers, TranslationPair.Value.SecondLanguageTranslation);
+            _properClosedAnswerIndex = Array.IndexOf(_closedAnswers, TranslationPair.Value.SecondLanguageTranslation.Value);
         }
 
         private void Finish()
@@ -805,6 +806,35 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
             _dispatcherRecordPlayTimer.Stop();
             _soundPlayer.Stop();
+        }
+
+        private void StarMouseLeftButtonDown(object obj)
+        {
+            var pair = obj as KeyValuePair<Word, TranslationSet>?;
+            if (pair != null)
+            {
+                if (pair.Value.Value.IsFavourite)
+                {
+                    // usuwamy z ulubionych
+                    if (FavouriteWordsService.RemoveFavouriteWordAsync(pair.Value.Value.FavouriteWordId.Value).Result)
+                    {
+                        pair.Value.Value.FavouriteWordId = null;
+                    }
+                }
+                else
+                {
+                    // dodajemy do ulubionych
+                    var favouriteWord = FavouriteWordsService.CreateFavouriteWordAsync
+                        (Configuration.GetInstance().User, pair.Value.Key,
+                        _dictionary.FirstLanguage,
+                        _dictionary.SecondLanguage).Result;
+
+                    if (favouriteWord != null)
+                    {
+                        pair.Value.Value.FavouriteWordId = favouriteWord.Id;
+                    }
+                }
+            }
         }
     }
 }
