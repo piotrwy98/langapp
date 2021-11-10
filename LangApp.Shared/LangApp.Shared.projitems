@@ -10,14 +10,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Models\Category.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Controllers\CategoryData.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Controllers\TranslationData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\CategoryName.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\FavouriteWord.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Language.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Controllers\LogInData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Level.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\NotifyPropertyChanged.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Controllers\RegisterData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Translation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Controllers\UserWithToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />

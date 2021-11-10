@@ -4,7 +4,7 @@ namespace LangApp.Shared.Models
 {
     public class Word
     {
-        public Guid Id { get; set; }
+        public uint Id { get; set; }
 
         public string ImagePath { get; set; }
     }

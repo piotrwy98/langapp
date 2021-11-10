@@ -4,7 +4,7 @@ namespace LangApp.Shared.Models
 {
     public class Category
     {
-        public Guid Id { get; set; }
+        public uint Id { get; set; }
 
         public Level Level { get; set; }
 

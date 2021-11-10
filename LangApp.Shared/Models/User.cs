@@ -1,78 +1,17 @@
-﻿using System;
-using static LangApp.Shared.Models.Enums;
+﻿using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.Shared.Models
 {
-    public class User : NotifyPropertyChanged
+    public class User
     {
-        private Guid _id;
-        public Guid Id
-        {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                _id = value;
-                OnPropertyChanged();
-            }
-        }
+        public uint Id { get; set; }
 
-        private string _email;
-        public string Email
-        {
-            get
-            {
-                return _email;
-            }
-            set
-            {
-                _email = value;
-                OnPropertyChanged();
-            }
-        }
+        public string Email { get; set; }
 
-        private string _username;
-        public string Username
-        {
-            get
-            {
-                return _username;
-            }
-            set
-            {
-                _username = value;
-                OnPropertyChanged();
-            }
-        }
+        public string Username { get; set; }
 
-        private string _password;
-        public string Password
-        {
-            get
-            {
-                return _password;
-            }
-            set
-            {
-                _password = value;
-                OnPropertyChanged();
-            }
-        }
+        public string Password { get; set; }
 
-        private UserRole _userRole;
-        public UserRole UserRole
-        {
-            get
-            {
-                return _userRole;
-            }
-            set
-            {
-                _userRole = value;
-                OnPropertyChanged();
-            }
-        }
+        public UserRole Role { get; set; }
     }
 }

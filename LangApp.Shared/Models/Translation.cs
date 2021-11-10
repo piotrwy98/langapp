@@ -4,7 +4,7 @@ namespace LangApp.Shared.Models
 {
     public class Translation
     {
-        public Guid Id { get; set; }
+        public uint Id { get; set; }
 
         public Language Language { get; set; }
 
