@@ -10,18 +10,19 @@ using Xunit;
 
 namespace LangApp.WebApi.UnitTests
 {
-    public class CategoriesControllerTest
+    public class CategoriesControllerTests
     {
         private readonly Mock<ICategoriesRepository> _categoriesRepository = new Mock<ICategoriesRepository>();
+        private readonly Random _random = new Random();
 
         private Category GetRandomCategory()
         {
             return new Category()
             {
-                Id = Guid.NewGuid(),
+                Id = (uint)_random.Next(0, int.MaxValue),
                 Level = new Level()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = (uint)_random.Next(0, int.MaxValue),
                     Name = Guid.NewGuid().ToString()
                 },
                 Name = Guid.NewGuid().ToString(),
@@ -55,12 +56,12 @@ namespace LangApp.WebApi.UnitTests
         public async Task GetCategoryAsyncTest()
         {
             // Arrange
-            _categoriesRepository.Setup(x => x.GetCategoryAsync(It.IsAny<Guid>())).ReturnsAsync((Category) null);
+            _categoriesRepository.Setup(x => x.GetCategoryAsync(It.IsAny<uint>())).ReturnsAsync((Category) null);
 
             var controller = new CategoriesController(_categoriesRepository.Object);
 
             // Act
-            var result = await controller.GetCategoryAsync(Guid.NewGuid());
+            var result = await controller.GetCategoryAsync(uint.MinValue);
 
             // Assert
             Assert.IsType<NotFoundResult>(result.Result);
@@ -74,12 +75,12 @@ namespace LangApp.WebApi.UnitTests
         {
             // Arrange
             Category expectedCategory = GetRandomCategory();
-            _categoriesRepository.Setup(x => x.GetCategoryAsync(It.IsAny<Guid>())).ReturnsAsync(expectedCategory);
+            _categoriesRepository.Setup(x => x.GetCategoryAsync(It.IsAny<uint>())).ReturnsAsync(expectedCategory);
 
             var controller = new CategoriesController(_categoriesRepository.Object);
 
             // Act
-            var result = await controller.GetCategoryAsync(Guid.NewGuid());
+            var result = await controller.GetCategoryAsync(uint.MinValue);
 
             // Assert
             Assert.Equal(expectedCategory, result.Value);
@@ -89,24 +90,19 @@ namespace LangApp.WebApi.UnitTests
         /// Should always return CreatedAtAction with created category
         /// </summary>
         [Fact]
-        public async Task CreateCategoryAsyncTest2()
+        public async Task CreateCategoryAsyncTest()
         {
             // Arrange
             Category expectedCategory = GetRandomCategory();
             var controller = new CategoriesController(_categoriesRepository.Object);
 
             // Act
-            var result = await controller.CreateCategoryAsync(new CategoryData()
-            {
-                Level = expectedCategory.Level,
-                Name = expectedCategory.Name,
-                ImagePath = expectedCategory.ImagePath
-            });
+            var result = await controller.CreateCategoryAsync(expectedCategory);
 
             // Assert
             Assert.IsType<CreatedAtActionResult>(result.Result);
 
-            Category actualCategory = (result.Result as CreatedAtActionResult).Value as Category;
+            var actualCategory = (result.Result as CreatedAtActionResult).Value as Category;
 
             Assert.NotNull(actualCategory);
             Assert.Equal(expectedCategory.Level, actualCategory.Level);
@@ -141,7 +137,7 @@ namespace LangApp.WebApi.UnitTests
             var controller = new CategoriesController(_categoriesRepository.Object);
 
             // Act
-            var result = await controller.DeleteCategoryAsync(Guid.NewGuid());
+            var result = await controller.DeleteCategoryAsync(uint.MinValue);
 
             // Assert
             Assert.IsType<NoContentResult>(result);

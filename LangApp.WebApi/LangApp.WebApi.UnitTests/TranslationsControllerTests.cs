@@ -13,21 +13,22 @@ namespace LangApp.WebApi.UnitTests
     public class TranslationsControllerTests
     {
         private readonly Mock<ITranslationsRepository> _translationsRepository = new Mock<ITranslationsRepository>();
+        private readonly Random _random = new Random();
 
         private Translation GetRandomTranslation()
         {
             return new Translation()
             {
-                Id = Guid.NewGuid(),
+                Id = (uint)_random.Next(0, int.MaxValue),
                 Language = new Language()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = (uint)_random.Next(0, int.MaxValue),
                     Code = Guid.NewGuid().ToString(),
                     Name = Guid.NewGuid().ToString()
                 },
                 Word = new Word()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = (uint)_random.Next(0, int.MaxValue),
                     ImagePath = Guid.NewGuid().ToString()
                 },
                 Value = Guid.NewGuid().ToString()
@@ -42,12 +43,12 @@ namespace LangApp.WebApi.UnitTests
         {
             // Arrange
             var expectedTranslations = new Translation[] { GetRandomTranslation(), GetRandomTranslation() };
-            _translationsRepository.Setup(x => x.GetTranslationsAsync(It.IsAny<Guid>())).ReturnsAsync(expectedTranslations);
+            _translationsRepository.Setup(x => x.GetTranslationsAsync(It.IsAny<uint>())).ReturnsAsync(expectedTranslations);
 
             var controller = new TranslationsController(_translationsRepository.Object);
 
             // Act
-            var actualTranslations = await controller.GetTranslationsAsync(Guid.NewGuid());
+            var actualTranslations = await controller.GetTranslationsAsync(uint.MinValue);
 
             // Assert
             Assert.Equal(expectedTranslations, actualTranslations);
@@ -60,12 +61,12 @@ namespace LangApp.WebApi.UnitTests
         public async Task GetTranslationAsyncTest()
         {
             // Arrange
-            _translationsRepository.Setup(x => x.GetTranslationAsync(It.IsAny<Guid>())).ReturnsAsync((Translation) null);
+            _translationsRepository.Setup(x => x.GetTranslationAsync(It.IsAny<uint>())).ReturnsAsync((Translation) null);
 
             var controller = new TranslationsController(_translationsRepository.Object);
 
             // Act
-            var result = await controller.GetTranslationAsync(Guid.NewGuid());
+            var result = await controller.GetTranslationAsync(uint.MinValue);
 
             // Assert
             Assert.IsType<NotFoundResult>(result.Result);
@@ -79,12 +80,12 @@ namespace LangApp.WebApi.UnitTests
         {
             // Arrange
             Translation expectedTranslation = GetRandomTranslation();
-            _translationsRepository.Setup(x => x.GetTranslationAsync(It.IsAny<Guid>())).ReturnsAsync(expectedTranslation);
+            _translationsRepository.Setup(x => x.GetTranslationAsync(It.IsAny<uint>())).ReturnsAsync(expectedTranslation);
 
             var controller = new TranslationsController(_translationsRepository.Object);
 
             // Act
-            var result = await controller.GetTranslationAsync(Guid.NewGuid());
+            var result = await controller.GetTranslationAsync(uint.MinValue);
 
             // Assert
             Assert.Equal(expectedTranslation, result.Value);
@@ -98,18 +99,13 @@ namespace LangApp.WebApi.UnitTests
         {
             // Arrange
             Translation expectedTranslation = GetRandomTranslation();
-            _translationsRepository.Setup(x => x.GetTranslationByWordAndLanguageAsync(It.IsAny<Guid>(), It.IsAny<Guid>()))
+            _translationsRepository.Setup(x => x.GetTranslationByWordAndLanguageAsync(It.IsAny<uint>(), It.IsAny<uint>()))
                 .ReturnsAsync(expectedTranslation);
 
             var controller = new TranslationsController(_translationsRepository.Object);
 
             // Act
-            var result = await controller.CreateTranslationAsync(new TranslationData()
-            {
-                Language = expectedTranslation.Language,
-                Word = expectedTranslation.Word,
-                Value = expectedTranslation.Value
-            });
+            var result = await controller.CreateTranslationAsync(expectedTranslation);
 
             // Assert
             Assert.IsType<BadRequestResult>(result.Result);
@@ -123,18 +119,13 @@ namespace LangApp.WebApi.UnitTests
         {
             // Arrange
             Translation expectedTranslation = GetRandomTranslation();
-            _translationsRepository.Setup(x => x.GetTranslationByWordAndLanguageAsync(It.IsAny<Guid>(), It.IsAny<Guid>()))
+            _translationsRepository.Setup(x => x.GetTranslationByWordAndLanguageAsync(It.IsAny<uint>(), It.IsAny<uint>()))
                 .ReturnsAsync((Translation) null);
 
             var controller = new TranslationsController(_translationsRepository.Object);
 
             // Act
-            var result = await controller.CreateTranslationAsync(new TranslationData()
-            {
-                Language = expectedTranslation.Language,
-                Word = expectedTranslation.Word,
-                Value = expectedTranslation.Value
-            });
+            var result = await controller.CreateTranslationAsync(expectedTranslation);
 
             // Assert
             Assert.IsType<CreatedAtActionResult>(result.Result);
@@ -174,7 +165,7 @@ namespace LangApp.WebApi.UnitTests
             var controller = new TranslationsController(_translationsRepository.Object);
 
             // Act
-            var result = await controller.DeleteTranslationAsync(Guid.NewGuid());
+            var result = await controller.DeleteTranslationAsync(uint.MinValue);
 
             // Assert
             Assert.IsType<NoContentResult>(result);

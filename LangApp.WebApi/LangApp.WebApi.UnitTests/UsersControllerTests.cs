@@ -1,7 +1,7 @@
 using LangApp.Shared.Models;
 using LangApp.Shared.Models.Controllers;
-using LangApp.WebApi.Controllers;
-using LangApp.WebApi.Repositories;
+using LangApp.WebApi.Api.Controllers;
+using LangApp.WebApi.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
@@ -20,11 +20,11 @@ namespace LangApp.WebApi.UnitTests
         {
             return new User()
             {
-                Id = Guid.NewGuid(),
+                Id = (uint)_random.Next(0, int.MaxValue),
                 Email = Guid.NewGuid().ToString(),
                 Username = Guid.NewGuid().ToString(),
                 Password = Guid.NewGuid().ToString(),
-                UserRole = (UserRole)_random.Next(Enum.GetNames(typeof(UserRole)).Length - 1)
+                Role = (UserRole) _random.Next(Enum.GetNames(typeof(UserRole)).Length - 1)
             };
         }
 
@@ -54,12 +54,12 @@ namespace LangApp.WebApi.UnitTests
         public async Task GetUserAsyncTest()
         {
             // Arrange
-            _usersRepository.Setup(x => x.GetUserByIdAsync(It.IsAny<Guid>())).ReturnsAsync((User) null);
+            _usersRepository.Setup(x => x.GetUserByIdAsync(It.IsAny<uint>())).ReturnsAsync((User) null);
 
             var controller = new UsersController(_usersRepository.Object);
 
             // Act
-            var result = await controller.GetUserAsync(Guid.NewGuid());
+            var result = await controller.GetUserAsync(uint.MinValue);
 
             // Assert
             Assert.IsType<NotFoundResult>(result.Result);
@@ -73,12 +73,12 @@ namespace LangApp.WebApi.UnitTests
         {
             // Arrange
             User expectedUser = GetRandomUser();
-            _usersRepository.Setup(x => x.GetUserByIdAsync(It.IsAny<Guid>())).ReturnsAsync(expectedUser);
+            _usersRepository.Setup(x => x.GetUserByIdAsync(It.IsAny<uint>())).ReturnsAsync(expectedUser);
 
             var controller = new UsersController(_usersRepository.Object);
 
             // Act
-            var result = await controller.GetUserAsync(Guid.NewGuid());
+            var result = await controller.GetUserAsync(uint.MinValue);
 
             // Assert
             Assert.Equal(expectedUser, result.Value);
@@ -96,7 +96,7 @@ namespace LangApp.WebApi.UnitTests
             var controller = new UsersController(_usersRepository.Object);
 
             // Act
-            var result = await controller.CreateUserAsync(new RegisterData());
+            var result = await controller.CreateUserAsync(new User());
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result.Result);
@@ -116,7 +116,7 @@ namespace LangApp.WebApi.UnitTests
             var controller = new UsersController(_usersRepository.Object);
 
             // Act
-            var result = await controller.CreateUserAsync(new RegisterData());
+            var result = await controller.CreateUserAsync(new User());
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result.Result);
@@ -137,13 +137,7 @@ namespace LangApp.WebApi.UnitTests
             var controller = new UsersController(_usersRepository.Object);
 
             // Act
-            var result = await controller.CreateUserAsync(new RegisterData()
-            {
-                Email = expectedUser.Email,
-                Username = expectedUser.Username,
-                Password = expectedUser.Password,
-                UserRole = expectedUser.UserRole
-            });
+            var result = await controller.CreateUserAsync(expectedUser);
 
             // Assert
             Assert.IsType<CreatedAtActionResult>(result.Result);
@@ -154,7 +148,7 @@ namespace LangApp.WebApi.UnitTests
             Assert.Equal(expectedUser.Email, actualUser.Email);
             Assert.Equal(expectedUser.Username, actualUser.Username);
             Assert.Equal(expectedUser.Password, actualUser.Password);
-            Assert.Equal(expectedUser.UserRole, actualUser.UserRole);
+            Assert.Equal(expectedUser.Role, actualUser.Role);
         }
 
         /// <summary>
@@ -184,7 +178,7 @@ namespace LangApp.WebApi.UnitTests
             var controller = new UsersController(_usersRepository.Object);
 
             // Act
-            var result = await controller.DeleteUserAsync(Guid.NewGuid());
+            var result = await controller.DeleteUserAsync(uint.MinValue);
 
             // Assert
             Assert.IsType<NoContentResult>(result);
