@@ -1,5 +1,5 @@
 ﻿using LangApp.Shared.Models.Controllers;
-using LangApp.WebApi.Repositories;
+using LangApp.WebApi.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LangApp.WebApi.Controllers
+namespace LangApp.WebApi.Api.Controllers
 {
     [ApiController]
     [Route("/tokens")]

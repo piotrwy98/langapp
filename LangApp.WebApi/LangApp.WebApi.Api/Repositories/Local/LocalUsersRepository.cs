@@ -4,58 +4,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LangApp.WebApi.Repositories
+namespace LangApp.WebApi.Api.Repositories.Local
 {
     public class LocalUsersRepository : IUsersRepository
     {
-        private readonly List<User> _users = new List<User>()
+        public static readonly List<User> Users = new List<User>()
         {
-            new User { Id = Guid.NewGuid(), Email = "test@wp.pl", Password = "test" }
+            new User { Id = 1, Email = "test@wp.pl", Password = "test" }
         };
 
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
-            return await Task.FromResult(_users);
+            return await Task.FromResult(Users);
         }
 
-        public async Task<User> GetUserByIdAsync(Guid id)
+        public async Task<User> GetUserByIdAsync(uint id)
         {
-            return await Task.FromResult(_users.FirstOrDefault(x => x.Id == id));
+            return await Task.FromResult(Users.FirstOrDefault(x => x.Id == id));
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
         {
-            return await Task.FromResult(_users.FirstOrDefault(x => x.Email == email));
+            return await Task.FromResult(Users.FirstOrDefault(x => x.Email == email));
         }
 
         public async Task<User> GetUserByUsernameAsync(string username)
         {
-            return await Task.FromResult(_users.FirstOrDefault(x => x.Username == username));
+            return await Task.FromResult(Users.FirstOrDefault(x => x.Username == username));
         }
 
         public async Task CreateUserAsync(User user)
         {
-            _users.Add(user);
+            Users.Add(user);
             await Task.CompletedTask;
         }
 
         public async Task UpdateUserAsync(User user)
         {
-            var index = _users.FindIndex(x => x.Id == user.Id);
+            var index = Users.FindIndex(x => x.Id == user.Id);
             if(index >= 0)
             {
-                _users[index] = user;
+                Users[index] = user;
             }
 
             await Task.CompletedTask;
         }
 
-        public async Task DeleteUserAsync(Guid id)
+        public async Task DeleteUserAsync(uint id)
         {
-            var index = _users.FindIndex(x => x.Id == id);
+            var index = Users.FindIndex(x => x.Id == id);
             if (index >= 0)
             {
-                _users.RemoveAt(index);
+                Users.RemoveAt(index);
             }
 
             await Task.CompletedTask;

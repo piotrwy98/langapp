@@ -1,14 +1,13 @@
 ﻿using LangApp.Shared.Models;
 using LangApp.Shared.Models.Controllers;
-using LangApp.WebApi.Repositories;
+using LangApp.WebApi.Api.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using static LangApp.Shared.Models.Enums;
 
-namespace LangApp.WebApi.Controllers
+namespace LangApp.WebApi.Api.Controllers
 {
     //[Authorize]
     [ApiController]
@@ -29,7 +28,7 @@ namespace LangApp.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUserAsync(Guid id)
+        public async Task<ActionResult<User>> GetUserAsync(uint id)
         {
             var user = await _usersRepository.GetUserByIdAsync(id);
             if (user == null)
@@ -42,26 +41,17 @@ namespace LangApp.WebApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<User>> CreateUserAsync([FromBody] RegisterData data)
+        public async Task<ActionResult<User>> CreateUserAsync([FromBody] User user)
         {
-            if(await _usersRepository.GetUserByEmailAsync(data.Email) != null)
+            if(await _usersRepository.GetUserByEmailAsync(user.Email) != null)
             {
                 return BadRequest(RegisterResult.OCCUPIED_EMAIL);
             }
 
-            if (await _usersRepository.GetUserByUsernameAsync(data.Username) != null)
+            if (await _usersRepository.GetUserByUsernameAsync(user.Username) != null)
             {
                 return BadRequest(RegisterResult.OCCUPIED_USERNAME);
             }
-
-            User user = new User()
-            {
-                Id = Guid.NewGuid(),
-                Email = data.Email,
-                Username = data.Username,
-                Password = data.Password,
-                UserRole = data.UserRole
-            };
 
             await _usersRepository.CreateUserAsync(user);
 
@@ -77,7 +67,7 @@ namespace LangApp.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteUserAsync(Guid id)
+        public async Task<ActionResult> DeleteUserAsync(uint id)
         {
             await _usersRepository.DeleteUserAsync(id);
 

@@ -28,7 +28,7 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategoryAsync(Guid id)
+        public async Task<ActionResult<Category>> GetCategoryAsync(uint id)
         {
             var category = await _categoriesRepository.GetCategoryAsync(id);
             if (category == null)
@@ -40,16 +40,8 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Category>> CreateCategoryAsync([FromBody] CategoryData data)
+        public async Task<ActionResult<Category>> CreateCategoryAsync([FromBody] Category category)
         {
-            Category category = new Category()
-            {
-                Id = Guid.NewGuid(),
-                Level = data.Level,
-                Name = data.Name,
-                ImagePath = data.ImagePath
-            };
-
             await _categoriesRepository.CreateCategoryAsync(category);
 
             return CreatedAtAction(nameof(GetCategoryAsync), new { id = category.Id }, category);
@@ -64,7 +56,7 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteCategoryAsync(Guid id)
+        public async Task<ActionResult> DeleteCategoryAsync(uint id)
         {
             await _categoriesRepository.DeleteCategoryAsync(id);
 

@@ -22,13 +22,13 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpGet("languageId={languageId}")]
-        public async Task<IEnumerable<Translation>> GetTranslationsAsync(Guid languageId)
+        public async Task<IEnumerable<Translation>> GetTranslationsAsync(uint languageId)
         {
             return await _translationsRepository.GetTranslationsAsync(languageId);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Translation>> GetTranslationAsync(Guid id)
+        public async Task<ActionResult<Translation>> GetTranslationAsync(uint id)
         {
             var translation = await _translationsRepository.GetTranslationAsync(id);
             if (translation == null)
@@ -40,20 +40,12 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Translation>> CreateTranslationAsync([FromBody] TranslationData data)
+        public async Task<ActionResult<Translation>> CreateTranslationAsync([FromBody] Translation translation)
         {
-            if (await _translationsRepository.GetTranslationByWordAndLanguageAsync(data.Word.Id, data.Language.Id) != null)
+            if (await _translationsRepository.GetTranslationByWordAndLanguageAsync(translation.Word.Id, translation.Language.Id) != null)
             {
                 return BadRequest();
             }
-
-            Translation translation = new Translation()
-            {
-                Id = Guid.NewGuid(),
-                Language = data.Language,
-                Word = data.Word,
-                Value = data.Value
-            };
 
             await _translationsRepository.CreateTranslationAsync(translation);
 
@@ -69,7 +61,7 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteTranslationAsync(Guid id)
+        public async Task<ActionResult> DeleteTranslationAsync(uint id)
         {
             await _translationsRepository.DeleteTranslationAsync(id);
 

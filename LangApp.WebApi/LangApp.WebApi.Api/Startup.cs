@@ -1,8 +1,10 @@
 using LangApp.WebApi.Api.Repositories;
-using LangApp.WebApi.Repositories;
+using LangApp.WebApi.Api.Repositories.Db;
+using LangApp.WebApi.Api.Repositories.Local;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,6 +19,7 @@ namespace LangApp.WebApi
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            LangAppContext.ConnectionString = Configuration.GetConnectionString("LangApp");
         }
 
         public IConfiguration Configuration { get; }
@@ -24,9 +27,16 @@ namespace LangApp.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IUsersRepository, LocalUsersRepository>();
+            services.AddDbContextPool<LangAppContext>(options =>
+            {
+                options.UseMySql(LangAppContext.ConnectionString,
+                    ServerVersion.AutoDetect(LangAppContext.ConnectionString));
+            });
+
+            services.AddScoped<IUsersRepository, DbUsersRepository>();
             services.AddSingleton<ITranslationsRepository, LocalTranslationsRepository>();
             services.AddSingleton<ICategoriesRepository, LocalCategoriesRepository>();
+            services.AddSingleton<IFavouriteWordsRepository, LocalFavouriteWordsRepository>();
 
             services.AddControllers(options =>
                 options.SuppressAsyncSuffixInActionNames = false
