@@ -9,11 +9,11 @@ namespace LangApp.WpfClient.Services
     {
         private static CategoriesService _instace;
 
-        public List<Category> Categories;
+        public List<CategoryName> Categories { get; }
 
         private CategoriesService()
         {
-            Categories = (List<Category>) GetCategoriesAsync().Result;
+            Categories = (List<CategoryName>) GetCategoriesAsync().Result;
         }
 
         public static CategoriesService GetInstance()
@@ -26,14 +26,14 @@ namespace LangApp.WpfClient.Services
             return _instace;
         }
 
-        private async Task<IEnumerable<Category>> GetCategoriesAsync()
+        private async Task<IEnumerable<CategoryName>> GetCategoriesAsync()
         {
             var response = await HttpClient.GetAsync("http://localhost:5000/categories").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<IEnumerable<Category>>(json);
+                return JsonConvert.DeserializeObject<IEnumerable<CategoryName>>(json);
             }
 
             return null;

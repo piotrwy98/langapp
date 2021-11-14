@@ -6,9 +6,14 @@
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:LangApp.WpfClient.Views.Controls"
+             xmlns:converters="clr-namespace:LangApp.WpfClient.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" FontSize="20" Foreground="{StaticResource SecondaryForegroundColor}"
              FontWeight="Medium" RenderOptions.BitmapScalingMode="HighQuality">
+    <UserControl.Resources>
+        <converters:LevelNameConverter x:Key="LevelNameConverter"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -165,7 +170,7 @@
                                 </i:Interaction.Triggers>
 
                                 <Border.Background>
-                                    <ImageBrush Stretch="UniformToFill" ImageSource="{Binding Category.ImagePath}"/>
+                                    <ImageBrush Stretch="UniformToFill" ImageSource="{Binding Category.Category.ImagePath}"/>
                                 </Border.Background>
 
                                 <Border CornerRadius="0 0 7 7" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
@@ -174,8 +179,8 @@
                                     </Border.Background>
                                     
                                     <StackPanel>
-                                        <TextBlock Text="{Binding Category.Name}" Margin="10 5 10 0"/>
-                                        <TextBlock Text="{Binding Category.Level.Name}" Margin="10 5"/>
+                                        <TextBlock Text="{Binding Category.Value}" Margin="10 5 10 0"/>
+                                        <TextBlock Text="{Binding Category.Category.Level, Converter={StaticResource LevelNameConverter}}" Margin="10 5"/>
                                     </StackPanel>
                                 </Border>
                             </Border>

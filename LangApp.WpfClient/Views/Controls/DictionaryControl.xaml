@@ -6,9 +6,14 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:LangApp.WpfClient.Views.Controls"
+             xmlns:converters="clr-namespace:LangApp.WpfClient.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" FontSize="14" 
              Foreground="{StaticResource PrimaryForegroundColor}" RenderOptions.BitmapScalingMode="HighQuality">
+    <UserControl.Resources>
+        <converters:LanguageNameConverter x:Key="LanguageNameConverter"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -97,8 +102,8 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="{Binding DataContext.SelectedDictionary.FirstLanguage.Name, Source={x:Reference ProxyElement}}" Binding="{Binding Value.FirstLanguageTranslation.Value}" MinWidth="200"/>
-                    <DataGridTextColumn Header="{Binding DataContext.SelectedDictionary.SecondLanguage.Name, Source={x:Reference ProxyElement}}" Binding="{Binding Value.SecondLanguageTranslation.Value}"/>
+                    <DataGridTextColumn Header="{Binding DataContext.SelectedDictionary.FirstLanguage.Id, Converter={StaticResource LanguageNameConverter}, Source={x:Reference ProxyElement}}" Binding="{Binding Value.FirstLanguageTranslation.Value}" MinWidth="200"/>
+                    <DataGridTextColumn Header="{Binding DataContext.SelectedDictionary.SecondLanguage.Id, Converter={StaticResource LanguageNameConverter}, Source={x:Reference ProxyElement}}" Binding="{Binding Value.SecondLanguageTranslation.Value}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>

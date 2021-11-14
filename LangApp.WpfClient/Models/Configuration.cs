@@ -2,6 +2,7 @@
 using LangApp.WpfClient.Services;
 using LangApp.WpfClient.ViewModels;
 using LangApp.WpfClient.Views.Controls;
+using Newtonsoft.Json;
 using System.Windows.Controls;
 
 namespace LangApp.WpfClient.Models
@@ -10,7 +11,13 @@ namespace LangApp.WpfClient.Models
     {
         private static Configuration _instance;
 
-        private Configuration() { }
+        private Configuration()
+        {
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects
+            };
+        }
 
         public static Configuration GetInstance()
         {

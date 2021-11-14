@@ -5,7 +5,7 @@ namespace LangApp.WpfClient.Models
 {
     public class CategoryToChoose : NotifyPropertyChanged
     {
-        public Category Category { get; set; }
+        public CategoryName Category { get; set; }
 
         private bool _isChosen;
         public bool IsChosen

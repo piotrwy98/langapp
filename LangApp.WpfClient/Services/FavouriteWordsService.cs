@@ -1,14 +1,14 @@
 ﻿using LangApp.Shared.Models;
-using LangApp.Shared.Models.Controllers;
 using LangApp.WpfClient.Models;
-using LangApp.WpfClient.ViewModels.Controls;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
-using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows;
+using System;
 
 namespace LangApp.WpfClient.Services
 {
@@ -16,13 +16,11 @@ namespace LangApp.WpfClient.Services
     {
         private static FavouriteWordsService _instace;
 
-        #region Properties
-        public List<FavouriteWord> FavouriteWords { get; }
-        #endregion
+        public ObservableCollection<FavouriteWord> FavouriteWords { get; }
 
         private FavouriteWordsService()
         {
-            FavouriteWords = (List<FavouriteWord>) GetFavouriteWordsOfUserAsync().Result;
+            FavouriteWords = new ObservableCollection<FavouriteWord>(GetFavouriteWordsOfUserAsync().Result);
         }
 
         public static FavouriteWordsService GetInstance()
@@ -48,14 +46,13 @@ namespace LangApp.WpfClient.Services
             return null;
         }
 
-        public static async Task<FavouriteWord> CreateFavouriteWordAsync(User user, Word word, Language firstLanguage, Language secondLanguage)
+        public static async Task<FavouriteWord> CreateFavouriteWordAsync(uint firstTranslationId, uint secondTranslationId)
         {
             var favouriteWord = new FavouriteWord()
             {
-                User = user,
-                Word = word,
-                FirstLanguage = firstLanguage,
-                SecondLanguage = secondLanguage
+                UserId = Configuration.GetInstance().User.Id,
+                FirstTranslationId = firstTranslationId,
+                SecondTranslationId = secondTranslationId
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(favouriteWord), Encoding.UTF8, "application/json");
@@ -64,7 +61,28 @@ namespace LangApp.WpfClient.Services
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<FavouriteWord>(json);
+                var newFavouriteWord = JsonConvert.DeserializeObject<FavouriteWord>(json);
+
+                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    _instace.FavouriteWords.Add(newFavouriteWord);
+                }));
+
+                foreach (var dictionary in TranslationsService.GetInstance().Dictionaries)
+                {
+                    foreach (var pair in dictionary.Dictionary)
+                    {
+                        if ((pair.Value.FirstLanguageTranslation.Id == firstTranslationId &&
+                            pair.Value.SecondLanguageTranslation.Id == secondTranslationId) ||
+                            (pair.Value.FirstLanguageTranslation.Id == secondTranslationId &&
+                            pair.Value.SecondLanguageTranslation.Id == firstTranslationId))
+                        {
+                            pair.Value.FavouriteWordId = newFavouriteWord.Id;
+                        }
+                    }
+                }
+
+                return newFavouriteWord;
             }
 
             return null;
@@ -76,6 +94,24 @@ namespace LangApp.WpfClient.Services
 
             if(response.IsSuccessStatusCode)
             {
+                var favouriteWord = _instace.FavouriteWords.FirstOrDefault(x => x.Id == id);
+                
+                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() => 
+                {
+                    _instace.FavouriteWords.Remove(favouriteWord);
+                }));
+
+                foreach(var dictionary in TranslationsService.GetInstance().Dictionaries)
+                {
+                    foreach(var pair in dictionary.Dictionary)
+                    {
+                        if(pair.Value.FavouriteWordId == id)
+                        {
+                            pair.Value.FavouriteWordId = null;
+                        }
+                    }
+                }
+
                 return true;
             }
 

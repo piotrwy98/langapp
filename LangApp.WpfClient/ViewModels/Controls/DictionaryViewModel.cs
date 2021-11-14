@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.ComponentModel;
 using System;
 using System.Windows.Media.Imaging;
+using System.Linq;
 
 namespace LangApp.WpfClient.ViewModels.Controls
 {
@@ -106,7 +107,8 @@ namespace LangApp.WpfClient.ViewModels.Controls
             SearchValueChangedCommand = new RelayCommand(SearchValueChanged);
             StarMouseLeftButtonDownCommand = new RelayCommand(StarMouseLeftButtonDown);
 
-            Dictionaries = TranslationsService.GetInstance().Dictionaries;
+            Dictionaries = TranslationsService.GetInstance().Dictionaries
+                .OrderByDescending(x => x.FirstLanguage.Code).ToList();
             SelectedDictionary = Dictionaries[0];
         }
 
@@ -120,31 +122,20 @@ namespace LangApp.WpfClient.ViewModels.Controls
             }
         }
 
-        private void StarMouseLeftButtonDown(object obj)
+        private async void StarMouseLeftButtonDown(object obj)
         {
             var pair = obj as KeyValuePair<Word, TranslationSet>?;
             if(pair != null)
             {
                 if(pair.Value.Value.IsFavourite)
                 {
-                    // usuwamy z ulubionych
-                    if(FavouriteWordsService.RemoveFavouriteWordAsync(pair.Value.Value.FavouriteWordId.Value).Result)
-                    {
-                        pair.Value.Value.FavouriteWordId = null;
-                    }
+                    await FavouriteWordsService.RemoveFavouriteWordAsync(pair.Value.Value.FavouriteWordId.Value);
                 }
                 else
                 {
-                    // dodajemy do ulubionych
-                    var favouriteWord = FavouriteWordsService.CreateFavouriteWordAsync
-                        (Configuration.GetInstance().User, pair.Value.Key,
-                        _selectedDictionary.FirstLanguage,
-                        _selectedDictionary.SecondLanguage).Result;
-
-                    if(favouriteWord != null)
-                    {
-                        pair.Value.Value.FavouriteWordId = favouriteWord.Id;
-                    }
+                    await FavouriteWordsService.CreateFavouriteWordAsync
+                        (pair.Value.Value.FirstLanguageTranslation.Id,
+                        pair.Value.Value.SecondLanguageTranslation.Id);
                 }
             }
         }

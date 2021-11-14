@@ -6,12 +6,13 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:LangApp.WpfClient.Views.Controls"
-             xmlns:models="clr-namespace:LangApp.WpfClient.Models"
+             xmlns:converters="clr-namespace:LangApp.WpfClient.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Foreground="{StaticResource PrimaryForegroundColor}"
              RenderOptions.BitmapScalingMode="HighQuality">
     <UserControl.Resources>
-        <models:ImageConverter x:Key="ImageConverter"/>
+        <converters:ImageConverter x:Key="ImageConverter"/>
+        <converters:LanguageNameConverter x:Key="LanguageNameConverter"/>
     </UserControl.Resources>
     
     <Grid Margin="10">
@@ -22,8 +23,9 @@
 
         <TextBlock Text="Ulubione słowa" FontSize="30" Margin="0 0 0 20"/>
 
+        <FrameworkElement x:Name="ProxyElement" DataContext="{Binding}"/>
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <DataGrid ItemsSource="{Binding TranslationSets}" Background="Transparent" FontSize="16" IsReadOnly="True" AutoGenerateColumns="False" CanUserResizeRows="False">
+            <DataGrid ItemsSource="{Binding FavouriteWords}" Background="Transparent" FontSize="16" IsReadOnly="True" AutoGenerateColumns="False" CanUserResizeRows="False">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
@@ -31,7 +33,7 @@
                                 <md:PackIcon Kind="Star" ToolTip="Usuń z ulubionych" Foreground="Gold" Background="Transparent" VerticalAlignment="Center" Width="24" Height="24" Cursor="Hand">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseLeftButtonDown">
-                                            <i:InvokeCommandAction Command="{Binding DataContext.StarMouseLeftButtonDownCommand}" CommandParameter="{Binding FavouriteWordId}"/>
+                                            <i:InvokeCommandAction Command="{Binding DataContext.StarMouseLeftButtonDownCommand, Source={x:Reference ProxyElement}}" CommandParameter="{Binding Id}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </md:PackIcon>
@@ -41,19 +43,20 @@
                     <DataGridTemplateColumn Header="Pierwszy język">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding FirstLanguageTranslation.Language.FlagUri, Converter={StaticResource ImageConverter}}" ToolTip="{Binding FirstLanguageTranslation.Language.Name}" Height="24"/>
+                                <Image Source="{Binding FirstTranslation.Language.ImagePath, Converter={StaticResource ImageConverter}}" ToolTip="{Binding FirstTranslation.Language.Id, Converter={StaticResource LanguageNameConverter}}" Height="24"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Pierwsze tłumaczenie" Binding="{Binding FirstLanguageTranslation.Value}"/>
+                    <DataGridTextColumn Header="Pierwsze tłumaczenie" Binding="{Binding FirstTranslation.Value}"/>
                     <DataGridTemplateColumn Header="Drugi język">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding SecondLanguageTranslation.Language.FlagUri, Converter={StaticResource ImageConverter}}" ToolTip="{Binding FirstLanguageTranslation.Language.Name}" Height="24"/>
+                                <Image Source="{Binding SecondTranslation.Language.ImagePath, Converter={StaticResource ImageConverter}}" ToolTip="{Binding SecondTranslation.Language.Id, Converter={StaticResource LanguageNameConverter}}" Height="24"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Drugie tłumaczenie" Binding="{Binding SecondLanguageTranslation.Value}"/>
+                    <DataGridTextColumn Header="Drugie tłumaczenie" Binding="{Binding SecondTranslation.Value}"/>
+                    <DataGridTextColumn Header="Data dodania" Binding="{Binding CreationDateTime, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>

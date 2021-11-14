@@ -1,4 +1,4 @@
-﻿using LangApp.WpfClient.Models;
+﻿using LangApp.Shared.Models;
 using LangApp.WpfClient.ViewModels.Controls;
 using System.Collections.Generic;
 using System.Windows.Controls;

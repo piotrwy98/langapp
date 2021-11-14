@@ -166,14 +166,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Answer.cs" />
+    <Compile Include="Converters\LanguageNameConverter.cs" />
+    <Compile Include="Converters\LevelNameConverter.cs" />
+    <Compile Include="Converters\AnswerResultConverter.cs" />
+    <Compile Include="Converters\QuestionTypeConverter.cs" />
     <Compile Include="Models\BilingualDictionary.cs" />
     <Compile Include="Models\CategoryToChoose.cs" />
     <Compile Include="Models\Configuration.cs" />
-    <Compile Include="Models\Extensions.cs" />
-    <Compile Include="Models\ImageConverter.cs" />
-    <Compile Include="Models\QuestionType.cs" />
+    <Compile Include="Converters\ImageConverter.cs" />
     <Compile Include="Models\RelayCommand.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\TranslationSet.cs" />
     <Compile Include="Models\TranslationsList.cs" />
     <Compile Include="ViewModels\NotifyPropertyChanged.cs" />
@@ -253,6 +255,10 @@
   <ItemGroup>
     <Resource Include="Resources\Flags\en.png" />
     <Resource Include="Resources\Flags\pl.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Flags\de.png" />
+    <Resource Include="Resources\Flags\es.png" />
   </ItemGroup>
   <Import Project="..\LangApp.Shared\LangApp.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

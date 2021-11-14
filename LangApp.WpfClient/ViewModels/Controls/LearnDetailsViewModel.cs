@@ -1,4 +1,5 @@
-﻿using LangApp.WpfClient.Models;
+﻿using LangApp.Shared.Models;
+using LangApp.WpfClient.Models;
 using System.Collections.Generic;
 using System.Windows.Input;
 

@@ -1,7 +1,6 @@
 ﻿using LangApp.Shared.Models;
 using LangApp.WpfClient.Models;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -24,13 +23,14 @@ namespace LangApp.WpfClient.Services
             TranslationsLists = new List<TranslationsList>();
 
             var languages = LanguagesService.GetInstance().Languages;
+            var allTranslations = (List<Translation>) GetTranslationsAsync().Result;
 
             foreach (var language in languages)
             {
                 TranslationsLists.Add(new TranslationsList()
                 {
                     Language = language,
-                    Translations = (List<Translation>) GetTranslationsAsync(language.Id).Result
+                    Translations = allTranslations.FindAll(x => x.LanguageId == language.Id)
                 });
             }
 
@@ -48,9 +48,9 @@ namespace LangApp.WpfClient.Services
             return _instace;
         }
 
-        private async Task<IEnumerable<Translation>> GetTranslationsAsync(uint languageId)
+        private async Task<IEnumerable<Translation>> GetTranslationsAsync()
         {
-            var response = await HttpClient.GetAsync("http://localhost:5000/translations/languageId=" + languageId).ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("http://localhost:5000/translations").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -109,11 +109,10 @@ namespace LangApp.WpfClient.Services
                 if (secondTranslation != null)
                 {
                     var favouriteWord = FavouriteWordsService.GetInstance().FavouriteWords.
-                            FirstOrDefault(x => x.Word.Id == translation.Word.Id &&
-                            ((x.FirstLanguage.Id == translation.Language.Id &&
-                            x.SecondLanguage.Id == secondTranslation.Language.Id) ||
-                            (x.FirstLanguage.Id == secondTranslation.Language.Id &&
-                            x.SecondLanguage.Id == translation.Language.Id)));
+                            FirstOrDefault(x => (x.FirstTranslationId == translation.Id &&
+                            x.SecondTranslationId == secondTranslation.Id) ||
+                            (x.FirstTranslationId == secondTranslation.Id &&
+                            x.SecondTranslationId == translation.Id));
 
                     dictionary.Add(translation.Word, new TranslationSet()
                     {

@@ -88,7 +88,8 @@ namespace LangApp.WpfClient.ViewModels.Controls
             SpeakClickCommand = new RelayCommand(SpeakClick);
             StartLearningCommand = new RelayCommand(StartLearning);
 
-            var categories = CategoriesService.GetInstance().Categories;
+            uint id = Settings.GetInstance().InterfaceLanguageId;
+            var categories = CategoriesService.GetInstance().Categories.FindAll(x => x.LanguageId == id);
             Categories = new List<CategoryToChoose>();
 
             foreach(var category in categories)

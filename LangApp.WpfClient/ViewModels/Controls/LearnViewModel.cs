@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.WpfClient.ViewModels.Controls
 {
@@ -524,11 +525,10 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
                 _answers.Add(new Answer()
                 {
-                    Index = QuestionCounter,
-                    QuestionType = _questionType.GetName(),
-                    UserAnswer = userAnswer,
+                    NumberInSession = (uint)QuestionCounter,
+                    QuestionType = _questionType,
+                    Value = userAnswer,
                     CorrectAnswer = TranslationPair.Value.SecondLanguageTranslation.Value,
-                    IsAnswerCorrect = userAnswer == TranslationPair.Value.SecondLanguageTranslation.Value,
                     Duration = DateTime.Now - _questionAppearedTime
                 });
 
@@ -808,31 +808,20 @@ namespace LangApp.WpfClient.ViewModels.Controls
             _soundPlayer.Stop();
         }
 
-        private void StarMouseLeftButtonDown(object obj)
+        private async void StarMouseLeftButtonDown(object obj)
         {
             var pair = obj as KeyValuePair<Word, TranslationSet>?;
             if (pair != null)
             {
                 if (pair.Value.Value.IsFavourite)
                 {
-                    // usuwamy z ulubionych
-                    if (FavouriteWordsService.RemoveFavouriteWordAsync(pair.Value.Value.FavouriteWordId.Value).Result)
-                    {
-                        pair.Value.Value.FavouriteWordId = null;
-                    }
+                    await FavouriteWordsService.RemoveFavouriteWordAsync(pair.Value.Value.FavouriteWordId.Value);
                 }
                 else
                 {
-                    // dodajemy do ulubionych
-                    var favouriteWord = FavouriteWordsService.CreateFavouriteWordAsync
-                        (Configuration.GetInstance().User, pair.Value.Key,
-                        _dictionary.FirstLanguage,
-                        _dictionary.SecondLanguage).Result;
-
-                    if (favouriteWord != null)
-                    {
-                        pair.Value.Value.FavouriteWordId = favouriteWord.Id;
-                    }
+                    await FavouriteWordsService.CreateFavouriteWordAsync
+                        (pair.Value.Value.FirstLanguageTranslation.Id,
+                        pair.Value.Value.SecondLanguageTranslation.Id);
                 }
             }
         }

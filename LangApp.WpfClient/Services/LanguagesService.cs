@@ -1,6 +1,7 @@
 ﻿using LangApp.Shared.Models;
-using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LangApp.WpfClient.Services
 {
@@ -8,13 +9,23 @@ namespace LangApp.WpfClient.Services
     {
         private static LanguagesService _instace;
 
-        public List<Language> Languages;
+        #region Properties
+        public List<LanguageName> LanguageNames { get; }
+        public List<Language> Languages { get; }
+        #endregion
 
         private LanguagesService()
         {
+            LanguageNames = (List<LanguageName>) GetLanguagesAsync().Result;
             Languages = new List<Language>();
-            Languages.Add(new Language { Id = 0, Code = "pl", Name = "Polski", ImagePath = "../../../Resources/Flags/pl.png" });
-            Languages.Add(new Language { Id = 1, Code = "en", Name = "Angielski", ImagePath = "../../../Resources/Flags/en.png" });
+
+            foreach(var languageName in LanguageNames)
+            {
+                if(!Languages.Contains(languageName.Language))
+                {
+                    Languages.Add(languageName.Language);
+                }
+            }
         }
 
         public static LanguagesService GetInstance()
@@ -25,6 +36,19 @@ namespace LangApp.WpfClient.Services
             }
 
             return _instace;
+        }
+
+        private async Task<IEnumerable<LanguageName>> GetLanguagesAsync()
+        {
+            var response = await HttpClient.GetAsync("http://localhost:5000/languages").ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<IEnumerable<LanguageName>>(json);
+            }
+
+            return null;
         }
     }
 }
