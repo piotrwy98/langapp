@@ -1,23 +1,11 @@
-﻿using System;
+﻿using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.Shared.Models
 {
-    public class Category
+    public partial class Category
     {
         public uint Id { get; set; }
-
         public Level Level { get; set; }
-
-        public string Name { get; set; }
-
         public string ImagePath { get; set; }
-
-        public override string ToString()
-        {
-            if(Level != null)
-                return Name + " (" + Level.Name + ")";
-
-            return Name;
-        }
     }
 }

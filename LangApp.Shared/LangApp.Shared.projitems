@@ -9,15 +9,21 @@
     <Import_RootNamespace>LangApp.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Answer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Category.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CategoryName.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Enums.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Controllers\LogInData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Controllers\UserWithToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\FavouriteWord.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Language.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Controllers\LogInData.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Level.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LanguageName.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\News.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PartOfSpeech.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PartOfSpeechName.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SelectedCategory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Session.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Translation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Controllers\UserWithToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Word.cs" />
   </ItemGroup>
