@@ -39,6 +39,7 @@ namespace LangApp.WebApi
             services.AddScoped<ICategoriesRepository, DbCategoriesRepository>();
             services.AddScoped<IFavouriteWordsRepository, DbFavouriteWordsRepository>();
             services.AddScoped<ILanguagesRepository, DbLanguagesRepository>();
+            services.AddScoped<IPartsOfSpeechRepository, DbPartsOfSpeechRepository>();
 
             services.AddControllers(options =>
                 options.SuppressAsyncSuffixInActionNames = false

@@ -24,7 +24,7 @@ namespace LangApp.WebApi.Api.Repositories.Local
         public async Task<CategoryName> GetCategoryAsync(uint id)
         {
             return await _context.CategoryNames.Where(x => x.Id == id)
-                       .Include(x => x.Category).FirstOrDefaultAsync();
+                .Include(x => x.Category).FirstOrDefaultAsync();
         }
 
         public async Task<CategoryName> CreateCategoryAsync(CategoryName category)
