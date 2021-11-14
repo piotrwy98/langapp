@@ -1,5 +1,4 @@
 ﻿using LangApp.Shared.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,19 +12,21 @@ namespace LangApp.WebApi.Api.Repositories.Local
             new FavouriteWord
             {
                 Id = 1, 
-                User = LocalUsersRepository.Users[0],
-                Word = LocalTranslationsRepository.Words[0], 
-                FirstLanguage = LocalTranslationsRepository.Languages[0], 
-                SecondLanguage = LocalTranslationsRepository.Languages[1] 
+                UserId = 1,
+                FirstTranslationId = 1,
+                FirstTranslation = LocalTranslationsRepository.Translations[0],
+                SecondTranslationId = 2,
+                SecondTranslation = LocalTranslationsRepository.Translations[1] 
             },
             new FavouriteWord
             {
                 Id = 2,
-                User = LocalUsersRepository.Users[0],
-                Word = LocalTranslationsRepository.Words[1],
-                FirstLanguage = LocalTranslationsRepository.Languages[0],
-                SecondLanguage = LocalTranslationsRepository.Languages[1]
-            },
+                UserId = 1,
+                FirstTranslationId = 3,
+                FirstTranslation = LocalTranslationsRepository.Translations[2],
+                SecondTranslationId = 4,
+                SecondTranslation = LocalTranslationsRepository.Translations[3]
+            }
         };
 
         public async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsAsync()
@@ -35,7 +36,7 @@ namespace LangApp.WebApi.Api.Repositories.Local
 
         public async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsOfUserAsync(uint userId)
         {
-            return await Task.FromResult(_favouriteWords.FindAll(x => x.User.Id == userId));
+            return await Task.FromResult(_favouriteWords.FindAll(x => x.UserId == userId));
         }
 
         public async Task<FavouriteWord> GetFavouriteWordAsync(uint id)
@@ -43,10 +44,12 @@ namespace LangApp.WebApi.Api.Repositories.Local
             return await Task.FromResult(_favouriteWords.FirstOrDefault(x => x.Id == id));
         }
 
-        public async Task CreateFavouriteWordAsync(FavouriteWord favouriteWord)
+        public async Task<FavouriteWord> CreateFavouriteWordAsync(FavouriteWord favouriteWord)
         {
+            favouriteWord.Id = (uint) _favouriteWords.Count + 1;
             _favouriteWords.Add(favouriteWord);
-            await Task.CompletedTask;
+
+            return await Task.FromResult(favouriteWord);
         }
 
         public async Task DeleteFavouriteWordAsync(uint id)

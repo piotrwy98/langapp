@@ -1,5 +1,4 @@
 ﻿using LangApp.Shared.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,10 +6,10 @@ namespace LangApp.WebApi.Api.Repositories
 {
     public interface ICategoriesRepository
     {
-        Task<IEnumerable<Category>> GetCategoriesAsync();
-        Task<Category> GetCategoryAsync(uint id);
-        Task CreateCategoryAsync(Category category);
-        Task UpdateCategoryAsync(Category category);
+        Task<IEnumerable<CategoryName>> GetCategoriesAsync();
+        Task<CategoryName> GetCategoryAsync(uint id);
+        Task<CategoryName> CreateCategoryAsync(CategoryName category);
+        Task UpdateCategoryAsync(CategoryName category);
         Task DeleteCategoryAsync(uint id);
     }
 }

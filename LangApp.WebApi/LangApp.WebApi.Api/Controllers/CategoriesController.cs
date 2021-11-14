@@ -1,9 +1,6 @@
 ﻿using LangApp.Shared.Models;
-using LangApp.Shared.Models.Controllers;
 using LangApp.WebApi.Api.Repositories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -22,13 +19,13 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Category>> GetCategoriesAsync()
+        public async Task<IEnumerable<CategoryName>> GetCategoriesAsync()
         {
             return await _categoriesRepository.GetCategoriesAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategoryAsync(uint id)
+        public async Task<ActionResult<CategoryName>> GetCategoryAsync(uint id)
         {
             var category = await _categoriesRepository.GetCategoryAsync(id);
             if (category == null)
@@ -40,15 +37,13 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Category>> CreateCategoryAsync([FromBody] Category category)
+        public async Task<ActionResult<CategoryName>> CreateCategoryAsync([FromBody] CategoryName category)
         {
-            await _categoriesRepository.CreateCategoryAsync(category);
-
-            return CreatedAtAction(nameof(GetCategoryAsync), new { id = category.Id }, category);
+            return await _categoriesRepository.CreateCategoryAsync(category);
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateCategoryAsync([FromBody] Category category)
+        public async Task<ActionResult> UpdateCategoryAsync([FromBody] CategoryName category)
         {
             await _categoriesRepository.UpdateCategoryAsync(category);
 

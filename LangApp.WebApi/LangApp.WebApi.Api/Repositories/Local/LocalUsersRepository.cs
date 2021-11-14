@@ -1,5 +1,4 @@
 ﻿using LangApp.Shared.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +9,7 @@ namespace LangApp.WebApi.Api.Repositories.Local
     {
         public static readonly List<User> Users = new List<User>()
         {
-            new User { Id = 1, Email = "test@wp.pl", Password = "test" }
+            new User { Id = 1, Email = "admin@wp.pl", Password = "admin" }
         };
 
         public async Task<IEnumerable<User>> GetUsersAsync()
@@ -33,10 +32,12 @@ namespace LangApp.WebApi.Api.Repositories.Local
             return await Task.FromResult(Users.FirstOrDefault(x => x.Username == username));
         }
 
-        public async Task CreateUserAsync(User user)
+        public async Task<User> CreateUserAsync(User user)
         {
+            user.Id = (uint) Users.Count + 1;
             Users.Add(user);
-            await Task.CompletedTask;
+
+            return await Task.FromResult(user);
         }
 
         public async Task UpdateUserAsync(User user)

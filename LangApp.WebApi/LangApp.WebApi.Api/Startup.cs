@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace LangApp.WebApi
 {
@@ -34,12 +35,16 @@ namespace LangApp.WebApi
             });
 
             services.AddScoped<IUsersRepository, DbUsersRepository>();
-            services.AddSingleton<ITranslationsRepository, LocalTranslationsRepository>();
-            services.AddSingleton<ICategoriesRepository, LocalCategoriesRepository>();
-            services.AddSingleton<IFavouriteWordsRepository, LocalFavouriteWordsRepository>();
+            services.AddScoped<ITranslationsRepository, DbTranslationsRepository>();
+            services.AddScoped<ICategoriesRepository, DbCategoriesRepository>();
+            services.AddScoped<IFavouriteWordsRepository, DbFavouriteWordsRepository>();
+            services.AddScoped<ILanguagesRepository, DbLanguagesRepository>();
 
             services.AddControllers(options =>
                 options.SuppressAsyncSuffixInActionNames = false
+            )
+            .AddJsonOptions(options =>
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
             );
 
             services.AddSwaggerGen(c =>

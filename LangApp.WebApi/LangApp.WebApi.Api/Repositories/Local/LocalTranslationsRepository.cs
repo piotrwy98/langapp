@@ -1,5 +1,4 @@
 ﻿using LangApp.Shared.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,11 +18,11 @@ namespace LangApp.WebApi.Api.Repositories.Local
 
         public static readonly List<Language> Languages = new List<Language>()
         {
-            new Language { Id = 1, Code = "pl", Name = "Polski", ImagePath = "../../../Resources/Flags/pl.png" },
-            new Language { Id = 2, Code = "en", Name = "Angielski", ImagePath = "../../../Resources/Flags/en.png" }
+            new Language { Id = 1, Code = "pl", ImagePath = "../../../Resources/Flags/pl.png" },
+            new Language { Id = 2, Code = "en", ImagePath = "../../../Resources/Flags/en.png" }
         };
 
-        private readonly List<Translation> _translations = new List<Translation>()
+        public static readonly List<Translation> Translations = new List<Translation>()
         {
             new Translation { Id = 1, Word = Words[0], Language = Languages[0], Value = "pies" },
             new Translation { Id = 2, Word = Words[0], Language = Languages[1], Value = "dog" },
@@ -37,33 +36,35 @@ namespace LangApp.WebApi.Api.Repositories.Local
             new Translation { Id = 10, Word = Words[4], Language = Languages[1], Value = "bird" },
         };
 
-        public async Task<IEnumerable<Translation>> GetTranslationsAsync(uint languageId)
+        public async Task<IEnumerable<Translation>> GetTranslationsAsync()
         {
-            return await Task.FromResult(_translations.FindAll(x => x.Language.Id == languageId));
+            return await Task.FromResult(Translations);
         }
 
         public async Task<Translation> GetTranslationAsync(uint id)
         {
-            return await Task.FromResult(_translations.FirstOrDefault(x => x.Id == id));
+            return await Task.FromResult(Translations.FirstOrDefault(x => x.Id == id));
         }
 
         public async Task<Translation> GetTranslationByWordAndLanguageAsync(uint wordId, uint languageId)
         {
-            return await Task.FromResult(_translations.FirstOrDefault(x => x.Word.Id == wordId && x.Language.Id == languageId));
+            return await Task.FromResult(Translations.FirstOrDefault(x => x.Word.Id == wordId && x.Language.Id == languageId));
         }
 
-        public async Task CreateTranslationAsync(Translation translation)
+        public async Task<Translation> CreateTranslationAsync(Translation translation)
         {
-            _translations.Add(translation);
-            await Task.CompletedTask;
+            translation.Id = (uint) Translations.Count + 1;
+            Translations.Add(translation);
+
+            return await Task.FromResult(translation);
         }
 
         public async Task UpdateTranslationAsync(Translation translation)
         {
-            var index = _translations.FindIndex(x => x.Id == translation.Id);
+            var index = Translations.FindIndex(x => x.Id == translation.Id);
             if (index >= 0)
             {
-                _translations[index] = translation;
+                Translations[index] = translation;
             }
 
             await Task.CompletedTask;
@@ -71,10 +72,10 @@ namespace LangApp.WebApi.Api.Repositories.Local
 
         public async Task DeleteTranslationAsync(uint id)
         {
-            var index = _translations.FindIndex(x => x.Id == id);
+            var index = Translations.FindIndex(x => x.Id == id);
             if (index >= 0)
             {
-                _translations.RemoveAt(index);
+                Translations.RemoveAt(index);
             }
 
             await Task.CompletedTask;

@@ -1,8 +1,6 @@
 ﻿using LangApp.Shared.Models;
-using LangApp.Shared.Models.Controllers;
 using LangApp.WebApi.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -26,7 +24,7 @@ namespace LangApp.WebApi.Api.Controllers
             return await _favouriteWordsRepository.GetFavouriteWordsAsync();
         }
 
-        [HttpGet("user/{id}")]
+        [HttpGet("user/{userId}")]
         public async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsOfUserAsync(uint userId)
         {
             return await _favouriteWordsRepository.GetFavouriteWordsOfUserAsync(userId);
@@ -47,9 +45,7 @@ namespace LangApp.WebApi.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<FavouriteWord>> CreateFavouriteWordAsync([FromBody] FavouriteWord favouriteWord)
         {
-            await _favouriteWordsRepository.CreateFavouriteWordAsync(favouriteWord);
-
-            return CreatedAtAction(nameof(GetFavouriteWordAsync), new { id = favouriteWord.Id }, favouriteWord);
+            return await _favouriteWordsRepository.CreateFavouriteWordAsync(favouriteWord);
         }
 
         [HttpDelete("{id}")]

@@ -21,10 +21,10 @@ namespace LangApp.WebApi.Api.Controllers
             _translationsRepository = translationsRepository;
         }
 
-        [HttpGet("languageId={languageId}")]
-        public async Task<IEnumerable<Translation>> GetTranslationsAsync(uint languageId)
+        [HttpGet]
+        public async Task<IEnumerable<Translation>> GetTranslationsAsync()
         {
-            return await _translationsRepository.GetTranslationsAsync(languageId);
+            return await _translationsRepository.GetTranslationsAsync();
         }
 
         [HttpGet("{id}")]
@@ -47,9 +47,7 @@ namespace LangApp.WebApi.Api.Controllers
                 return BadRequest();
             }
 
-            await _translationsRepository.CreateTranslationAsync(translation);
-
-            return CreatedAtAction(nameof(GetTranslationAsync), new { id = translation.Id }, translation);
+            return await _translationsRepository.CreateTranslationAsync(translation);
         }
 
         [HttpPut]

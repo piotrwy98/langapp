@@ -53,9 +53,7 @@ namespace LangApp.WebApi.Api.Controllers
                 return BadRequest(RegisterResult.OCCUPIED_USERNAME);
             }
 
-            await _usersRepository.CreateUserAsync(user);
-
-            return CreatedAtAction(nameof(GetUserAsync), new { id = user.Id }, user);
+            return await _usersRepository.CreateUserAsync(user);
         }
 
         [HttpPut]
