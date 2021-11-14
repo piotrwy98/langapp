@@ -31,5 +31,33 @@ namespace LangApp.WpfClient.Models
                 return _favouriteWordId != null;
             }
         }
+
+        private bool _isFirstPlaying;
+        public bool IsFirstPlaying
+        {
+            get
+            {
+                return _isFirstPlaying;
+            }
+            set
+            {
+                _isFirstPlaying = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isSecondPlaying;
+        public bool IsSecondPlaying
+        {
+            get
+            {
+                return _isSecondPlaying;
+            }
+            set
+            {
+                _isSecondPlaying = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

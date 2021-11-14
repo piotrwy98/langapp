@@ -30,7 +30,7 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <md:PackIcon Kind="Star" ToolTip="Usuń z ulubionych" Foreground="Gold" Background="Transparent" VerticalAlignment="Center" Width="24" Height="24" Cursor="Hand">
+                                <md:PackIcon Kind="Star" ToolTip="Usuń z ulubionych" Foreground="Gold" Background="Transparent" VerticalAlignment="Center" Width="28" Height="28" Margin="-2" Cursor="Hand">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseLeftButtonDown">
                                             <i:InvokeCommandAction Command="{Binding DataContext.StarMouseLeftButtonDownCommand, Source={x:Reference ProxyElement}}" CommandParameter="{Binding Id}"/>

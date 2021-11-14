@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System;
 using System.Windows.Media.Imaging;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace LangApp.WpfClient.ViewModels.Controls
 {
@@ -17,6 +18,8 @@ namespace LangApp.WpfClient.ViewModels.Controls
         #region Commands
         public ICommand SearchValueChangedCommand { get; set; }
         public ICommand StarMouseLeftButtonDownCommand { get; set; }
+        public ICommand FirstVolumeMouseLeftButtonDownCommand { get; set; }
+        public ICommand SecondVolumeMouseLeftButtonDownCommand { get; set; }
         #endregion
 
         #region Properties
@@ -106,6 +109,8 @@ namespace LangApp.WpfClient.ViewModels.Controls
         {
             SearchValueChangedCommand = new RelayCommand(SearchValueChanged);
             StarMouseLeftButtonDownCommand = new RelayCommand(StarMouseLeftButtonDown);
+            FirstVolumeMouseLeftButtonDownCommand = new RelayCommand(FirstVolumeMouseLeftButtonDown);
+            SecondVolumeMouseLeftButtonDownCommand = new RelayCommand(SecondVolumeMouseLeftButtonDown);
 
             Dictionaries = TranslationsService.GetInstance().Dictionaries
                 .OrderByDescending(x => x.FirstLanguage.Code).ToList();
@@ -137,6 +142,28 @@ namespace LangApp.WpfClient.ViewModels.Controls
                         (pair.Value.Value.FirstLanguageTranslation.Id,
                         pair.Value.Value.SecondLanguageTranslation.Id);
                 }
+            }
+        }
+
+        private async void FirstVolumeMouseLeftButtonDown(object obj)
+        {
+            var translationSet = obj as TranslationSet;
+            if(translationSet != null && !translationSet.IsFirstPlaying)
+            {
+                translationSet.IsFirstPlaying = true;
+                await Task.Run(() => PronunciationsService.PlayPronunciation(translationSet.FirstLanguageTranslation));
+                translationSet.IsFirstPlaying = false;
+            }
+        }
+
+        private async void SecondVolumeMouseLeftButtonDown(object obj)
+        {
+            var translationSet = obj as TranslationSet;
+            if (translationSet != null && !translationSet.IsSecondPlaying)
+            {
+                translationSet.IsSecondPlaying = true;
+                await Task.Run(() => PronunciationsService.PlayPronunciation(translationSet.SecondLanguageTranslation));
+                translationSet.IsSecondPlaying = false;
             }
         }
 

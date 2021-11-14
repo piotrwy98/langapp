@@ -166,6 +166,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\PartOfSpeechNameConverter.cs" />
     <Compile Include="Converters\LanguageNameConverter.cs" />
     <Compile Include="Converters\LevelNameConverter.cs" />
     <Compile Include="Converters\AnswerResultConverter.cs" />
@@ -178,6 +179,8 @@
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\TranslationSet.cs" />
     <Compile Include="Models\TranslationsList.cs" />
+    <Compile Include="Services\PartsOfSpeechService.cs" />
+    <Compile Include="Services\PronunciationsService.cs" />
     <Compile Include="ViewModels\NotifyPropertyChanged.cs" />
     <Compile Include="Services\CategoriesService.cs" />
     <Compile Include="Services\FavouriteWordsService.cs" />

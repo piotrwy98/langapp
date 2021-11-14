@@ -12,6 +12,7 @@
              Foreground="{StaticResource PrimaryForegroundColor}" RenderOptions.BitmapScalingMode="HighQuality">
     <UserControl.Resources>
         <converters:LanguageNameConverter x:Key="LanguageNameConverter"/>
+        <converters:PartOfSpeechNameConverter x:Key="PartOfSpeechNameConverter"/>
     </UserControl.Resources>
     
     <Grid>
@@ -78,7 +79,7 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <md:PackIcon Foreground="Gold" Background="Transparent" VerticalAlignment="Center" Width="24" Height="24" Cursor="Hand">
+                                <md:PackIcon Foreground="Gold" Background="Transparent" VerticalAlignment="Center" Width="28" Height="28" Margin="-2" Cursor="Hand">
                                     <md:PackIcon.Style>
                                         <Style TargetType="md:PackIcon">
                                             <Setter Property="Kind" Value="StarOutline"/>
@@ -102,8 +103,65 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="{Binding DataContext.SelectedDictionary.FirstLanguage.Id, Converter={StaticResource LanguageNameConverter}, Source={x:Reference ProxyElement}}" Binding="{Binding Value.FirstLanguageTranslation.Value}" MinWidth="200"/>
-                    <DataGridTextColumn Header="{Binding DataContext.SelectedDictionary.SecondLanguage.Id, Converter={StaticResource LanguageNameConverter}, Source={x:Reference ProxyElement}}" Binding="{Binding Value.SecondLanguageTranslation.Value}"/>
+                    <DataGridTextColumn Header="{Binding DataContext.SelectedDictionary.FirstLanguage.Id, Converter={StaticResource LanguageNameConverter}, Source={x:Reference ProxyElement}}" Binding="{Binding Value.FirstLanguageTranslation.Value}" FontWeight="Bold"/>
+                    <DataGridTemplateColumn Header="Wymowa">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <md:PackIcon Foreground="{StaticResource SecondaryForegroundColor}" Background="Transparent" VerticalAlignment="Center" Width="36" Height="36" Margin="-6" HorizontalAlignment="Center" ToolTip="Odtwórz">
+                                    <md:PackIcon.Style>
+                                        <Style TargetType="md:PackIcon">
+                                            <Setter Property="Kind" Value="VolumeLow"/>
+                                            <Setter Property="Cursor" Value="Hand"/>
+
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Value.IsFirstPlaying}" Value="True">
+                                                    <Setter Property="Kind" Value="VolumeHigh"/>
+                                                    <Setter Property="Cursor" Value="Arrow"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </md:PackIcon.Style>
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.FirstVolumeMouseLeftButtonDownCommand, Source={x:Reference ProxyElement}}" CommandParameter="{Binding Value}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </md:PackIcon>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Zapis fonetyczny" Binding="{Binding Value.FirstLanguageTranslation.Phonetic, StringFormat=[{0}]}" FontStyle="Italic"/>
+                    <DataGridTextColumn Header="{Binding DataContext.SelectedDictionary.SecondLanguage.Id, Converter={StaticResource LanguageNameConverter}, Source={x:Reference ProxyElement}}" Binding="{Binding Value.SecondLanguageTranslation.Value}" FontWeight="Bold"/>
+                    <DataGridTemplateColumn Header="Wymowa">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <md:PackIcon Foreground="{StaticResource SecondaryForegroundColor}" Background="Transparent" VerticalAlignment="Center" Width="36" Height="36" Margin="-6" HorizontalAlignment="Center" ToolTip="Odtwórz">
+                                    <md:PackIcon.Style>
+                                        <Style TargetType="md:PackIcon">
+                                            <Setter Property="Kind" Value="VolumeLow"/>
+                                            <Setter Property="Cursor" Value="Hand"/>
+
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Value.IsSecondPlaying}" Value="True">
+                                                    <Setter Property="Kind" Value="VolumeHigh"/>
+                                                    <Setter Property="Cursor" Value="Arrow"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </md:PackIcon.Style>
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.SecondVolumeMouseLeftButtonDownCommand, Source={x:Reference ProxyElement}}" CommandParameter="{Binding Value}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </md:PackIcon>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Zapis fonetyczny" Binding="{Binding Value.SecondLanguageTranslation.Phonetic, StringFormat=[{0}]}" FontStyle="Italic"/>
+                    <DataGridTextColumn Header="Część mowy" Binding="{Binding Value.FirstLanguageTranslation.Word.PartOfSpeechId, Converter={StaticResource PartOfSpeechNameConverter}}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>
