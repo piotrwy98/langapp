@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Height="850" Width="1200" WindowStyle="None" ResizeMode="CanResizeWithGrip"
         AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen"
-        MouseDown="Window_MouseDown">
+        MouseDown="Window_MouseDown" Title="LangApp" RenderOptions.BitmapScalingMode="HighQuality">
     <Window.Resources>
         <Style x:Key="MenuButton" TargetType="RadioButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
             <Setter Property="Template">
@@ -43,6 +43,7 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
@@ -62,9 +63,16 @@
                         <Setter Property="VerticalAlignment" Value="Center"/>
                     </Style>
                 </StackPanel.Resources>
-                
-                <md:PackIcon Kind="UserCircle" Foreground="{StaticResource PrimaryForegroundColor}" HorizontalAlignment="Center" Height="75" Width="75" Margin="0 30"/>
 
+                <Image Source="../../Resources/logo.png" Margin="20 30 20 0"/>
+                
+                <md:PackIcon Kind="UserCircle" Foreground="{StaticResource PrimaryForegroundColor}" HorizontalAlignment="Center" Height="100" Width="100" Margin="0 20 0 0"/>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 26">
+                    <TextBlock Text="Witaj, " FontSize="20" Foreground="{StaticResource PrimaryForegroundColor}"/>
+                    <TextBlock Text="{Binding Configuration.User.Username}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource SecondaryForegroundColor}"/>
+                </StackPanel>
+                
                 <RadioButton Style="{StaticResource MenuButton}" Command="{Binding MainScreenCheckedCommand}" IsChecked="True">
                     <StackPanel Orientation="Horizontal">
                         <md:PackIcon Kind="Home"/>

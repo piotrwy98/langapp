@@ -42,7 +42,7 @@ namespace LangApp.WpfClient.Models
             }
         }
 
-        public User User { get; set; } = new User() { Id = 1 };
+        public User User { get; set; } = new User() { Id = 1, Username = "piotrwy" };
 
         private UserControl _currentView;
         public UserControl CurrentView

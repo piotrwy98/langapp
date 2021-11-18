@@ -35,6 +35,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         public ICommand RecordCommand { get; set; }
         public ICommand RecordPlayCommand { get; set; }
         public ICommand StarMouseLeftButtonDownCommand { get; set; }
+        public ICommand AnswerVolumeMouseLeftButtonDownCommand { get; set; }
         #endregion
 
         #region Properties
@@ -193,26 +194,17 @@ namespace LangApp.WpfClient.ViewModels.Controls
             }
         }
 
-        private bool _isShowAnswerVisible;
-        public bool IsShowAnswerVisible
-        {
-            get
-            {
-                return _isShowAnswerVisible;
-            }
-            set
-            {
-                _isShowAnswerVisible = value;
-                OnPropertyChanged();
-                OnPropertyChanged("IsAnswerVisible");
-            }
-        }
-
+        private bool _isAnswerVisible;
         public bool IsAnswerVisible
         {
             get
             {
-                return !_isShowAnswerVisible;
+                return _isAnswerVisible;
+            }
+            set
+            {
+                _isAnswerVisible = value;
+                OnPropertyChanged();
             }
         }
 
@@ -376,6 +368,20 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 return !IsRecording || CanGoFurther;
             }
         }
+
+        private bool _isAnswerPlaying;
+        public bool IsAnswerPlaying
+        {
+            get
+            {
+                return _isAnswerPlaying;
+            }
+            set
+            {
+                _isAnswerPlaying = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
 
         #region Variables
@@ -483,6 +489,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             RecordCommand = new RelayCommand(Record);
             RecordPlayCommand = new RelayCommand(RecordPlay);
             StarMouseLeftButtonDownCommand = new RelayCommand(StarMouseLeftButtonDown);
+            AnswerVolumeMouseLeftButtonDownCommand = new RelayCommand(AnswerVolumeMouseLeftButtonDown);
 
             GetNextQuestion();
         }
@@ -581,7 +588,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         private void ShowAnswer(object obj)
         {
-            IsShowAnswerVisible = false;
+            IsAnswerVisible = true;
         }
 
         private void ClosedAnswerChecked(object obj)
@@ -605,7 +612,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 _selectedClosedAnswerIndex = 0;
                 _pronunciationResult = null;
                 _questionAppearedTime = DateTime.Now;
-                IsShowAnswerVisible = true;
+                IsAnswerVisible = false;
 
                 if (!IsTest)
                 {
@@ -823,6 +830,16 @@ namespace LangApp.WpfClient.ViewModels.Controls
                         (pair.Value.Value.FirstLanguageTranslation.Id,
                         pair.Value.Value.SecondLanguageTranslation.Id);
                 }
+            }
+        }
+
+        private async void AnswerVolumeMouseLeftButtonDown(object obj)
+        {
+            if (!_isAnswerPlaying)
+            {
+                IsAnswerPlaying = true;
+                await Task.Run(() => PronunciationsService.PlayPronunciation(TranslationPair.Value.SecondLanguageTranslation));
+                IsAnswerPlaying = false;
             }
         }
     }

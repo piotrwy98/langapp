@@ -107,9 +107,11 @@
                         <md:PackIcon.Style>
                             <Style TargetType="md:PackIcon">
                                 <Setter Property="Kind" Value="Stop"/>
+                                
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsRecordComplete}" Value="True">
                                         <Setter Property="Kind" Value="Microphone"/>
+                                        
                                         <DataTrigger.EnterActions>
                                             <BeginStoryboard>
                                                 <Storyboard>
@@ -160,21 +162,46 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10 0 0 0" Visibility="{Binding IsIncorrectVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="PaleVioletRed"/>
+                        <Setter Property="FontSize" Value="30"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </StackPanel.Resources>
+
                 <md:PackIcon Kind="Error" Width="42" Height="42" Foreground="PaleVioletRed" Margin="0 0 5 0"/>
-                <TextBlock Text="{Binding IncorrectMessage}" FontSize="30" Foreground="PaleVioletRed" VerticalAlignment="Center"/>
-                <Button Content="Pokaż poprawne" Command="{Binding ShowAnswerCommand}" Height="42" Background="PaleVioletRed" BorderBrush="PaleVioletRed" Margin="10 0 0 0" Visibility="{Binding IsShowAnswerVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                <StackPanel Orientation="Horizontal" Visibility="{Binding IsAnswerVisible, Converter={StaticResource InverseBoolToVisConverter}}">
+                    <TextBlock Text="{Binding IncorrectMessage}" FontSize="30" Foreground="PaleVioletRed" VerticalAlignment="Center"/>
+                    <Button Content="Pokaż poprawne" Command="{Binding ShowAnswerCommand}" Height="42" Background="PaleVioletRed" BorderBrush="PaleVioletRed" Margin="10 0 0 0"/>
+                </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Visibility="{Binding IsAnswerVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <StackPanel.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Foreground" Value="PaleVioletRed"/>
-                            <Setter Property="FontSize" Value="30"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </StackPanel.Resources>
-
-                    <TextBlock Text=", poprawne: "/>
+                    <TextBlock Text="Poprawna odpowiedź: "/>
                     <TextBlock Text="{Binding TranslationPair.Value.SecondLanguageTranslation.Value}" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding TranslationPair.Value.SecondLanguageTranslation.Phonetic, StringFormat=' [{0}]'}"/>
+                    <md:PackIcon Foreground="{StaticResource PrimaryForegroundColor}" Background="Transparent" VerticalAlignment="Center" Width="46" Height="46" HorizontalAlignment="Center" ToolTip="Odtwórz">
+                        <md:PackIcon.Style>
+                            <Style TargetType="md:PackIcon">
+                                <Setter Property="Kind" Value="VolumeLow"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsAnswerPlaying}" Value="True">
+                                        <Setter Property="Kind" Value="VolumeHigh"/>
+                                        <Setter Property="Cursor" Value="Arrow"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </md:PackIcon.Style>
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding AnswerVolumeMouseLeftButtonDownCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </md:PackIcon>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

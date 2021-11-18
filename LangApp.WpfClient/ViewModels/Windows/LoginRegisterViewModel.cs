@@ -5,6 +5,7 @@ using LangApp.WpfClient.Views.Windows;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -49,39 +50,46 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
         public string RepeatPassword { get; set; }
 
-        private string _errorMessageText;
-        public string ErrorMessageText
+        private bool _isResultSuccess;
+        public bool IsResultSuccess
         {
             get
             {
-                return _errorMessageText;
+                return _isResultSuccess;
             }
             set
             {
-                _errorMessageText = value;
+                _isResultSuccess = value;
                 OnPropertyChanged();
-                OnPropertyChanged("ErrorIconVisibility");
-
-                if (!String.IsNullOrEmpty(value))
-                    SuccessMessageText = "";
             }
         }
 
-        private string _successMessageText;
-        public string SuccessMessageText
+        private string _resultMessage;
+        public string ResultMessage
         {
             get
             {
-                return _successMessageText;
+                return _resultMessage;
             }
             set
             {
-                _successMessageText = value;
+                _resultMessage = value;
                 OnPropertyChanged();
-                OnPropertyChanged("SuccessIconVisibility");
+                OnPropertyChanged("ResultVisibility");
+            }
+        }
 
-                if (!String.IsNullOrEmpty(value))
-                    ErrorMessageText = "";
+        private bool _isProcessing;
+        public bool IsProcessing
+        {
+            get
+            {
+                return _isProcessing;
+            }
+            set
+            {
+                _isProcessing = value;
+                OnPropertyChanged();
             }
         }
 
@@ -113,22 +121,11 @@ namespace LangApp.WpfClient.ViewModels.Windows
             }
         }
 
-        public Visibility ErrorIconVisibility
+        public Visibility ResultVisibility
         {
             get
             {
-                if (String.IsNullOrEmpty(ErrorMessageText))
-                    return Visibility.Hidden;
-
-                return Visibility.Visible;
-            }
-        }
-
-        public Visibility SuccessIconVisibility
-        {
-            get
-            {
-                if (String.IsNullOrEmpty(SuccessMessageText))
+                if (String.IsNullOrEmpty(_resultMessage))
                     return Visibility.Hidden;
 
                 return Visibility.Visible;
@@ -146,23 +143,34 @@ namespace LangApp.WpfClient.ViewModels.Windows
             RepeatPasswordChangedCommand = new RelayCommand(RepeatPasswordChanged);
         }
 
-        private async void LogIn(object obj = null)
+        private async void LogIn(object obj)
+        {
+            IsProcessing = true;
+            ResultMessage = "";
+            IsResultSuccess = false;
+
+            await CheckLogIn();
+
+            IsProcessing = false;
+        }
+
+        private async Task CheckLogIn()
         {
             if (String.IsNullOrEmpty(Email))
             {
-                ErrorMessageText = "Nie podano adresu email";
+                ResultMessage = "Nie podano adresu email";
                 return;
             }
 
-            if(!new EmailAddressAttribute().IsValid(Email.Trim()))
+            if (!new EmailAddressAttribute().IsValid(Email.Trim()))
             {
-                ErrorMessageText = "Nieprawidłowy format adresu email";
+                ResultMessage = "Nieprawidłowy format adresu email";
                 return;
             }
 
             if (String.IsNullOrEmpty(Password))
             {
-                ErrorMessageText = "Nie podano hasła";
+                ResultMessage = "Nie podano hasła";
                 return;
             }
 
@@ -174,11 +182,11 @@ namespace LangApp.WpfClient.ViewModels.Windows
             }
             catch (HttpRequestException)
             {
-                ErrorMessageText = "Brak połączenia z serwerem";
+                ResultMessage = "Brak połączenia z serwerem";
                 return;
             }
 
-            if(userWithToken != null)
+            if (userWithToken != null)
             {
                 Configuration.GetInstance().User = userWithToken.User;
                 Configuration.GetInstance().Token = userWithToken.Token;
@@ -188,39 +196,50 @@ namespace LangApp.WpfClient.ViewModels.Windows
             }
             else
             {
-                ErrorMessageText = "Błędne dane logowania";
+                ResultMessage = "Błędne dane logowania";
             }
         }
 
-        private async void Register(object obj = null)
+        private async void Register(object obj)
+        {
+            IsProcessing = true;
+            ResultMessage = "";
+            IsResultSuccess = false;
+
+            await CheckRegister();
+
+            IsProcessing = false;
+        }
+
+        private async Task CheckRegister()
         {
             if (String.IsNullOrEmpty(Email))
             {
-                ErrorMessageText = "Nie podano adresu email";
+                ResultMessage = "Nie podano adresu email";
                 return;
             }
 
             if (!new EmailAddressAttribute().IsValid(Email.Trim()))
             {
-                ErrorMessageText = "Nieprawidłowy format adresu email";
+                ResultMessage = "Nieprawidłowy format adresu email";
                 return;
             }
 
             if (String.IsNullOrEmpty(Username))
             {
-                ErrorMessageText = "Nie podano nazwy użytkownika";
+                ResultMessage = "Nie podano nazwy użytkownika";
                 return;
             }
 
             if (String.IsNullOrEmpty(Password))
             {
-                ErrorMessageText = "Nie podano hasła";
+                ResultMessage = "Nie podano hasła";
                 return;
             }
 
             if (Password != RepeatPassword)
             {
-                ErrorMessageText = "Hasła nie są zgodne";
+                ResultMessage = "Hasła nie są zgodne";
                 return;
             }
 
@@ -233,23 +252,24 @@ namespace LangApp.WpfClient.ViewModels.Windows
             }
             catch (HttpRequestException)
             {
-                ErrorMessageText = "Brak połączenia z serwerem";
+                ResultMessage = "Brak połączenia z serwerem";
                 return;
             }
 
             switch(registerResult)
             {
                 case RegisterResult.OK:
-                    SuccessMessageText = "Pomyślnie utworzono konto";
+                    IsResultSuccess = true;
+                    ResultMessage = "Pomyślnie utworzono konto";
                     GoToLogIn();
                     break;
 
                 case RegisterResult.OCCUPIED_EMAIL:
-                    ErrorMessageText = "Podany adres email jest zajęty";
+                    ResultMessage = "Podany adres email jest zajęty";
                     break;
 
                 case RegisterResult.OCCUPIED_USERNAME:
-                    ErrorMessageText = "Podana nazwa użytkownika jest zajęta";
+                    ResultMessage = "Podana nazwa użytkownika jest zajęta";
                     break;
             }
         }
@@ -258,7 +278,11 @@ namespace LangApp.WpfClient.ViewModels.Windows
         {
             LogInVisibility = Visibility.Visible;
             RegisterVisibility = Visibility.Collapsed;
-            ErrorMessageText = "";
+
+            if (!_isResultSuccess)
+            {
+                ResultMessage = "";
+            }
         }
 
         private void GoToRegister(object obj)
@@ -266,7 +290,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
             LogInVisibility = Visibility.Collapsed;
             RegisterVisibility = Visibility.Visible;
             Username = "";
-            ErrorMessageText = "";
+            ResultMessage = "";
         }
 
         private void PasswordChanged(object obj)
