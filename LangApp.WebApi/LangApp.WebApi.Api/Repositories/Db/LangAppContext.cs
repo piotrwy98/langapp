@@ -57,9 +57,9 @@ namespace LangApp.WebApi.Api.Repositories.Db
                     .HasColumnName("correct_answer")
                     .UseCollation("utf8mb4_bin");
 
-                entity.Property(e => e.Duration)
-                    .HasColumnType("time")
-                    .HasColumnName("duration");
+                entity.Property(e => e.DurationMs)
+                    .HasColumnType("int(10) unsigned")
+                    .HasColumnName("duration_ms");
 
                 entity.Property(e => e.NumberInSession)
                     .HasColumnType("int(10) unsigned")
@@ -324,7 +324,8 @@ namespace LangApp.WebApi.Api.Repositories.Db
 
                 entity.Property(e => e.StartDateTime)
                     .HasColumnType("datetime")
-                    .HasColumnName("start_date_time");
+                    .HasColumnName("start_date_time")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.Property(e => e.Type)
                     .IsRequired()
