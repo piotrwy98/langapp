@@ -1,5 +1,4 @@
-﻿using System;
-using static LangApp.Shared.Models.Enums;
+﻿using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.Shared.Models
 {
@@ -12,7 +11,7 @@ namespace LangApp.Shared.Models
         public QuestionType QuestionType { get; set; }
         public string Value { get; set; }
         public string CorrectAnswer { get; set; }
-        public TimeSpan Duration { get; set; }
+        public uint DurationMs { get; set; }
         public bool IsAnswerCorrect
         {
             get

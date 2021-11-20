@@ -1,4 +1,5 @@
 ﻿using System;
+using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.Shared.Models
 {
@@ -11,7 +12,7 @@ namespace LangApp.Shared.Models
         public Language FirstLanguage { get; set; }
         public uint SecondLanguageId { get; set; }
         public Language SecondLanguage { get; set; }
-        public string Type { get; set; }
+        public SessionType Type { get; set; }
         public DateTime StartDateTime { get; set; }
     }
 }
