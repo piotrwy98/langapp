@@ -1,4 +1,5 @@
 ﻿using LangApp.Shared.Models;
+using LangApp.WpfClient.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace LangApp.WpfClient.Services
 
         #region Properties
         public List<LanguageName> LanguageNames { get; }
+
         public List<Language> Languages { get; }
         #endregion
 

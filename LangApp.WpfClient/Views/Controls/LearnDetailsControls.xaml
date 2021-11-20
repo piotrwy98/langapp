@@ -10,6 +10,7 @@
     <UserControl.Resources>
         <converters:AnswerResultConverter x:Key="AnswerResultConverter"/>
         <converters:QuestionTypeConverter x:Key="QuestionTypeConverter"/>
+        <converters:DurationMsConverter x:Key="DurationMsConverter"/>
     </UserControl.Resources>
     
     <Grid Margin="10 0">
@@ -40,7 +41,7 @@
                     <DataGridTextColumn Header="Twoja odpowiedź" Binding="{Binding Value}"/>
                     <DataGridTextColumn Header="Poprawna odpowiedź" Binding="{Binding CorrectAnswer}"/>
                     <DataGridTextColumn Header="Typ pytania" Binding="{Binding QuestionType, Converter={StaticResource QuestionTypeConverter}}"/>
-                    <DataGridTextColumn Header="Czas odpowiedzi" Binding="{Binding Duration, StringFormat=mm\\:ss\\.fff}"/>
+                    <DataGridTextColumn Header="Czas odpowiedzi" Binding="{Binding DurationMs, Converter={StaticResource DurationMsConverter}}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>

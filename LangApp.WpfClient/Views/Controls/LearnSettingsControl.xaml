@@ -16,26 +16,48 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
             <RowDefinition/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <Button Grid.Row="0" Command="{Binding StartLearningCommand}" IsEnabled="{Binding CanStartLearning}" Height="40" Margin="14 10">
-            <Button.Style>
-                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                    <Setter Property="Content" Value="Rozpocznij naukę"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsTest}" Value="True">
-                            <Setter Property="Content" Value="Rozpocznij test"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
-
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0 0 16 0">
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="0 0 16 0">
             <StackPanel>
+                <StackPanel Margin="14 0 14 0">
+                    <TextBlock Text="Język" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="26"/>
+                    <Separator/>
+                </StackPanel>
 
+                <ItemsControl ItemsSource="{Binding Languages}" Margin="0 10">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="1"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Object.Language.ImagePath}" ToolTip="{Binding Object.Value}" Height="100" Cursor="Hand">
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Setter Property="Opacity" Value="0.15"/>
+
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsChosen}" Value="True">
+                                                <Setter Property="Opacity" Value="1"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                        <i:InvokeCommandAction Command="{Binding DataContext.LanguageClickCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Image>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                
                 <StackPanel Margin="14 10 14 0">
                     <TextBlock Text="Typy zadań" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="26"/>
                     <Separator/>
@@ -76,15 +98,16 @@
                                         <Setter Property="HorizontalAlignment" Value="Center"/>
                                         <Setter Property="FontFamily" Value="Courier New"/>
                                         <Setter Property="FontSize" Value="32"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
                                     </Style>
                                 </StackPanel.Resources>
 
-                                <TextBlock Text="A ....." Margin="0 15 0 0"/>
-                                <TextBlock Text="B ....."/>
-                                <TextBlock Text="C ....."/>
+                                <TextBlock Text="A ..." Margin="0 20 0 0"/>
+                                <TextBlock Text="B ..."/>
+                                <TextBlock Text="C ..."/>
                             </StackPanel>
 
-                            <TextBlock Text="Pytania zamknięte" HorizontalAlignment="Center" Margin="0 18 0 0"/>
+                            <TextBlock Text="Pytania zamknięte" HorizontalAlignment="Center" Margin="0 10 0 0"/>
                         </StackPanel>
                     </Border>
 
@@ -107,8 +130,8 @@
                         </i:Interaction.Triggers>
 
                         <StackPanel>
-                            <TextBlock Text="T" HorizontalAlignment="Center" FontFamily="Courier New" FontSize="150"/>
-                            <TextBlock Text="Pytania otwarte" HorizontalAlignment="Center" Margin="0 -30 0 0"/>
+                            <TextBlock Text="T" HorizontalAlignment="Center" FontFamily="Courier New" FontSize="165" Margin="0 -15 0 0"/>
+                            <TextBlock Text="Pytania otwarte" HorizontalAlignment="Center" Margin="0 -32 0 0"/>
                         </StackPanel>
                     </Border>
 
@@ -131,7 +154,7 @@
                         </i:Interaction.Triggers>
 
                         <StackPanel>
-                            <md:PackIcon Kind="Microphone" HorizontalAlignment="Center" Height="140" Width="140"/>
+                            <md:PackIcon Kind="Microphone" HorizontalAlignment="Center" Height="130" Width="130" Margin="0 10 0 0"/>
                             <TextBlock Text="Wymowa" HorizontalAlignment="Center" Margin="0 0 0 0"/>
                         </StackPanel>
                     </Border>
@@ -170,17 +193,17 @@
                                 </i:Interaction.Triggers>
 
                                 <Border.Background>
-                                    <ImageBrush Stretch="UniformToFill" ImageSource="{Binding Category.Category.ImagePath}"/>
+                                    <ImageBrush Stretch="UniformToFill" ImageSource="{Binding Object.Category.ImagePath}"/>
                                 </Border.Background>
 
                                 <Border CornerRadius="0 0 7 7" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
                                     <Border.Background>
                                         <SolidColorBrush Color="#2B3544" Opacity="0.8"/>
                                     </Border.Background>
-                                    
+
                                     <StackPanel>
-                                        <TextBlock Text="{Binding Category.Value}" Margin="10 5 10 0"/>
-                                        <TextBlock Text="{Binding Category.Category.Level, Converter={StaticResource LevelNameConverter}}" Margin="10 5"/>
+                                        <TextBlock Text="{Binding Object.Value}" Margin="10 5 10 0"/>
+                                        <TextBlock Text="{Binding Object.Category.Level, Converter={StaticResource LevelNameConverter}}" Margin="10 5"/>
                                     </StackPanel>
                                 </Border>
                             </Border>
@@ -189,5 +212,18 @@
                 </ItemsControl>
             </StackPanel>
         </ScrollViewer>
+
+        <Button Grid.Row="1" Command="{Binding StartLearningCommand}" IsEnabled="{Binding CanStartLearning}" Height="40" Margin="14 10">
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Content" Value="Rozpocznij naukę"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsTest}" Value="True">
+                            <Setter Property="Content" Value="Rozpocznij test"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
     </Grid>
 </UserControl>

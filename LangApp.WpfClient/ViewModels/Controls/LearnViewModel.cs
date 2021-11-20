@@ -385,6 +385,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         #endregion
 
         #region Variables
+        private uint _sessionId;
         private uint _languageId;
         private List<uint> _categoriesIds;
         private bool _isClosedChosen;
@@ -413,9 +414,10 @@ namespace LangApp.WpfClient.ViewModels.Controls
         private double _recordPlayValueToAdd;
         #endregion
 
-        public LearnViewModel(bool isTest, uint languageId, List<uint> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen)
+        public LearnViewModel(bool isTest, uint sessionId, uint languageId, List<uint> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen)
         {
             IsTest = isTest;
+            _sessionId = sessionId;
             _languageId = languageId;
             _categoriesIds = categoriesIds;
             _isClosedChosen = isClosedChosen;
@@ -509,7 +511,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             GetNextQuestion(true);
         }
 
-        private void Check(object obj)
+        private async void Check(object obj)
         {
             if(CanGoFurther)
             {
@@ -530,16 +532,16 @@ namespace LangApp.WpfClient.ViewModels.Controls
                         break;
                 }
 
-                _answers.Add(new Answer()
-                {
-                    NumberInSession = (uint)QuestionCounter,
-                    QuestionType = _questionType,
-                    Value = userAnswer,
-                    CorrectAnswer = TranslationPair.Value.SecondLanguageTranslation.Value,
-                    Duration = DateTime.Now - _questionAppearedTime
-                });
+                // dodanie odpowiedzi
+                var answer = await Task.Run(() => AnswersService.CreateAnswerAsync(_sessionId, (uint) _questionCounter,
+                    _questionType, userAnswer, TranslationPair.Value.SecondLanguageTranslation.Value,
+                    DateTime.Now - _questionAppearedTime));
 
-                GetNextQuestion();
+                if (answer != null)
+                {
+                    _answers.Add(answer);
+                    GetNextQuestion();
+                }
             }
             else
             {

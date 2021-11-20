@@ -4,6 +4,7 @@ using LangApp.WpfClient.ViewModels;
 using LangApp.WpfClient.Views.Controls;
 using Newtonsoft.Json;
 using System.Windows.Controls;
+using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.WpfClient.Models
 {
@@ -58,9 +59,9 @@ namespace LangApp.WpfClient.Models
             }
         }
 
-        public LearnSettingsControl LearnSettingsControl { get; } = new LearnSettingsControl(false);
+        public LearnSettingsControl LearnSettingsControl { get; } = new LearnSettingsControl(SessionType.LEARN);
 
-        public LearnSettingsControl TestSettingsControl { get; } = new LearnSettingsControl(true);
+        public LearnSettingsControl TestSettingsControl { get; } = new LearnSettingsControl(SessionType.TEST);
 
         public LearnControl LearnControl { get; set; }
 

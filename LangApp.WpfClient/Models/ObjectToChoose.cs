@@ -1,11 +1,10 @@
-﻿using LangApp.Shared.Models;
-using LangApp.WpfClient.ViewModels;
+﻿using LangApp.WpfClient.ViewModels;
 
 namespace LangApp.WpfClient.Models
 {
-    public class CategoryToChoose : NotifyPropertyChanged
+    public class ObjectToChoose : NotifyPropertyChanged
     {
-        public CategoryName Category { get; set; }
+        public object Object { get; set; }
 
         private bool _isChosen;
         public bool IsChosen

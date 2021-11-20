@@ -169,21 +169,25 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\DurationMsConverter.cs" />
     <Compile Include="Converters\PartOfSpeechNameConverter.cs" />
     <Compile Include="Converters\LanguageNameConverter.cs" />
     <Compile Include="Converters\LevelNameConverter.cs" />
     <Compile Include="Converters\AnswerResultConverter.cs" />
     <Compile Include="Converters\QuestionTypeConverter.cs" />
     <Compile Include="Models\BilingualDictionary.cs" />
-    <Compile Include="Models\CategoryToChoose.cs" />
+    <Compile Include="Models\ObjectToChoose.cs" />
     <Compile Include="Models\Configuration.cs" />
     <Compile Include="Converters\ImageConverter.cs" />
     <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\TranslationSet.cs" />
     <Compile Include="Models\TranslationsList.cs" />
+    <Compile Include="Services\AnswersService.cs" />
     <Compile Include="Services\PartsOfSpeechService.cs" />
     <Compile Include="Services\PronunciationsService.cs" />
+    <Compile Include="Services\SelectedCategoriesService.cs" />
+    <Compile Include="Services\SessionsService.cs" />
     <Compile Include="ViewModels\NotifyPropertyChanged.cs" />
     <Compile Include="Services\CategoriesService.cs" />
     <Compile Include="Services\FavouriteWordsService.cs" />

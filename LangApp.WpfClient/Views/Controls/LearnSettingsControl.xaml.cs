@@ -1,5 +1,6 @@
 ﻿using LangApp.WpfClient.ViewModels.Controls;
 using System.Windows.Controls;
+using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.WpfClient.Views.Controls
 {
@@ -8,10 +9,10 @@ namespace LangApp.WpfClient.Views.Controls
     /// </summary>
     public partial class LearnSettingsControl : UserControl
     {
-        public LearnSettingsControl(bool isTest)
+        public LearnSettingsControl(SessionType sessionType)
         {
             InitializeComponent();
-            DataContext = new LearnSettingsViewModel(isTest);
+            DataContext = new LearnSettingsViewModel(sessionType);
         }
     }
 }

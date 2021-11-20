@@ -4,13 +4,17 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Input;
 using LangApp.WpfClient.Views.Controls;
-using System;
+using LangApp.Shared.Models;
+using System.Threading.Tasks;
+using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.WpfClient.ViewModels.Controls
 {
     public class LearnSettingsViewModel : NotifyPropertyChanged
     {
         #region Commands
+        public ICommand LanguageClickCommand { get; set; }
+
         public ICommand CategoryClickCommand { get; set; }
 
         public ICommand ClosedClickCommand { get; set; }
@@ -23,9 +27,19 @@ namespace LangApp.WpfClient.ViewModels.Controls
         #endregion
 
         #region Properties
-        public bool IsTest { get; }
+        public SessionType SessionType { get; }
 
-        public List<CategoryToChoose> Categories { get; }
+        public bool IsTest
+        {
+            get
+            {
+                return SessionType == SessionType.TEST;
+            }
+        }
+
+        public List<ObjectToChoose> Languages { get; }
+
+        public List<ObjectToChoose> Categories { get; }
 
         private bool _isClosedChosen;
         public bool IsClosedChosen
@@ -79,9 +93,10 @@ namespace LangApp.WpfClient.ViewModels.Controls
         }
         #endregion
 
-        public LearnSettingsViewModel(bool isTest)
+        public LearnSettingsViewModel(SessionType sessionType)
         {
-            IsTest = isTest;
+            SessionType = sessionType;
+            LanguageClickCommand = new RelayCommand(LanguageClick);
             CategoryClickCommand = new RelayCommand(CategoryClick);
             ClosedClickCommand = new RelayCommand(ClosedClick);
             OpenClickCommand = new RelayCommand(OpenClick);
@@ -89,15 +104,27 @@ namespace LangApp.WpfClient.ViewModels.Controls
             StartLearningCommand = new RelayCommand(StartLearning);
 
             uint id = Settings.GetInstance().InterfaceLanguageId;
+            var languages = LanguagesService.GetInstance().LanguageNames.FindAll(x => x.SourceLanguageId == id && x.LanguageId != id);
+            Languages = new List<ObjectToChoose>();
+
+            foreach (var language in languages)
+            {
+                Languages.Add(new ObjectToChoose()
+                {
+                    Object = language
+                });
+            }
+
+            Languages[0].IsChosen = true;
+
             var categories = CategoriesService.GetInstance().Categories.FindAll(x => x.LanguageId == id);
-            Categories = new List<CategoryToChoose>();
+            Categories = new List<ObjectToChoose>();
 
             foreach(var category in categories)
             {
-                Categories.Add(new CategoryToChoose()
+                Categories.Add(new ObjectToChoose()
                 {
-                    Category = category,
-                    IsChosen = false
+                    Object = category
                 });
             }
         }
@@ -120,36 +147,64 @@ namespace LangApp.WpfClient.ViewModels.Controls
             OnPropertyChanged("CanStartLearning");
         }
 
+        private void LanguageClick(object obj)
+        {
+            var objectToChoose = obj as ObjectToChoose;
+            if (objectToChoose != null && !objectToChoose.IsChosen)
+            {
+                foreach(var language in Languages)
+                {
+                    language.IsChosen = false;
+                }
+
+                objectToChoose.IsChosen = true;
+            }
+        }
+
         private void CategoryClick(object obj)
         {
-            var category = obj as CategoryToChoose;
-            if(obj != null)
+            var objectToChoose = obj as ObjectToChoose;
+            if(objectToChoose != null)
             {
-                category.IsChosen = !category.IsChosen;
+                objectToChoose.IsChosen = !objectToChoose.IsChosen;
                 OnPropertyChanged("CanStartLearning");
             }
         }
 
-        public void StartLearning(object obj = null)
+        public async void StartLearning(object obj = null)
         {
+            var languageId = (Languages.First(x => x.IsChosen).Object as LanguageName).Language.Id;
+
             List<uint> categoriesIds = new List<uint>();
             foreach(var category in Categories)
             {
                 if(category.IsChosen)
                 {
-                    categoriesIds.Add(category.Category.Id);
+                    categoriesIds.Add((category.Object as CategoryName).Category.Id);
                 }
             }
 
-            if(IsTest)
+            // utworzenie sesji
+            var session = await Task.Run(() => SessionsService.CreateSessionAsync(Settings.GetInstance().InterfaceLanguageId, languageId, SessionType));
+            
+            if(session != null)
             {
-                Configuration.GetInstance().TestControl = new LearnControl(true, LanguagesService.GetInstance().Languages[1].Id, categoriesIds, _isClosedChosen, _isOpenChosen, _isSpeakChosen);
-                Configuration.GetInstance().CurrentView = Configuration.GetInstance().TestControl;
-            }
-            else
-            {
-                Configuration.GetInstance().LearnControl = new LearnControl(false, LanguagesService.GetInstance().Languages[1].Id, categoriesIds, _isClosedChosen, _isOpenChosen, _isSpeakChosen);
-                Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnControl;
+                // dodanie wybranych kategori do utworzonej sesji
+                foreach(var id in categoriesIds)
+                {
+                    await Task.Run(() => SelectedCategoriesService.CreateSelectedCategoryAsync(session.Id, id));
+                }
+
+                if (SessionType == SessionType.TEST)
+                {
+                    Configuration.GetInstance().TestControl = new LearnControl(true, session.Id, languageId, categoriesIds, _isClosedChosen, _isOpenChosen, _isSpeakChosen);
+                    Configuration.GetInstance().CurrentView = Configuration.GetInstance().TestControl;
+                }
+                else
+                {
+                    Configuration.GetInstance().LearnControl = new LearnControl(false, session.Id, languageId, categoriesIds, _isClosedChosen, _isOpenChosen, _isSpeakChosen);
+                    Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnControl;
+                }
             }
         }
     }
