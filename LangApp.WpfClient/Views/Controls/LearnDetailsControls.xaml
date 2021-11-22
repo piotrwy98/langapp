@@ -46,6 +46,6 @@
             </DataGrid>
         </ScrollViewer>
 
-        <Button Grid.Row="2" Content="Powrót" Command="{Binding ReturnCommand}" Background="Gray" BorderBrush="Gray" Width="250" Height="50" FontSize="20" Margin="0 20"/>
+        <Button Grid.Row="2" Content="Powrót" Command="{Binding ReturnCommand}" Background="Gray" BorderBrush="Gray" Width="200" Height="45" FontSize="18" Margin="0 20"/>
     </Grid>
 </UserControl>

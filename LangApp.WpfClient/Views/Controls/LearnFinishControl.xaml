@@ -9,38 +9,40 @@
              d:DesignHeight="450" d:DesignWidth="800" Foreground="{Binding ResultColorBrush}">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         
         <Grid.Resources>
             <Style TargetType="TextBlock">
-                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="FontSize" Value="26"/>
                 <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundColor}"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
             
             <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                <Setter Property="Width" Value="240"/>
-                <Setter Property="Height" Value="50"/>
-                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="Width" Value="200"/>
+                <Setter Property="Height" Value="45"/>
+                <Setter Property="FontSize" Value="18"/>
             </Style>
         </Grid.Resources>
-        
-        <StackPanel Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="{Binding ResultText}" Foreground="{Binding ResultColorBrush}" HorizontalAlignment="Center" FontSize="60"/>
-            <md:PackIcon Kind="{Binding ResultIcon}" Width="400" Height="400" HorizontalAlignment="Center" Margin="0 0 0 40"/>
 
-            <StackPanel Orientation="Horizontal" Visibility="{Binding IsTest, Converter={StaticResource InverseBoolToVisConverter}}">
+        <TextBlock Grid.Row="0" Text="{Binding ResultText}" Foreground="{Binding ResultColorBrush}" HorizontalAlignment="Center" FontSize="50"/>
+
+        <md:PackIcon Grid.Row="1" Kind="{Binding ResultIcon}" Width="auto" Height="auto" HorizontalAlignment="Center" Margin="0 40 0 40"/>
+
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <WrapPanel HorizontalAlignment="Center" Visibility="{Binding IsTest, Converter={StaticResource InverseBoolToVisConverter}}">
                 <TextBlock Text="Wykonano "/>
                 <TextBlock Text="{Binding Answers.Count}"/>
                 <TextBlock Text="/"/>
                 <TextBlock Text="{Binding NumberOfQuestions}"/>
                 <TextBlock Text=" zadań z czasem "/>
                 <TextBlock Text="{Binding Timer, StringFormat=mm\\:ss\\.fff}"/>
-            </StackPanel>
+            </WrapPanel>
 
-            <StackPanel Orientation="Horizontal" Visibility="{Binding IsTest, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <WrapPanel HorizontalAlignment="Center" Visibility="{Binding IsTest, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock Text="Poprawność odpowiedzi to "/>
                 <TextBlock Text="{Binding ResultPercent, StringFormat=N0}" FontWeight="Bold"/>
                 <TextBlock Text="%" FontWeight="Bold"/>
@@ -48,13 +50,13 @@
                 <TextBlock Text="{Binding NumberOfQuestions}"/>
                 <TextBlock Text=" pytań w czasie "/>
                 <TextBlock Text="{Binding Timer, StringFormat=mm\\:ss\\.fff}"/>
-            </StackPanel>
-        </StackPanel>
+            </WrapPanel>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 40">
-            <Button Content="Zmień kategorie" Command="{Binding ChangeCategoryCommand}" Background="Gray" BorderBrush="Gray"/>
-            <Button Content="Pokaż szczegóły" Command="{Binding ShowDetailsCommand}" Margin="50 0"/>
-            <Button Content="Wykonaj ponownie" Command="{Binding LearnAgainCommand}" Background="Gray" BorderBrush="Gray"/>
+            <WrapPanel Margin="0 40 0 20">
+                <Button Content="Dostosuj" Command="{Binding ChangeCategoryCommand}" Background="Gray" BorderBrush="Gray"/>
+                <Button Content="Pokaż szczegóły" Command="{Binding ShowDetailsCommand}" Margin="30 0"/>
+                <Button Content="Wykonaj ponownie" Command="{Binding LearnAgainCommand}" Background="Gray" BorderBrush="Gray"/>
+            </WrapPanel>
         </StackPanel>
     </Grid>
 </UserControl>

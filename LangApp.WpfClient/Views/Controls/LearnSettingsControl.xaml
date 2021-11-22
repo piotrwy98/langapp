@@ -8,7 +8,7 @@
              xmlns:local="clr-namespace:LangApp.WpfClient.Views.Controls"
              xmlns:converters="clr-namespace:LangApp.WpfClient.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" FontSize="20" Foreground="{StaticResource SecondaryForegroundColor}"
+             d:DesignHeight="450" d:DesignWidth="800" FontSize="18" Foreground="{StaticResource SecondaryForegroundColor}"
              FontWeight="Medium" RenderOptions.BitmapScalingMode="HighQuality">
     <UserControl.Resources>
         <converters:LevelNameConverter x:Key="LevelNameConverter"/>
@@ -23,49 +23,89 @@
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="0 0 16 0">
             <StackPanel>
                 <StackPanel Margin="14 0 14 0">
-                    <TextBlock Text="Język" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="26"/>
+                    <TextBlock Text="Język" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="22"/>
                     <Separator/>
+
+                    <ItemsControl ItemsSource="{Binding Languages}" Margin="0 10">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Rows="1"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding Object.Language.ImagePath}" ToolTip="{Binding Object.Value}" Cursor="Hand">
+                                    <Image.Style>
+                                        <Style TargetType="Image">
+                                            <Setter Property="Opacity" Value="0.2"/>
+                                            <Setter Property="Height" Value="65"/>
+
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChosen}" Value="True">
+                                                    <Setter Property="Opacity" Value="1"/>
+                                                    <Setter Property="Height" Value="75"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.LanguageClickCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Image>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </StackPanel>
 
-                <ItemsControl ItemsSource="{Binding Languages}" Margin="0 10">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Rows="1"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Image Source="{Binding Object.Language.ImagePath}" ToolTip="{Binding Object.Value}" Height="100" Cursor="Hand">
-                                <Image.Style>
-                                    <Style TargetType="Image">
-                                        <Setter Property="Opacity" Value="0.15"/>
+                <StackPanel Margin="14 10 14 5">
+                    <TextBlock Text="Liczba zadań" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="22"/>
+                    <Separator/>
 
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsChosen}" Value="True">
-                                                <Setter Property="Opacity" Value="1"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Image.Style>
+                    <ItemsControl ItemsSource="{Binding QuestionNumbers}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Rows="1"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Object}" Cursor="Hand" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Opacity" Value="0.2"/>
+                                            <Setter Property="FontSize" Value="35"/>
 
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseLeftButtonDown">
-                                        <i:InvokeCommandAction Command="{Binding DataContext.LanguageClickCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </Image>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChosen}" Value="True">
+                                                    <Setter Property="Opacity" Value="1"/>
+                                                    <Setter Property="FontSize" Value="45"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.NumberClickCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
                 <StackPanel Margin="14 10 14 0">
-                    <TextBlock Text="Typy zadań" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="26"/>
+                    <TextBlock Text="Typy zadań" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="22"/>
                     <Separator/>
                 </StackPanel>
-
-                <Grid Grid.Row="1">
+                
+                <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="200"/>
+                        <RowDefinition Height="150"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -97,17 +137,17 @@
                                     <Style TargetType="TextBlock">
                                         <Setter Property="HorizontalAlignment" Value="Center"/>
                                         <Setter Property="FontFamily" Value="Courier New"/>
-                                        <Setter Property="FontSize" Value="32"/>
+                                        <Setter Property="FontSize" Value="22"/>
                                         <Setter Property="FontWeight" Value="Bold"/>
                                     </Style>
                                 </StackPanel.Resources>
 
-                                <TextBlock Text="A ..." Margin="0 20 0 0"/>
+                                <TextBlock Text="A ..." Margin="0 10 0 0"/>
                                 <TextBlock Text="B ..."/>
                                 <TextBlock Text="C ..."/>
                             </StackPanel>
 
-                            <TextBlock Text="Pytania zamknięte" HorizontalAlignment="Center" Margin="0 10 0 0"/>
+                            <TextBlock Text="Pytania zamknięte" HorizontalAlignment="Center" Margin="0 5 0 0"/>
                         </StackPanel>
                     </Border>
 
@@ -130,8 +170,8 @@
                         </i:Interaction.Triggers>
 
                         <StackPanel>
-                            <TextBlock Text="T" HorizontalAlignment="Center" FontFamily="Courier New" FontSize="165" Margin="0 -15 0 0"/>
-                            <TextBlock Text="Pytania otwarte" HorizontalAlignment="Center" Margin="0 -32 0 0"/>
+                            <TextBlock Text="T" HorizontalAlignment="Center" FontFamily="Courier New" FontSize="110" Margin="0 -10 0 0"/>
+                            <TextBlock Text="Pytania otwarte" HorizontalAlignment="Center" Margin="0 -26 0 0"/>
                         </StackPanel>
                     </Border>
 
@@ -154,14 +194,14 @@
                         </i:Interaction.Triggers>
 
                         <StackPanel>
-                            <md:PackIcon Kind="Microphone" HorizontalAlignment="Center" Height="130" Width="130" Margin="0 10 0 0"/>
-                            <TextBlock Text="Wymowa" HorizontalAlignment="Center" Margin="0 0 0 0"/>
+                            <md:PackIcon Kind="Microphone" HorizontalAlignment="Center" Height="90" Width="90" Margin="0 5 0 0"/>
+                            <TextBlock Text="Wymowa" HorizontalAlignment="Center" Margin="0 -5 0 0"/>
                         </StackPanel>
                     </Border>
                 </Grid>
 
                 <StackPanel Margin="14 10 14 0">
-                    <TextBlock Text="Kategorie" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="26"/>
+                    <TextBlock Text="Kategorie" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="22"/>
                     <Separator/>
                 </StackPanel>
 
@@ -174,7 +214,7 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderThickness="4" CornerRadius="10" Cursor="Hand" Height="200" Margin="10">
+                            <Border BorderThickness="4" CornerRadius="10" Cursor="Hand" Height="150" Margin="10">
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Setter Property="BorderBrush" Value="Transparent"/>
@@ -198,12 +238,12 @@
 
                                 <Border CornerRadius="0 0 7 7" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
                                     <Border.Background>
-                                        <SolidColorBrush Color="#2B3544" Opacity="0.8"/>
+                                        <SolidColorBrush Color="#2B3544" Opacity="0.85"/>
                                     </Border.Background>
 
                                     <StackPanel>
-                                        <TextBlock Text="{Binding Object.Value}" Margin="10 5 10 0"/>
-                                        <TextBlock Text="{Binding Object.Category.Level, Converter={StaticResource LevelNameConverter}}" Margin="10 5"/>
+                                        <TextBlock Text="{Binding Object.Value}" Margin="10 0"/>
+                                        <TextBlock Text="{Binding Object.Category.Level, Converter={StaticResource LevelNameConverter}}" Margin="10 0 0 5"/>
                                     </StackPanel>
                                 </Border>
                             </Border>

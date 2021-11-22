@@ -175,6 +175,7 @@
     <Compile Include="Converters\LevelNameConverter.cs" />
     <Compile Include="Converters\AnswerResultConverter.cs" />
     <Compile Include="Converters\QuestionTypeConverter.cs" />
+    <Compile Include="Converters\TextBoxEnterKeyUpdateBehavior.cs" />
     <Compile Include="Models\BilingualDictionary.cs" />
     <Compile Include="Models\ObjectToChoose.cs" />
     <Compile Include="Models\Configuration.cs" />

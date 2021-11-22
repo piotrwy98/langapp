@@ -6,7 +6,7 @@
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:LangApp.WpfClient"
         mc:Ignorable="d"
-        Height="850" Width="1200" WindowStyle="None" ResizeMode="CanResizeWithGrip"
+        Height="650" Width="1100" MinHeight="650" MinWidth="1000" WindowStyle="None" ResizeMode="CanResizeWithGrip"
         AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen"
         MouseDown="Window_MouseDown" Title="LangApp" RenderOptions.BitmapScalingMode="HighQuality">
     <Window.Resources>
@@ -23,7 +23,7 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundColor}"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontSize" Value="16"/>
             <Setter Property="IsEnabled" Value="{Binding Configuration.IsNotDuringTest}"/>
 
             <Style.Triggers>
@@ -46,7 +46,7 @@
     
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
@@ -66,7 +66,7 @@
 
                 <Image Source="../../Resources/logo.png" Margin="20 30 20 0"/>
                 
-                <md:PackIcon Kind="UserCircle" Foreground="{StaticResource PrimaryForegroundColor}" HorizontalAlignment="Center" Height="100" Width="100" Margin="0 20 0 0"/>
+                <md:PackIcon Kind="UserCircle" Foreground="{StaticResource PrimaryForegroundColor}" HorizontalAlignment="Center" Height="75" Width="75" Margin="0 20 0 0"/>
                 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 26">
                     <TextBlock Text="Witaj, " FontSize="20" Foreground="{StaticResource PrimaryForegroundColor}"/>

@@ -220,10 +220,12 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 _canGoToFurther = value;
                 OnPropertyChanged();
                 OnPropertyChanged("IsCheckButtonEnabled");
+                OnPropertyChanged("IsRecordButtonEnabled");
+                OnPropertyChanged("AreAnswersEnabled");
             }
         }
 
-        public int NumberOfQuestions { get; } = 5;
+        public int NumberOfQuestions { get; }
 
         private int _questionCounter;
         public int QuestionCounter
@@ -316,6 +318,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             {
                 _isRecordPlaying = value;
                 OnPropertyChanged();
+                OnPropertyChanged("IsRecordButtonEnabled");
             }
         }
 
@@ -361,11 +364,25 @@ namespace LangApp.WpfClient.ViewModels.Controls
             }
         }
 
+        private bool _isProcessingPronunciation;
+        public bool IsProcessingPronunciation
+        {
+            get
+            {
+                return _isProcessingPronunciation;
+            }
+            set
+            {
+                _isProcessingPronunciation = value;
+                OnPropertyChanged("IsCheckButtonEnabled");
+            }
+        }
+
         public bool IsCheckButtonEnabled
         {
             get
             {
-                return !IsRecording || CanGoFurther;
+                return (!IsRecording || CanGoFurther) && !IsProcessingPronunciation;
             }
         }
 
@@ -382,11 +399,27 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 OnPropertyChanged();
             }
         }
+
+        public bool IsRecordButtonEnabled
+        {
+            get
+            {
+                return !IsRecordPlaying && AreAnswersEnabled;
+            }
+        }
+
+        public bool AreAnswersEnabled
+        {
+            get
+            {
+                return IsTest || !CanGoFurther;
+            }
+        }
         #endregion
 
         #region Variables
         private uint _sessionId;
-        private uint _languageId;
+        private Language _language;
         private List<uint> _categoriesIds;
         private bool _isClosedChosen;
         private bool _isOpenChosen;
@@ -414,19 +447,20 @@ namespace LangApp.WpfClient.ViewModels.Controls
         private double _recordPlayValueToAdd;
         #endregion
 
-        public LearnViewModel(bool isTest, uint sessionId, uint languageId, List<uint> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen)
+        public LearnViewModel(bool isTest, uint sessionId, Language language, List<uint> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen, int numberOfQuestions)
         {
             IsTest = isTest;
             _sessionId = sessionId;
-            _languageId = languageId;
+            _language = language;
             _categoriesIds = categoriesIds;
             _isClosedChosen = isClosedChosen;
             _isOpenChosen = isOpenChosen;
             _isSpeakChosen = isSpeakChosen;
+            NumberOfQuestions = numberOfQuestions;
 
             _dictionary = TranslationsService.GetInstance().Dictionaries.First(x => 
                 x.FirstLanguage.Id == LanguagesService.GetInstance().Languages[0].Id &&
-                x.SecondLanguage.Id == _languageId);
+                x.SecondLanguage.Id == _language.Id);
             _random = new Random();
             _previousWordsIds = new List<uint>();
             _answers = new List<Answer>();
@@ -528,7 +562,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                         break;
 
                     case QuestionType.PRONUNCIATION:
-                        userAnswer = GetPronunciationResult();
+                        userAnswer = await GetPronunciationResult();
                         break;
                 }
 
@@ -545,7 +579,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             }
             else
             {
-                if (IsAnswerCorrect())
+                if (await IsAnswerCorrect())
                 {
                     CorrectMessage = "Poprawne tłumaczenie";
                     CanGoFurther = true;
@@ -557,20 +591,34 @@ namespace LangApp.WpfClient.ViewModels.Controls
             }
         }
 
-        private string GetPronunciationResult()
+        private async Task<string> GetPronunciationResult()
         {
-            if(_pronunciationResult != null)
+            if (_waveFileWriter == null)
             {
-                return _pronunciationResult;
+                return "-";
             }
 
-            string result = Task.Run(() => SpeechToTextService.GetText(_audioInputStream)).Result;
-            _pronunciationResult = result.Replace(".", "").ToLowerInvariant();
+            if (_pronunciationResult == null)
+            {
+                IsProcessingPronunciation = true;
+                Mouse.OverrideCursor = Cursors.AppStarting;
+
+                string result = await Task.Run(() => SpeechToTextService.GetText(_audioInputStream, _language));
+                _pronunciationResult = result.Replace(".", "").ToLowerInvariant();
+
+                if(_pronunciationResult == string.Empty)
+                {
+                    _pronunciationResult = "-";
+                }
+
+                Mouse.OverrideCursor = null;
+                IsProcessingPronunciation = false;
+            }
 
             return _pronunciationResult;
         }
 
-        private bool IsAnswerCorrect()
+        private async Task<bool> IsAnswerCorrect()
         {
             switch(_questionType)
             {
@@ -582,7 +630,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                         TranslationPair.Value.SecondLanguageTranslation.Value == _openAnswer.Trim();
 
                 case QuestionType.PRONUNCIATION:
-                    return TranslationPair.Value.SecondLanguageTranslation.Value == GetPronunciationResult();
+                    return TranslationPair.Value.SecondLanguageTranslation.Value == await GetPronunciationResult();
             }
 
             return false;
@@ -759,6 +807,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 IsRecordComplete = false;
                 RecordProgress = 0;
                 IsPlayButtonEnabled = false;
+                _pronunciationResult = null;
 
                 var waveFormat = new WaveFormat(SAMPLE_RATE, BITS_PER_SAMPLE, AUDIO_CHANNELS);
                 _waveMemoryStream = new MemoryStream();

@@ -6,10 +6,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:LangApp.WpfClient.Views.Windows"
+        xmlns:converters="clr-namespace:LangApp.WpfClient.Converters"
         mc:Ignorable="d" 
         Height="600" Width="350" WindowStyle="None" ResizeMode="NoResize"
         AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen"
         MouseDown="Window_MouseDown" Title="LangApp" RenderOptions.BitmapScalingMode="HighQuality">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="KeyDown">
+            <i:InvokeCommandAction Command="{Binding WindowKeyDownCommand}" PassEventArgsToCommand="True"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
     <Border CornerRadius="10">
         <Border.Background>
             <LinearGradientBrush>
@@ -82,12 +89,20 @@
 
                 <StackPanel Orientation="Horizontal" Margin="10">
                     <md:PackIcon Kind="Email" Width="35" Height="35" Foreground="{StaticResource PrimaryForegroundColor}" Margin="0 0 10 0"/>
-                    <TextBox Text="{Binding Email}" md:HintAssist.Hint="Email" Width="200" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="16" Loaded="TextBox_Loaded"/>
+                    <TextBox Text="{Binding Email}" md:HintAssist.Hint="Email" Width="200" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="16" Loaded="TextBox_Loaded">
+                        <i:Interaction.Behaviors>
+                            <converters:TextBoxEnterKeyUpdateBehavior/>
+                        </i:Interaction.Behaviors>
+                    </TextBox>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="10" Visibility="{Binding RegisterVisibility}">
                     <md:PackIcon Kind="User" Width="35" Height="35" Foreground="{StaticResource PrimaryForegroundColor}" Margin="0 0 10 0"/>
-                    <TextBox Text="{Binding Username}" md:HintAssist.Hint="Nazwa użytkownika" Width="200" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="16"/>
+                    <TextBox Text="{Binding Username}" md:HintAssist.Hint="Nazwa użytkownika" Width="200" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="16">
+                        <i:Interaction.Behaviors>
+                            <converters:TextBoxEnterKeyUpdateBehavior/>
+                        </i:Interaction.Behaviors>
+                    </TextBox>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="10">

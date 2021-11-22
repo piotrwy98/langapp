@@ -6,6 +6,7 @@
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:LangApp.WpfClient.Views.Controls"
+             xmlns:converters="clr-namespace:LangApp.WpfClient.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Foreground="{StaticResource PrimaryForegroundColor}"
              RenderOptions.BitmapScalingMode="HighQuality">
@@ -16,40 +17,40 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <Grid.Resources>
-                <Style TargetType="TextBlock">
-                    <Setter Property="FontSize" Value="30"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                </Style>
-            </Grid.Resources>
-
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Zadanie "/>
-                <TextBlock Text="{Binding QuestionCounter}"/>
-                <TextBlock Text="/"/>
-                <TextBlock Text="{Binding NumberOfQuestions}"/>
-            </StackPanel>
-
-            <TextBlock Text="{Binding Timer}" HorizontalAlignment="Right"/>
-        </Grid>
-
-        <StackPanel Grid.Row="1">
-            <Grid Margin="0 10 0 20">
+        <StackPanel Grid.Row="0">
+            <Grid>
                 <Grid.Resources>
                     <Style TargetType="TextBlock">
-                        <Setter Property="Foreground" Value="{StaticResource SecondaryForegroundColor}"/>
-                        <Setter Property="FontSize" Value="30"/>
+                        <Setter Property="FontSize" Value="24"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
                     </Style>
                 </Grid.Resources>
 
                 <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Zadanie "/>
+                    <TextBlock Text="{Binding QuestionCounter}"/>
+                    <TextBlock Text="/"/>
+                    <TextBlock Text="{Binding NumberOfQuestions}"/>
+                </StackPanel>
+
+                <TextBlock Text="{Binding Timer}" HorizontalAlignment="Right"/>
+            </Grid>
+
+            <Grid Margin="0 0 0 20">
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{StaticResource SecondaryForegroundColor}"/>
+                        <Setter Property="FontSize" Value="24"/>
+                    </Style>
+                </Grid.Resources>
+
+                <WrapPanel>
                     <TextBlock Text="Jakie jest tłumaczenie słowa "/>
                     <TextBlock Text="{Binding TranslationPair.Value.FirstLanguageTranslation.Value}" FontWeight="Bold"/>
                     <TextBlock Text="?"/>
-                </StackPanel>
+                </WrapPanel>
 
-                <md:PackIcon Foreground="Gold" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Center" Width="60" Height="60" Cursor="Hand">
+                <md:PackIcon Foreground="Gold" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Center" Width="40" Height="40" Cursor="Hand">
                     <md:PackIcon.Style>
                         <Style TargetType="md:PackIcon">
                             <Setter Property="Kind" Value="StarOutline"/>
@@ -71,17 +72,19 @@
                     </i:Interaction.Triggers>
                 </md:PackIcon>
             </Grid>
+        </StackPanel>
 
-            <Border Height="400" CornerRadius="20" Margin="100 0">
-                <Border.Background>
-                    <ImageBrush Stretch="UniformToFill" ImageSource="{Binding TranslationPair.Key.ImagePath}"/>
-                </Border.Background>
-            </Border>
+        <Border Grid.Row="1" CornerRadius="20" Margin="100 0">
+            <Border.Background>
+                <ImageBrush Stretch="UniformToFill" ImageSource="{Binding TranslationPair.Key.ImagePath}"/>
+            </Border.Background>
+        </Border>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="20" Visibility="{Binding ClosedAnswerVisibility}">
+        <StackPanel Grid.Row="2">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10" Visibility="{Binding ClosedAnswerVisibility}" IsEnabled="{Binding AreAnswersEnabled}">
                 <StackPanel.Resources>
                     <Style TargetType="RadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
-                        <Setter Property="FontSize" Value="32"/>
+                        <Setter Property="FontSize" Value="26"/>
                         <Setter Property="Margin" Value="25 10"/>
                     </Style>
                 </StackPanel.Resources>
@@ -92,13 +95,17 @@
                 <RadioButton Grid.Row="1" Grid.Column="1" Content="{Binding ClosedAnswers[3]}" Command="{Binding ClosedAnswerCheckedCommand}" CommandParameter="3"/>
             </StackPanel>
 
-            <TextBox Text="{Binding OpenAnswer}" md:HintAssist.Hint="Tłumaczenie" Width="400" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="30" Margin="20" Visibility="{Binding OpenAnswerVisibility}"/>
+            <TextBox Text="{Binding OpenAnswer}" md:HintAssist.Hint="Tłumaczenie" Width="400" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="26" Margin="10" Visibility="{Binding OpenAnswerVisibility}" IsEnabled="{Binding AreAnswersEnabled}" IsEnabledChanged="TextBox_IsEnabledChanged" IsVisibleChanged="TextBox_IsVisibleChanged">
+                <i:Interaction.Behaviors>
+                    <converters:TextBoxEnterKeyUpdateBehavior/>
+                </i:Interaction.Behaviors>
+            </TextBox>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 20" Visibility="{Binding PronunciationAnswerVisibility}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 20" Visibility="{Binding PronunciationAnswerVisibility}">
                 <Button
                   Style="{StaticResource MaterialDesignFloatingActionButton}"
                   Height="75" Width="75" Margin="0 0 100 0"
-                  Command="{Binding RecordCommand}" IsEnabled="{Binding IsRecordPlaying, Converter={StaticResource InvertBooleanConverter}}"
+                  Command="{Binding RecordCommand}" IsEnabled="{Binding IsRecordButtonEnabled}"
                   md:ButtonProgressAssist.IsIndicatorVisible="{Binding IsRecording}"
                   md:ButtonProgressAssist.Value="{Binding RecordProgress}"
                   md:ButtonProgressAssist.IndicatorForeground="White"
@@ -107,11 +114,11 @@
                         <md:PackIcon.Style>
                             <Style TargetType="md:PackIcon">
                                 <Setter Property="Kind" Value="Stop"/>
-                                
+
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsRecordComplete}" Value="True">
                                         <Setter Property="Kind" Value="Microphone"/>
-                                        
+
                                         <DataTrigger.EnterActions>
                                             <BeginStoryboard>
                                                 <Storyboard>
@@ -156,79 +163,81 @@
                 </Button>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10 0 0 0" Visibility="{Binding IsCorrectVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <md:PackIcon Kind="CheckCircle" Width="42" Height="42" Foreground="LawnGreen" Margin="0 0 5 0"/>
-                <TextBlock Text="{Binding CorrectMessage}" FontSize="30" Foreground="LawnGreen" VerticalAlignment="Center"/>
+            <StackPanel Height="60">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 20" Visibility="{Binding IsCorrectVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <md:PackIcon Kind="CheckCircle" Width="36" Height="36" VerticalAlignment="Center" Foreground="LawnGreen" Margin="0 0 5 0"/>
+                    <TextBlock Text="{Binding CorrectMessage}" FontSize="26" Foreground="LawnGreen" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 20" Visibility="{Binding IsIncorrectVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="PaleVioletRed"/>
+                            <Setter Property="FontSize" Value="30"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <md:PackIcon Kind="Error" Width="36" Height="36" VerticalAlignment="Center" Foreground="PaleVioletRed" Margin="0 0 5 0"/>
+
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding IsAnswerVisible, Converter={StaticResource InverseBoolToVisConverter}}">
+                        <TextBlock Text="{Binding IncorrectMessage}" FontSize="26" Foreground="PaleVioletRed" VerticalAlignment="Center"/>
+                        <Button Content="Pokaż poprawne" Command="{Binding ShowAnswerCommand}" Height="38" Background="PaleVioletRed" BorderBrush="PaleVioletRed" Margin="10 0 0 0"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding IsAnswerVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock Text="Poprawna odpowiedź: "/>
+                        <TextBlock Text="{Binding TranslationPair.Value.SecondLanguageTranslation.Value}" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding TranslationPair.Value.SecondLanguageTranslation.Phonetic, StringFormat=' [{0}]'}"/>
+                        <md:PackIcon Foreground="{StaticResource PrimaryForegroundColor}" Background="Transparent" VerticalAlignment="Center" Width="46" Height="46" Margin="0 -6" HorizontalAlignment="Center" ToolTip="Odtwórz">
+                            <md:PackIcon.Style>
+                                <Style TargetType="md:PackIcon">
+                                    <Setter Property="Kind" Value="VolumeLow"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsAnswerPlaying}" Value="True">
+                                            <Setter Property="Kind" Value="VolumeHigh"/>
+                                            <Setter Property="Cursor" Value="Arrow"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </md:PackIcon.Style>
+
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding AnswerVolumeMouseLeftButtonDownCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </md:PackIcon>
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10 0 0 0" Visibility="{Binding IsIncorrectVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 0">
                 <StackPanel.Resources>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Foreground" Value="PaleVioletRed"/>
-                        <Setter Property="FontSize" Value="30"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Width" Value="175"/>
+                        <Setter Property="Height" Value="45"/>
                     </Style>
                 </StackPanel.Resources>
 
-                <md:PackIcon Kind="Error" Width="42" Height="42" Foreground="PaleVioletRed" Margin="0 0 5 0"/>
+                <Button Content="Zakończ" Command="{Binding ExitCommand}" Margin="0 0 10 0" Background="PaleVioletRed" BorderBrush="PaleVioletRed"/>
+                <Button Content="Pomiń" Command="{Binding SkipCommand}" Margin="10 0" Background="Gray" BorderBrush="Gray" IsEnabled="{Binding CanGoFurther, Converter={StaticResource InvertBooleanConverter}}" Visibility="{Binding IsTest, Converter={StaticResource InverseBoolToVisConverter}}"/>
+                <Button Command="{Binding CheckCommand}" Margin="10 0 0 0" Background="LawnGreen" BorderBrush="LawnGreen" IsEnabled="{Binding IsCheckButtonEnabled}" IsDefault="True">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Content" Value="Sprawdź"/>
 
-                <StackPanel Orientation="Horizontal" Visibility="{Binding IsAnswerVisible, Converter={StaticResource InverseBoolToVisConverter}}">
-                    <TextBlock Text="{Binding IncorrectMessage}" FontSize="30" Foreground="PaleVioletRed" VerticalAlignment="Center"/>
-                    <Button Content="Pokaż poprawne" Command="{Binding ShowAnswerCommand}" Height="42" Background="PaleVioletRed" BorderBrush="PaleVioletRed" Margin="10 0 0 0"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal" Visibility="{Binding IsAnswerVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock Text="Poprawna odpowiedź: "/>
-                    <TextBlock Text="{Binding TranslationPair.Value.SecondLanguageTranslation.Value}" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding TranslationPair.Value.SecondLanguageTranslation.Phonetic, StringFormat=' [{0}]'}"/>
-                    <md:PackIcon Foreground="{StaticResource PrimaryForegroundColor}" Background="Transparent" VerticalAlignment="Center" Width="46" Height="46" HorizontalAlignment="Center" ToolTip="Odtwórz">
-                        <md:PackIcon.Style>
-                            <Style TargetType="md:PackIcon">
-                                <Setter Property="Kind" Value="VolumeLow"/>
-                                <Setter Property="Cursor" Value="Hand"/>
-
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsAnswerPlaying}" Value="True">
-                                        <Setter Property="Kind" Value="VolumeHigh"/>
-                                        <Setter Property="Cursor" Value="Arrow"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </md:PackIcon.Style>
-
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseLeftButtonDown">
-                                <i:InvokeCommandAction Command="{Binding AnswerVolumeMouseLeftButtonDownCommand}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </md:PackIcon>
-                </StackPanel>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CanGoFurther}" Value="True">
+                                    <Setter Property="Content" Value="Dalej"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
             </StackPanel>
-        </StackPanel>
-
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <StackPanel.Resources>
-                <Style TargetType="Button">
-                    <Setter Property="Width" Value="200"/>
-                    <Setter Property="Height" Value="50"/>
-                </Style>
-            </StackPanel.Resources>
-
-            <Button Content="Zakończ" Command="{Binding ExitCommand}" Margin="0 0 10 0" Background="PaleVioletRed" BorderBrush="PaleVioletRed"/>
-            <Button Content="Pomiń" Command="{Binding SkipCommand}" Margin="10 0" Background="Gray" BorderBrush="Gray" IsEnabled="{Binding CanGoFurther, Converter={StaticResource InvertBooleanConverter}}" Visibility="{Binding IsTest, Converter={StaticResource InverseBoolToVisConverter}}"/>
-            <Button Command="{Binding CheckCommand}" Margin="10 0 0 0" Background="LawnGreen" BorderBrush="LawnGreen" IsEnabled="{Binding IsCheckButtonEnabled}">
-                <Button.Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                        <Setter Property="Content" Value="Sprawdź"/>
-
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding CanGoFurther}" Value="True">
-                                <Setter Property="Content" Value="Dalej"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -27,6 +27,8 @@ namespace LangApp.WpfClient.ViewModels.Windows
         public ICommand PasswordChangedCommand { get; set; }
 
         public ICommand RepeatPasswordChangedCommand { get; set; }
+
+        public ICommand WindowKeyDownCommand { get; set; }
         #endregion
 
         #region Properties
@@ -141,9 +143,10 @@ namespace LangApp.WpfClient.ViewModels.Windows
             GoToRegisterCommand = new RelayCommand(GoToRegister);
             PasswordChangedCommand = new RelayCommand(PasswordChanged);
             RepeatPasswordChangedCommand = new RelayCommand(RepeatPasswordChanged);
+            WindowKeyDownCommand = new RelayCommand(WindowKeyDown);
         }
 
-        private async void LogIn(object obj)
+        private async void LogIn(object obj = null)
         {
             IsProcessing = true;
             ResultMessage = "";
@@ -164,7 +167,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
             if (!new EmailAddressAttribute().IsValid(Email.Trim()))
             {
-                ResultMessage = "Nieprawidłowy format adresu email";
+                ResultMessage = "Nieprawidłowy format email";
                 return;
             }
 
@@ -200,7 +203,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
             }
         }
 
-        private async void Register(object obj)
+        private async void Register(object obj = null)
         {
             IsProcessing = true;
             ResultMessage = "";
@@ -221,7 +224,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
             if (!new EmailAddressAttribute().IsValid(Email.Trim()))
             {
-                ResultMessage = "Nieprawidłowy format adresu email";
+                ResultMessage = "Nieprawidłowy format email";
                 return;
             }
 
@@ -308,6 +311,25 @@ namespace LangApp.WpfClient.ViewModels.Windows
             if (passwordBox != null)
             {
                 RepeatPassword = passwordBox.Password;
+            }
+        }
+
+        private void WindowKeyDown(object obj)
+        {
+            var args = obj as KeyEventArgs;
+            if(args != null)
+            {
+                if(args.Key == Key.Enter && !IsProcessing)
+                {
+                    if(_registerVisibility == Visibility.Collapsed)
+                    {
+                        LogIn();
+                    }
+                    else
+                    {
+                        Register();
+                    }
+                }
             }
         }
     }
