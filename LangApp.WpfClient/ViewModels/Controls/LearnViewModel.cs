@@ -225,7 +225,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             }
         }
 
-        public int NumberOfQuestions { get; }
+        public uint NumberOfQuestions { get; }
 
         private int _questionCounter;
         public int QuestionCounter
@@ -447,7 +447,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         private double _recordPlayValueToAdd;
         #endregion
 
-        public LearnViewModel(bool isTest, uint sessionId, Language language, List<uint> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen, int numberOfQuestions)
+        public LearnViewModel(bool isTest, uint sessionId, Language language, List<uint> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen, uint numberOfQuestions)
         {
             IsTest = isTest;
             _sessionId = sessionId;

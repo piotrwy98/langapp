@@ -14,7 +14,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
-                        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{TemplateBinding Background}" Height="60">
+                        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{TemplateBinding Background}" Height="56">
                             <ContentPresenter Content="{TemplateBinding Content}"/>
                         </Grid>
                     </ControlTemplate>
@@ -91,6 +91,13 @@
                     <StackPanel Orientation="Horizontal">
                         <md:PackIcon Kind="CheckboxMarkedCircleOutline"/>
                         <TextBlock Text="Test"/>
+                    </StackPanel>
+                </RadioButton>
+
+                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding StatsCheckedCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <md:PackIcon Kind="ChartLine"/>
+                        <TextBlock Text="Statystyki"/>
                     </StackPanel>
                 </RadioButton>
 

@@ -11,7 +11,7 @@ namespace LangApp.WpfClient.Views.Controls
     /// </summary>
     public partial class LearnFinishControl : UserControl
     {
-        public LearnFinishControl(bool isTest, TimeSpan timer, int numberOfQuestions, List<Answer> answers)
+        public LearnFinishControl(bool isTest, TimeSpan timer, uint numberOfQuestions, List<Answer> answers)
         {
             InitializeComponent();
             DataContext = new LearnFinishViewModel(isTest, timer, numberOfQuestions, answers);

@@ -3,6 +3,7 @@ using LangApp.WpfClient.Services;
 using LangApp.WpfClient.ViewModels;
 using LangApp.WpfClient.Views.Controls;
 using Newtonsoft.Json;
+using System;
 using System.Windows.Controls;
 using static LangApp.Shared.Models.Enums;
 
@@ -43,7 +44,7 @@ namespace LangApp.WpfClient.Models
             }
         }
 
-        public User User { get; set; } = new User() { Id = 1, Username = "piotrwy" };
+        public User User { get; set; } = new User() { Id = 1, Username = "test", RegisterDateTime = DateTime.Now.AddDays(-10) };
 
         private UserControl _currentView;
         public UserControl CurrentView

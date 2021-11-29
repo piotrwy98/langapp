@@ -1,5 +1,6 @@
 ﻿using LangApp.Shared.Models;
 using LangApp.WpfClient.Models;
+using LiveCharts;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -51,6 +52,22 @@ namespace LangApp.WpfClient.Services
             }
 
             return null;
+        }
+
+        public static List<ChartValues<ChartItem>> GetLanguageValues()
+        {
+            var list = new List<ChartValues<ChartItem>>();
+
+            // dla wszystkich języków
+            list.Add(new ChartValues<ChartItem>());
+
+            // dla konkretnego języka
+            foreach(var language in GetInstance().Languages)
+            {
+                list.Add(new ChartValues<ChartItem>());
+            }
+
+            return list;
         }
     }
 }

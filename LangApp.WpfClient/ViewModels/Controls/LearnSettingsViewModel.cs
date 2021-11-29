@@ -123,9 +123,9 @@ namespace LangApp.WpfClient.ViewModels.Controls
             Languages[0].IsChosen = true;
 
             QuestionNumbers = new List<ObjectToChoose>();
-            QuestionNumbers.Add(new ObjectToChoose() { Object = 5, IsChosen = true });
-            QuestionNumbers.Add(new ObjectToChoose() { Object = 10 });
-            QuestionNumbers.Add(new ObjectToChoose() { Object = 20 });
+            QuestionNumbers.Add(new ObjectToChoose() { Object = (uint) 5, IsChosen = true });
+            QuestionNumbers.Add(new ObjectToChoose() { Object = (uint) 10 });
+            QuestionNumbers.Add(new ObjectToChoose() { Object = (uint) 20 });
 
             var categories = CategoriesService.GetInstance().Categories.FindAll(x => x.LanguageId == id);
             Categories = new List<ObjectToChoose>();
@@ -198,7 +198,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         public async void StartLearning(object obj = null)
         {
             var language = (Languages.First(x => x.IsChosen).Object as LanguageName).Language;
-            var numberOfQuestions = (int) QuestionNumbers.First(x => x.IsChosen).Object;
+            var numberOfQuestions = (uint) QuestionNumbers.First(x => x.IsChosen).Object;
 
             List<uint> categoriesIds = new List<uint>();
             foreach(var category in Categories)
@@ -210,7 +210,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             }
 
             // utworzenie sesji
-            var session = await Task.Run(() => SessionsService.CreateSessionAsync(Settings.GetInstance().InterfaceLanguageId, language.Id, SessionType));
+            var session = await Task.Run(() => SessionsService.CreateSessionAsync(Settings.GetInstance().InterfaceLanguageId, language.Id, SessionType, numberOfQuestions));
             
             if(session != null)
             {

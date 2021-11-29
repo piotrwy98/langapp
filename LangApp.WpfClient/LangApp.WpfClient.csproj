@@ -60,6 +60,12 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors, Version=2.0.3.2, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.2.0.3\lib\net452\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -157,6 +163,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Controls\StatsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Windows\LoginRegisterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -177,6 +187,7 @@
     <Compile Include="Converters\QuestionTypeConverter.cs" />
     <Compile Include="Converters\TextBoxEnterKeyUpdateBehavior.cs" />
     <Compile Include="Models\BilingualDictionary.cs" />
+    <Compile Include="Models\ChartItem.cs" />
     <Compile Include="Models\ObjectToChoose.cs" />
     <Compile Include="Models\Configuration.cs" />
     <Compile Include="Converters\ImageConverter.cs" />
@@ -189,6 +200,7 @@
     <Compile Include="Services\PronunciationsService.cs" />
     <Compile Include="Services\SelectedCategoriesService.cs" />
     <Compile Include="Services\SessionsService.cs" />
+    <Compile Include="ViewModels\Controls\StatsViewModel.cs" />
     <Compile Include="ViewModels\NotifyPropertyChanged.cs" />
     <Compile Include="Services\CategoriesService.cs" />
     <Compile Include="Services\FavouriteWordsService.cs" />
@@ -227,6 +239,9 @@
     </Compile>
     <Compile Include="Views\Controls\MainScreenControl.xaml.cs">
       <DependentUpon>MainScreenControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\StatsControl.xaml.cs">
+      <DependentUpon>StatsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Windows\LoginRegisterWindow.xaml.cs">
       <DependentUpon>LoginRegisterWindow.xaml</DependentUpon>
@@ -276,6 +291,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Flags\earth.png" />
   </ItemGroup>
   <Import Project="..\LangApp.Shared\LangApp.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

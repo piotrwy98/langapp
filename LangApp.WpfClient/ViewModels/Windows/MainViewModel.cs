@@ -1,4 +1,5 @@
 ﻿using LangApp.WpfClient.Models;
+using LangApp.WpfClient.ViewModels.Controls;
 using LangApp.WpfClient.Views.Controls;
 using System.Windows.Input;
 
@@ -10,6 +11,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
         public ICommand MainScreenCheckedCommand { get; set; }
         public ICommand LearnCheckedCommand { get; set; }
         public ICommand TestCheckedCommand { get; set; }
+        public ICommand StatsCheckedCommand { get; set; }
         public ICommand DictionaryCheckedCommand { get; set; }
         public ICommand FavouriteWordsCheckedCommand { get; set; }
         #endregion
@@ -29,6 +31,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
             MainScreenCheckedCommand = new RelayCommand(MainScreenChecked);
             LearnCheckedCommand = new RelayCommand(LearnChecked);
             TestCheckedCommand = new RelayCommand(TestChecked);
+            StatsCheckedCommand = new RelayCommand(StatsChecked);
             DictionaryCheckedCommand = new RelayCommand(DictionaryChecked);
             FavouriteWordsCheckedCommand = new RelayCommand(FavouriteWordsChecked);
 
@@ -58,6 +61,11 @@ namespace LangApp.WpfClient.ViewModels.Windows
             {
                 Configuration.CurrentView = Configuration.TestSettingsControl;
             }
+        }
+
+        private void StatsChecked(object obj = null)
+        {
+            Configuration.CurrentView = new StatsControl();
         }
 
         private void DictionaryChecked(object obj = null)

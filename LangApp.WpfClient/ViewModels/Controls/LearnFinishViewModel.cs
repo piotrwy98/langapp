@@ -23,7 +23,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         public TimeSpan Timer { get; }
 
-        public int NumberOfQuestions { get; }
+        public uint NumberOfQuestions { get; }
 
         public List<Answer> Answers { get; }
 
@@ -36,7 +36,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         public double ResultPercent { get; }
         #endregion
 
-        public LearnFinishViewModel(bool isTest, TimeSpan timer, int numberOfQuestions, List<Answer> answers)
+        public LearnFinishViewModel(bool isTest, TimeSpan timer, uint numberOfQuestions, List<Answer> answers)
         {
             IsTest = isTest;
             Timer = timer;
