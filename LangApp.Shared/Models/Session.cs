@@ -14,5 +14,6 @@ namespace LangApp.Shared.Models
         public Language SecondLanguage { get; set; }
         public SessionType Type { get; set; }
         public DateTime StartDateTime { get; set; }
+        public uint QuestionsNumber { get; set; }
     }
 }

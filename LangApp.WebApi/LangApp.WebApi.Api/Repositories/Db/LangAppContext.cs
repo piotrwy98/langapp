@@ -335,6 +335,10 @@ namespace LangApp.WebApi.Api.Repositories.Db
                 entity.Property(e => e.UserId)
                     .HasColumnType("int(10) unsigned")
                     .HasColumnName("user_id");
+
+                entity.Property(e => e.QuestionsNumber)
+                    .HasColumnType("int(10) unsigned")
+                    .HasColumnName("questions_number");
             });
 
             modelBuilder.Entity<Translation>(entity =>
