@@ -12,10 +12,10 @@ namespace LangApp.WpfClient.Views.Controls
     /// </summary>
     public partial class LearnControl : UserControl
     {
-        public LearnControl(bool isTest, uint sessionId, Language language, List<uint> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen, uint numberOfQuestions)
+        public LearnControl(Session session, Language language, List<uint> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen)
         {
             InitializeComponent();
-            DataContext = new LearnViewModel(isTest, sessionId, language, categoriesIds, isClosedChosen, isOpenChosen, isSpeakChosen, numberOfQuestions);
+            DataContext = new LearnViewModel(session, language, categoriesIds, isClosedChosen, isOpenChosen, isSpeakChosen);
         }
 
         private void TextBox_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)

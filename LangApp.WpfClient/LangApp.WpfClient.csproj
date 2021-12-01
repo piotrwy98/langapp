@@ -147,7 +147,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controls\LearnDetailsControls.xaml">
+    <Page Include="Views\Controls\LearnDetailsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -179,12 +179,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\CorrectAnswersColorConverter.cs" />
+    <Compile Include="Converters\CorrectAnswersPercentConverter.cs" />
     <Compile Include="Converters\DurationMsConverter.cs" />
+    <Compile Include="Converters\LanguageFlagConverter.cs" />
     <Compile Include="Converters\PartOfSpeechNameConverter.cs" />
     <Compile Include="Converters\LanguageNameConverter.cs" />
     <Compile Include="Converters\LevelNameConverter.cs" />
     <Compile Include="Converters\AnswerResultConverter.cs" />
     <Compile Include="Converters\QuestionTypeConverter.cs" />
+    <Compile Include="Converters\SessionTypeConverter.cs" />
     <Compile Include="Converters\TextBoxEnterKeyUpdateBehavior.cs" />
     <Compile Include="Models\BilingualDictionary.cs" />
     <Compile Include="Models\ChartItem.cs" />
@@ -228,8 +232,8 @@
     <Compile Include="Views\Controls\LearnControl.xaml.cs">
       <DependentUpon>LearnControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\LearnDetailsControls.xaml.cs">
-      <DependentUpon>LearnDetailsControls.xaml</DependentUpon>
+    <Compile Include="Views\Controls\LearnDetailsControl.xaml.cs">
+      <DependentUpon>LearnDetailsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\LearnFinishControl.xaml.cs">
       <DependentUpon>LearnFinishControl.xaml</DependentUpon>

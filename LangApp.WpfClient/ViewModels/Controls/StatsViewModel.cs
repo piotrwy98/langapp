@@ -1,10 +1,12 @@
 ﻿using LangApp.Shared.Models;
 using LangApp.WpfClient.Models;
 using LangApp.WpfClient.Services;
+using LangApp.WpfClient.Views.Controls;
 using LiveCharts;
 using LiveCharts.Configurations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 
 namespace LangApp.WpfClient.ViewModels.Controls
@@ -14,6 +16,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         #region Commands
         public ICommand PeriodClickCommand { get; }
         public ICommand LanguageClickCommand { get; }
+        public ICommand SessionClickCommand { get; }
         #endregion
 
         #region Properties
@@ -161,6 +164,8 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 OnPropertyChanged();
             }
         }
+
+        public List<Session> Sessions { get; }
         #endregion
 
         #region Variables
@@ -172,6 +177,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         {
             PeriodClickCommand = new RelayCommand(PeriodClick);
             LanguageClickCommand = new RelayCommand(LanguageClick);
+            SessionClickCommand = new RelayCommand(SessionClick);
 
             Periods = new List<ObjectToChoose>();
             Periods.Add(new ObjectToChoose()
@@ -224,6 +230,8 @@ namespace LangApp.WpfClient.ViewModels.Controls
             PercentFormatter = value => value.ToString("N2") + " %";
 
             UpdateCharts();
+
+            Sessions = SessionsService.GetInstance().Sessions.OrderByDescending(x => x.StartDateTime).ToList();
         }
 
         private void UpdateCharts()
@@ -316,6 +324,15 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 objectToChoose.IsChosen = true;
                 _selectedLanguageId = (int)(objectToChoose.Object as LanguageName).LanguageId;
                 UpdateCharts();
+            }
+        }
+
+        private void SessionClick(object obj)
+        {
+            var session = obj as Session;
+            if(session != null)
+            {
+                Configuration.GetInstance().CurrentView = new LearnDetailsControl(session, null);
             }
         }
     }

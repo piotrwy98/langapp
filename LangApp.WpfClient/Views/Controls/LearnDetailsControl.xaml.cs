@@ -8,12 +8,12 @@ namespace LangApp.WpfClient.Views.Controls
     /// <summary>
     /// Interaction logic for LearnDetailsControls.xaml
     /// </summary>
-    public partial class LearnDetailsControls : UserControl
+    public partial class LearnDetailsControl : UserControl
     {
-        public LearnDetailsControls(bool isTest, List<Answer> answers)
+        public LearnDetailsControl(Session session, List<Answer> answers)
         {
             InitializeComponent();
-            DataContext = new LearnDetailsViewModel(isTest, answers);
+            DataContext = new LearnDetailsViewModel(session, answers);
         }
     }
 }

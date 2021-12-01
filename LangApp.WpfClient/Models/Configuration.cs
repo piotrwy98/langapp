@@ -89,6 +89,8 @@ namespace LangApp.WpfClient.Models
         }
 
         public LearnFinishControl LearnFinishControl { get; set; }
+
+        public StatsControl StatsControl { get; set; }
         #endregion
     }
 }

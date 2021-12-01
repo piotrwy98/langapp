@@ -65,7 +65,8 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
         private void StatsChecked(object obj = null)
         {
-            Configuration.CurrentView = new StatsControl();
+            Configuration.StatsControl = new StatsControl();
+            Configuration.CurrentView = Configuration.StatsControl;
         }
 
         private void DictionaryChecked(object obj = null)

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
+using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.WpfClient.ViewModels.Controls
 {
@@ -36,18 +37,23 @@ namespace LangApp.WpfClient.ViewModels.Controls
         public double ResultPercent { get; }
         #endregion
 
-        public LearnFinishViewModel(bool isTest, TimeSpan timer, uint numberOfQuestions, List<Answer> answers)
+        #region Variables
+        private Session _session;
+        #endregion
+
+        public LearnFinishViewModel(Session session, TimeSpan timer, List<Answer> answers)
         {
-            IsTest = isTest;
+            _session = session;
+            IsTest = session.Type == SessionType.TEST;
             Timer = timer;
-            NumberOfQuestions = numberOfQuestions;
+            NumberOfQuestions = session.QuestionsNumber;
             Answers = answers;
 
             ShowDetailsCommand = new RelayCommand(ShowDetails);
             ChangeCategoryCommand = new RelayCommand(ChangeCategory);
             LearnAgainCommand = new RelayCommand(LearnAgain);
 
-            if(!isTest)
+            if(!IsTest)
             {
                 ResultText = "Zakończono naukę";
                 ResultColorBrush = new SolidColorBrush(Color.FromRgb(0x03, 0xA9, 0xF4));
@@ -55,7 +61,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             }
             else
             {
-                ResultPercent = (double) answers.Count(x => x.IsAnswerCorrect) / numberOfQuestions * 100;
+                ResultPercent = (double) answers.Count(x => x.IsAnswerCorrect) / NumberOfQuestions * 100;
 
                 if(ResultPercent >= 80)
                 {
@@ -80,7 +86,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         private void ShowDetails(object obj)
         {
-            Configuration.GetInstance().CurrentView = new LearnDetailsControls(IsTest, Answers);
+            Configuration.GetInstance().CurrentView = new LearnDetailsControl(_session, Answers);
         }
 
         private void ChangeCategory(object obj)

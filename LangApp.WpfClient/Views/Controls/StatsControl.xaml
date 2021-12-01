@@ -6,10 +6,19 @@
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:LangApp.WpfClient.Views.Controls"
+             xmlns:converters="clr-namespace:LangApp.WpfClient.Converters"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:SessionTypeConverter x:Key="SessionTypeConverter"/>
+        <converters:LanguageFlagConverter x:Key="LanguageFlagConverter"/>
+        <converters:LanguageNameConverter x:Key="LanguageNameConverter"/>
+        <converters:CorrectAnswersPercentConverter x:Key="CorrectAnswersPercentConverter"/>
+        <converters:CorrectAnswersColorConverter x:Key="CorrectAnswersColorConverter"/>
+    </UserControl.Resources>
+    
     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="14 0">
-        <StackPanel>
+        <StackPanel Margin="0 0 10 0">
             <TextBlock Text="Rodzaj podsumowania" FontSize="22" Foreground="{StaticResource PrimaryForegroundColor}"/>
             <Separator/>
 
@@ -149,6 +158,51 @@
                     <lvc:Axis MinValue="0" LabelFormatter="{Binding PercentFormatter}"/>
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
+            
+            <TextBlock Text="Historia rozgrywek" FontSize="22" Foreground="{StaticResource PrimaryForegroundColor}"/>
+            <Separator/>
+
+            <ItemsControl ItemsSource="{Binding Sessions}" Margin="0 5 0 0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Height="50" BorderThickness="2" BorderBrush="{StaticResource SecondaryForegroundColor}" Background="#B0152131" Margin="0 3" CornerRadius="20" Cursor="Hand">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="220"/>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="180"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundColor}"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="FontSize" Value="16"/>
+                                    </Style>
+                                </Grid.Resources>
+
+                                <TextBlock Grid.Column="0" Text="{Binding StartDateTime, StringFormat=dd.MM.yyyy HH:mm:ss}" Margin="25 0 0 0" ToolTip="Data rozpoczęcia"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Type, Converter={StaticResource SessionTypeConverter}}" FontWeight="Bold" ToolTip="Tryb"/>
+                                <TextBlock Grid.Column="2" Text="{Binding QuestionsNumber, StringFormat='Liczba pytań: {0}'}"/>
+                                <TextBlock Grid.Column="3" Text="{Binding Converter={StaticResource CorrectAnswersPercentConverter}, StringFormat='{}{0:N2} %'}" Foreground="{Binding Converter={StaticResource CorrectAnswersColorConverter}}" FontWeight="Bold" ToolTip="Poprawność odpowiedzi"/>
+                                <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 20 0">
+                                    <Image Source="{Binding FirstLanguageId, Converter={StaticResource LanguageFlagConverter}}" ToolTip="{Binding FirstLanguageId, Converter={StaticResource LanguageNameConverter}}" Height="30"/>
+                                    <TextBlock Text="➜" Margin="10 0" FontSize="24"/>
+                                    <Image Source="{Binding SecondLanguageId, Converter={StaticResource LanguageFlagConverter}}" ToolTip="{Binding SecondLanguageId, Converter={StaticResource LanguageNameConverter}}" Height="30"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DataContext.SessionClickCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

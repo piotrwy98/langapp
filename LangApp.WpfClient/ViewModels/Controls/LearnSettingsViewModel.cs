@@ -222,12 +222,12 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
                 if (SessionType == SessionType.TEST)
                 {
-                    Configuration.GetInstance().TestControl = new LearnControl(true, session.Id, language, categoriesIds, _isClosedChosen, _isOpenChosen, _isSpeakChosen, numberOfQuestions);
+                    Configuration.GetInstance().TestControl = new LearnControl(session, language, categoriesIds, _isClosedChosen, _isOpenChosen, _isSpeakChosen);
                     Configuration.GetInstance().CurrentView = Configuration.GetInstance().TestControl;
                 }
                 else
                 {
-                    Configuration.GetInstance().LearnControl = new LearnControl(false, session.Id, language, categoriesIds, _isClosedChosen, _isOpenChosen, _isSpeakChosen, numberOfQuestions);
+                    Configuration.GetInstance().LearnControl = new LearnControl(session, language, categoriesIds, _isClosedChosen, _isOpenChosen, _isSpeakChosen);
                     Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnControl;
                 }
             }

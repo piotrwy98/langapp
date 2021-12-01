@@ -418,7 +418,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         #endregion
 
         #region Variables
-        private uint _sessionId;
+        private Session _session;
         private Language _language;
         private List<uint> _categoriesIds;
         private bool _isClosedChosen;
@@ -447,16 +447,16 @@ namespace LangApp.WpfClient.ViewModels.Controls
         private double _recordPlayValueToAdd;
         #endregion
 
-        public LearnViewModel(bool isTest, uint sessionId, Language language, List<uint> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen, uint numberOfQuestions)
+        public LearnViewModel(Session session, Language language, List<uint> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen)
         {
-            IsTest = isTest;
-            _sessionId = sessionId;
+            _session = session;
+            IsTest = session.Type == SessionType.TEST;
             _language = language;
             _categoriesIds = categoriesIds;
             _isClosedChosen = isClosedChosen;
             _isOpenChosen = isOpenChosen;
             _isSpeakChosen = isSpeakChosen;
-            NumberOfQuestions = numberOfQuestions;
+            NumberOfQuestions = session.QuestionsNumber;
 
             _dictionary = TranslationsService.GetInstance().Dictionaries.First(x => 
                 x.FirstLanguage.Id == LanguagesService.GetInstance().Languages[0].Id &&
@@ -567,7 +567,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 }
 
                 // dodanie odpowiedzi
-                var answer = await Task.Run(() => AnswersService.CreateAnswerAsync(_sessionId, (uint) _questionCounter,
+                var answer = await Task.Run(() => AnswersService.CreateAnswerAsync(_session.Id, (uint) _questionCounter,
                     _questionType, userAnswer, TranslationPair.Value.SecondLanguageTranslation.Value,
                     DateTime.Now - _questionAppearedTime));
 
@@ -784,7 +784,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         private void Finish()
         {
-            Configuration.GetInstance().LearnFinishControl = new LearnFinishControl(IsTest, DateTime.Now - _startTime, NumberOfQuestions, _answers);
+            Configuration.GetInstance().LearnFinishControl = new LearnFinishControl(_session, DateTime.Now - _startTime, _answers);
             Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnFinishControl;
 
             if (IsTest)
