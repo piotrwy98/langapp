@@ -27,8 +27,8 @@
                 </Grid.Resources>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Zadanie "/>
-                    <TextBlock Text="{Binding QuestionCounter}"/>
+                    <TextBlock Text="{DynamicResource question}"/>
+                    <TextBlock Text="{Binding QuestionCounter, StringFormat=' {0}'}"/>
                     <TextBlock Text="/"/>
                     <TextBlock Text="{Binding NumberOfQuestions}"/>
                 </StackPanel>
@@ -45,8 +45,8 @@
                 </Grid.Resources>
 
                 <WrapPanel>
-                    <TextBlock Text="Jakie jest tłumaczenie słowa "/>
-                    <TextBlock Text="{Binding TranslationPair.Value.FirstLanguageTranslation.Value}" FontWeight="Bold"/>
+                    <TextBlock Text="{DynamicResource whats_the_translation_of_the_word}"/>
+                    <TextBlock Text="{Binding TranslationPair.Value.FirstLanguageTranslation.Value, StringFormat=' {0}'}" FontWeight="Bold"/>
                     <TextBlock Text="?"/>
                 </WrapPanel>
 
@@ -54,12 +54,12 @@
                     <md:PackIcon.Style>
                         <Style TargetType="md:PackIcon">
                             <Setter Property="Kind" Value="StarOutline"/>
-                            <Setter Property="ToolTip" Value="Dodaj słowo do ulubionych"/>
+                            <Setter Property="ToolTip" Value="{DynamicResource add_the_word_to_favourites}"/>
 
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding TranslationPair.Value.IsFavourite}" Value="True">
                                     <Setter Property="Kind" Value="Star"/>
-                                    <Setter Property="ToolTip" Value="Usuń słowo z ulubionych"/>
+                                    <Setter Property="ToolTip" Value="{DynamicResource remove_the_word_from_favourites}"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -95,7 +95,7 @@
                 <RadioButton Grid.Row="1" Grid.Column="1" Content="{Binding ClosedAnswers[3]}" Command="{Binding ClosedAnswerCheckedCommand}" CommandParameter="3"/>
             </StackPanel>
 
-            <TextBox Text="{Binding OpenAnswer}" md:HintAssist.Hint="Tłumaczenie" Width="400" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="26" Margin="10" Visibility="{Binding OpenAnswerVisibility}" IsEnabled="{Binding AreAnswersEnabled}" IsEnabledChanged="TextBox_IsEnabledChanged" IsVisibleChanged="TextBox_IsVisibleChanged">
+            <TextBox Text="{Binding OpenAnswer}" md:HintAssist.Hint="{DynamicResource translation}" Width="400" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="26" Margin="10" Visibility="{Binding OpenAnswerVisibility}" IsEnabled="{Binding AreAnswersEnabled}" IsEnabledChanged="TextBox_IsEnabledChanged" IsVisibleChanged="TextBox_IsVisibleChanged">
                 <i:Interaction.Behaviors>
                     <converters:TextBoxEnterKeyUpdateBehavior/>
                 </i:Interaction.Behaviors>
@@ -182,14 +182,14 @@
 
                     <StackPanel Orientation="Horizontal" Visibility="{Binding IsAnswerVisible, Converter={StaticResource InverseBoolToVisConverter}}">
                         <TextBlock Text="{Binding IncorrectMessage}" FontSize="26" Foreground="PaleVioletRed" VerticalAlignment="Center"/>
-                        <Button Content="Pokaż poprawne" Command="{Binding ShowAnswerCommand}" Height="38" Background="PaleVioletRed" BorderBrush="PaleVioletRed" Margin="10 0 0 0"/>
+                        <Button Content="{DynamicResource show_correct}" Command="{Binding ShowAnswerCommand}" Height="38" Background="PaleVioletRed" BorderBrush="PaleVioletRed" Margin="10 0 0 0"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Visibility="{Binding IsAnswerVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TextBlock Text="Poprawna odpowiedź: "/>
-                        <TextBlock Text="{Binding TranslationPair.Value.SecondLanguageTranslation.Value}" FontWeight="Bold"/>
+                        <TextBlock Text="{DynamicResource correct_answer_colon}"/>
+                        <TextBlock Text="{Binding TranslationPair.Value.SecondLanguageTranslation.Value, StringFormat=' {0}'}" FontWeight="Bold"/>
                         <TextBlock Text="{Binding TranslationPair.Value.SecondLanguageTranslation.Phonetic, StringFormat=' [{0}]'}"/>
-                        <md:PackIcon Foreground="{StaticResource PrimaryForegroundColor}" Background="Transparent" VerticalAlignment="Center" Width="46" Height="46" Margin="0 -6" HorizontalAlignment="Center" ToolTip="Odtwórz">
+                        <md:PackIcon Foreground="{StaticResource PrimaryForegroundColor}" Background="Transparent" VerticalAlignment="Center" Width="46" Height="46" Margin="0 -6" HorizontalAlignment="Center" ToolTip="{DynamicResource play}">
                             <md:PackIcon.Style>
                                 <Style TargetType="md:PackIcon">
                                     <Setter Property="Kind" Value="VolumeLow"/>
@@ -222,16 +222,16 @@
                     </Style>
                 </StackPanel.Resources>
 
-                <Button Content="Zakończ" Command="{Binding ExitCommand}" Margin="0 0 10 0" Background="PaleVioletRed" BorderBrush="PaleVioletRed"/>
-                <Button Content="Pomiń" Command="{Binding SkipCommand}" Margin="10 0" Background="Gray" BorderBrush="Gray" IsEnabled="{Binding CanGoFurther, Converter={StaticResource InvertBooleanConverter}}" Visibility="{Binding IsTest, Converter={StaticResource InverseBoolToVisConverter}}"/>
+                <Button Content="{DynamicResource finish}" Command="{Binding ExitCommand}" Margin="0 0 10 0" Background="PaleVioletRed" BorderBrush="PaleVioletRed"/>
+                <Button Content="{DynamicResource skip}" Command="{Binding SkipCommand}" Margin="10 0" Background="Gray" BorderBrush="Gray" IsEnabled="{Binding CanGoFurther, Converter={StaticResource InvertBooleanConverter}}" Visibility="{Binding IsTest, Converter={StaticResource InverseBoolToVisConverter}}"/>
                 <Button Command="{Binding CheckCommand}" Margin="10 0 0 0" Background="LawnGreen" BorderBrush="LawnGreen" IsEnabled="{Binding IsCheckButtonEnabled}" IsDefault="True">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                            <Setter Property="Content" Value="Sprawdź"/>
+                            <Setter Property="Content" Value="{DynamicResource check}"/>
 
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding CanGoFurther}" Value="True">
-                                    <Setter Property="Content" Value="Dalej"/>
+                                    <Setter Property="Content" Value="{DynamicResource next}"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>

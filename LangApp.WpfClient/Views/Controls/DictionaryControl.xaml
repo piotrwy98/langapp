@@ -36,11 +36,11 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Słownik:" VerticalAlignment="Center" FontWeight="Medium" Margin="0 0 10 10"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource dictionary_colon}" VerticalAlignment="Center" FontWeight="Medium" Margin="0 0 10 10"/>
             <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Dictionaries}" SelectedItem="{Binding SelectedDictionary}" Margin="0 0 0 10"/>
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Szukaj:" VerticalAlignment="Center" Margin="0 0 10 0" FontWeight="Medium"/>
-            <TextBox Grid.Row="1" Grid.Column="1" md:HintAssist.Hint="Wyszukiwana fraza">
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource search_colon}" VerticalAlignment="Center" Margin="0 0 10 0" FontWeight="Medium"/>
+            <TextBox Grid.Row="1" Grid.Column="1" md:HintAssist.Hint="{DynamicResource search_phrase}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding SearchValueChangedCommand}" PassEventArgsToCommand="True"/>
@@ -64,7 +64,7 @@
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding DictionaryCollectionView.Count}" Value="0">
-                            <Setter Property="Text" Value="Brak wyników wyszukiwania"/>
+                            <Setter Property="Text" Value="{DynamicResource no_search_results}"/>
                             <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </Style.Triggers>
@@ -83,12 +83,12 @@
                                     <md:PackIcon.Style>
                                         <Style TargetType="md:PackIcon">
                                             <Setter Property="Kind" Value="StarOutline"/>
-                                            <Setter Property="ToolTip" Value="Dodaj do ulubionych"/>
+                                            <Setter Property="ToolTip" Value="{DynamicResource add_to_favourites}"/>
                                             
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Value.IsFavourite}" Value="True">
                                                     <Setter Property="Kind" Value="Star"/>
-                                                    <Setter Property="ToolTip" Value="Usuń z ulubionych"/>
+                                                    <Setter Property="ToolTip" Value="{DynamicResource remove_from_favourites}"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -104,10 +104,10 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Header="{Binding DataContext.SelectedDictionary.FirstLanguage.Id, Converter={StaticResource LanguageNameConverter}, Source={x:Reference ProxyElement}}" Binding="{Binding Value.FirstLanguageTranslation.Value}" FontWeight="Bold"/>
-                    <DataGridTemplateColumn Header="Wymowa">
+                    <DataGridTemplateColumn Header="{DynamicResource pronunciation}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <md:PackIcon Foreground="{StaticResource SecondaryForegroundColor}" Background="Transparent" VerticalAlignment="Center" Width="36" Height="36" Margin="-6" HorizontalAlignment="Center" ToolTip="Odtwórz">
+                                <md:PackIcon Foreground="{StaticResource SecondaryForegroundColor}" Background="Transparent" VerticalAlignment="Center" Width="36" Height="36" Margin="-6" HorizontalAlignment="Center" ToolTip="{DynamicResource play}">
                                     <md:PackIcon.Style>
                                         <Style TargetType="md:PackIcon">
                                             <Setter Property="Kind" Value="VolumeLow"/>
@@ -131,12 +131,12 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Zapis fonetyczny" Binding="{Binding Value.FirstLanguageTranslation.Phonetic, StringFormat=[{0}]}" FontStyle="Italic"/>
+                    <DataGridTextColumn Header="{DynamicResource phonetic_notation}" Binding="{Binding Value.FirstLanguageTranslation.Phonetic, StringFormat=[{0}]}" FontStyle="Italic"/>
                     <DataGridTextColumn Header="{Binding DataContext.SelectedDictionary.SecondLanguage.Id, Converter={StaticResource LanguageNameConverter}, Source={x:Reference ProxyElement}}" Binding="{Binding Value.SecondLanguageTranslation.Value}" FontWeight="Bold"/>
-                    <DataGridTemplateColumn Header="Wymowa">
+                    <DataGridTemplateColumn Header="{DynamicResource pronunciation}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <md:PackIcon Foreground="{StaticResource SecondaryForegroundColor}" Background="Transparent" VerticalAlignment="Center" Width="36" Height="36" Margin="-6" HorizontalAlignment="Center" ToolTip="Odtwórz">
+                                <md:PackIcon Foreground="{StaticResource SecondaryForegroundColor}" Background="Transparent" VerticalAlignment="Center" Width="36" Height="36" Margin="-6" HorizontalAlignment="Center" ToolTip="{DynamicResource play}">
                                     <md:PackIcon.Style>
                                         <Style TargetType="md:PackIcon">
                                             <Setter Property="Kind" Value="VolumeLow"/>
@@ -160,8 +160,8 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Zapis fonetyczny" Binding="{Binding Value.SecondLanguageTranslation.Phonetic, StringFormat=[{0}]}" FontStyle="Italic"/>
-                    <DataGridTextColumn Header="Część mowy" Binding="{Binding Value.FirstLanguageTranslation.Word.PartOfSpeechId, Converter={StaticResource PartOfSpeechNameConverter}}"/>
+                    <DataGridTextColumn Header="{DynamicResource phonetic_notation}" Binding="{Binding Value.SecondLanguageTranslation.Phonetic, StringFormat=[{0}]}" FontStyle="Italic"/>
+                    <DataGridTextColumn Header="{DynamicResource part_of_speech}" Binding="{Binding Value.FirstLanguageTranslation.Word.PartOfSpeechId, Converter={StaticResource PartOfSpeechNameConverter}}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>

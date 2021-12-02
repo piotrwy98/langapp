@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 
 namespace LangApp.WpfClient.Converters
@@ -10,10 +11,10 @@ namespace LangApp.WpfClient.Converters
         {
             if ((bool)value)
             {
-                return "Poprawna";
+                return Application.Current.Resources["correct_singular"].ToString();
             }
 
-            return "Niepoprawna";
+            return Application.Current.Resources["incorrect_singular"].ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

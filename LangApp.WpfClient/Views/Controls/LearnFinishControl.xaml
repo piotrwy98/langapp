@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="LangApp.WpfClient.Views.Controls.LearnFinishControl"
+﻿    <UserControl x:Class="LangApp.WpfClient.Views.Controls.LearnFinishControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -34,28 +34,28 @@
 
         <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
             <WrapPanel HorizontalAlignment="Center" Visibility="{Binding IsTest, Converter={StaticResource InverseBoolToVisConverter}}">
-                <TextBlock Text="Wykonano "/>
-                <TextBlock Text="{Binding Answers.Count}"/>
+                <TextBlock Text="{DynamicResource completed}"/>
+                <TextBlock Text="{Binding Answers.Count, StringFormat=' {0}'}"/>
                 <TextBlock Text="/"/>
-                <TextBlock Text="{Binding NumberOfQuestions}"/>
-                <TextBlock Text=" zadań z czasem "/>
-                <TextBlock Text="{Binding Timer, StringFormat=mm\\:ss\\.fff}"/>
+                <TextBlock Text="{Binding NumberOfQuestions, StringFormat='{}{0} '}"/>
+                <TextBlock Text="{DynamicResource tasks_in}"/>
+                <TextBlock Text="{Binding Timer, StringFormat=' mm\\:ss\\.fff'}"/>
             </WrapPanel>
 
             <WrapPanel HorizontalAlignment="Center" Visibility="{Binding IsTest, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TextBlock Text="Poprawność odpowiedzi to "/>
-                <TextBlock Text="{Binding ResultPercent, StringFormat=N0}" FontWeight="Bold"/>
-                <TextBlock Text="%" FontWeight="Bold"/>
-                <TextBlock Text=" z "/>
-                <TextBlock Text="{Binding NumberOfQuestions}"/>
-                <TextBlock Text=" pytań w czasie "/>
-                <TextBlock Text="{Binding Timer, StringFormat=mm\\:ss\\.fff}"/>
+                <TextBlock Text="{DynamicResource correctness_of_answers_equals}"/>
+                <TextBlock Text="{Binding ResultPercent, StringFormat=' {0:N2}'}" FontWeight="Bold"/>
+                <TextBlock Text=" % " FontWeight="Bold"/>
+                <TextBlock Text="{DynamicResource from}"/>
+                <TextBlock Text="{Binding NumberOfQuestions, StringFormat=' {0}' }"/>
+                <TextBlock Text="{DynamicResource tasks_in}"/>
+                <TextBlock Text="{Binding Timer, StringFormat=' mm\\:ss\\.fff'}"/>
             </WrapPanel>
 
             <WrapPanel Margin="0 40 0 20">
-                <Button Content="Dostosuj" Command="{Binding ChangeCategoryCommand}" Background="Gray" BorderBrush="Gray"/>
-                <Button Content="Pokaż szczegóły" Command="{Binding ShowDetailsCommand}" Margin="30 0"/>
-                <Button Content="Wykonaj ponownie" Command="{Binding LearnAgainCommand}" Background="Gray" BorderBrush="Gray"/>
+                <Button Content="{DynamicResource customize}" Command="{Binding ChangeCategoryCommand}" Background="Gray" BorderBrush="Gray"/>
+                <Button Content="{DynamicResource show_details}" Command="{Binding ShowDetailsCommand}" Margin="30 0"/>
+                <Button Content="{DynamicResource play_again}" Command="{Binding LearnAgainCommand}" Background="Gray" BorderBrush="Gray"/>
             </WrapPanel>
         </StackPanel>
     </Grid>

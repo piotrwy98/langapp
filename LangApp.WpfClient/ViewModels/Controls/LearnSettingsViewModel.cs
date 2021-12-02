@@ -14,19 +14,19 @@ namespace LangApp.WpfClient.ViewModels.Controls
     public class LearnSettingsViewModel : NotifyPropertyChanged
     {
         #region Commands
-        public ICommand LanguageClickCommand { get; set; }
+        public ICommand LanguageClickCommand { get; }
 
-        public ICommand NumberClickCommand { get; set; }
+        public ICommand NumberClickCommand { get; }
 
-        public ICommand CategoryClickCommand { get; set; }
+        public ICommand CategoryClickCommand { get; }
 
-        public ICommand ClosedClickCommand { get; set; }
+        public ICommand ClosedClickCommand { get; }
 
-        public ICommand OpenClickCommand { get; set; }
+        public ICommand OpenClickCommand { get; }
 
-        public ICommand SpeakClickCommand { get; set; }
+        public ICommand SpeakClickCommand { get; }
 
-        public ICommand StartLearningCommand { get; set; }
+        public ICommand StartLearningCommand { get; }
         #endregion
 
         #region Properties

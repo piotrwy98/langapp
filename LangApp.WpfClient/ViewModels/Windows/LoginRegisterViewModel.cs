@@ -16,19 +16,19 @@ namespace LangApp.WpfClient.ViewModels.Windows
     public class LoginRegisterViewModel : NotifyPropertyChanged
     {
         #region Commands
-        public ICommand LogInCommand { get; set; }
+        public ICommand LogInCommand { get; }
 
-        public ICommand RegisterCommand { get; set; }
+        public ICommand RegisterCommand { get; }
 
-        public ICommand GoToLogInCommand { get; set; }
+        public ICommand GoToLogInCommand { get; }
 
-        public ICommand GoToRegisterCommand { get; set; }
+        public ICommand GoToRegisterCommand { get; }
 
-        public ICommand PasswordChangedCommand { get; set; }
+        public ICommand PasswordChangedCommand { get; }
 
-        public ICommand RepeatPasswordChangedCommand { get; set; }
+        public ICommand RepeatPasswordChangedCommand { get; }
 
-        public ICommand WindowKeyDownCommand { get; set; }
+        public ICommand WindowKeyDownCommand { get; }
         #endregion
 
         #region Properties
@@ -149,7 +149,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
         private async void LogIn(object obj = null)
         {
             IsProcessing = true;
-            ResultMessage = "";
+            ResultMessage = string.Empty;
             IsResultSuccess = false;
 
             await CheckLogIn();
@@ -161,19 +161,19 @@ namespace LangApp.WpfClient.ViewModels.Windows
         {
             if (String.IsNullOrEmpty(Email))
             {
-                ResultMessage = "Nie podano adresu email";
+                ResultMessage = Application.Current.Resources["no_email_address_provided"].ToString();
                 return;
             }
 
             if (!new EmailAddressAttribute().IsValid(Email.Trim()))
             {
-                ResultMessage = "Nieprawidłowy format email";
+                ResultMessage = Application.Current.Resources["invalid_email_format"].ToString();
                 return;
             }
 
             if (String.IsNullOrEmpty(Password))
             {
-                ResultMessage = "Nie podano hasła";
+                ResultMessage = Application.Current.Resources["no_password_provided"].ToString();
                 return;
             }
 
@@ -185,7 +185,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
             }
             catch (HttpRequestException)
             {
-                ResultMessage = "Brak połączenia z serwerem";
+                ResultMessage = Application.Current.Resources["no_server_connection"].ToString();
                 return;
             }
 
@@ -199,14 +199,14 @@ namespace LangApp.WpfClient.ViewModels.Windows
             }
             else
             {
-                ResultMessage = "Błędne dane logowania";
+                ResultMessage = Application.Current.Resources["incorrect_login_details"].ToString();
             }
         }
 
         private async void Register(object obj = null)
         {
             IsProcessing = true;
-            ResultMessage = "";
+            ResultMessage = string.Empty;
             IsResultSuccess = false;
 
             await CheckRegister();
@@ -218,31 +218,31 @@ namespace LangApp.WpfClient.ViewModels.Windows
         {
             if (String.IsNullOrEmpty(Email))
             {
-                ResultMessage = "Nie podano adresu email";
+                ResultMessage = Application.Current.Resources["no_email_address_provided"].ToString();
                 return;
             }
 
             if (!new EmailAddressAttribute().IsValid(Email.Trim()))
             {
-                ResultMessage = "Nieprawidłowy format email";
+                ResultMessage = Application.Current.Resources["invalid_email_format"].ToString();
                 return;
             }
 
             if (String.IsNullOrEmpty(Username))
             {
-                ResultMessage = "Nie podano nazwy użytkownika";
+                ResultMessage = Application.Current.Resources["no_username_provided"].ToString();
                 return;
             }
 
             if (String.IsNullOrEmpty(Password))
             {
-                ResultMessage = "Nie podano hasła";
+                ResultMessage = Application.Current.Resources["no_password_provided"].ToString();
                 return;
             }
 
             if (Password != RepeatPassword)
             {
-                ResultMessage = "Hasła nie są zgodne";
+                ResultMessage = Application.Current.Resources["passwords_do_not_match"].ToString();
                 return;
             }
 
@@ -255,7 +255,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
             }
             catch (HttpRequestException)
             {
-                ResultMessage = "Brak połączenia z serwerem";
+                ResultMessage = Application.Current.Resources["no_server_connection"].ToString();
                 return;
             }
 
@@ -263,16 +263,16 @@ namespace LangApp.WpfClient.ViewModels.Windows
             {
                 case RegisterResult.OK:
                     IsResultSuccess = true;
-                    ResultMessage = "Pomyślnie utworzono konto";
+                    ResultMessage = Application.Current.Resources["account_created_successfully"].ToString();
                     GoToLogIn();
                     break;
 
                 case RegisterResult.OCCUPIED_EMAIL:
-                    ResultMessage = "Podany adres email jest zajęty";
+                    ResultMessage = Application.Current.Resources["the_given_email_address_is_taken"].ToString();
                     break;
 
                 case RegisterResult.OCCUPIED_USERNAME:
-                    ResultMessage = "Podana nazwa użytkownika jest zajęta";
+                    ResultMessage = Application.Current.Resources["the_given_username_is_taken"].ToString();
                     break;
             }
         }
@@ -284,7 +284,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
             if (!_isResultSuccess)
             {
-                ResultMessage = "";
+                ResultMessage = string.Empty;
             }
         }
 
@@ -292,8 +292,8 @@ namespace LangApp.WpfClient.ViewModels.Windows
         {
             LogInVisibility = Visibility.Collapsed;
             RegisterVisibility = Visibility.Visible;
-            Username = "";
-            ResultMessage = "";
+            Username = string.Empty;
+            ResultMessage = string.Empty;
         }
 
         private void PasswordChanged(object obj)

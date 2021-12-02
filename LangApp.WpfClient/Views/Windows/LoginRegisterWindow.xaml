@@ -89,7 +89,7 @@
 
                 <StackPanel Orientation="Horizontal" Margin="10">
                     <md:PackIcon Kind="Email" Width="35" Height="35" Foreground="{StaticResource PrimaryForegroundColor}" Margin="0 0 10 0"/>
-                    <TextBox Text="{Binding Email}" md:HintAssist.Hint="Email" Width="200" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="16" Loaded="TextBox_Loaded">
+                    <TextBox Text="{Binding Email}" md:HintAssist.Hint="{DynamicResource email}" Width="200" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="16" Loaded="TextBox_Loaded">
                         <i:Interaction.Behaviors>
                             <converters:TextBoxEnterKeyUpdateBehavior/>
                         </i:Interaction.Behaviors>
@@ -98,7 +98,7 @@
 
                 <StackPanel Orientation="Horizontal" Margin="10" Visibility="{Binding RegisterVisibility}">
                     <md:PackIcon Kind="User" Width="35" Height="35" Foreground="{StaticResource PrimaryForegroundColor}" Margin="0 0 10 0"/>
-                    <TextBox Text="{Binding Username}" md:HintAssist.Hint="Nazwa użytkownika" Width="200" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="16">
+                    <TextBox Text="{Binding Username}" md:HintAssist.Hint="{DynamicResource username}" Width="200" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="16">
                         <i:Interaction.Behaviors>
                             <converters:TextBoxEnterKeyUpdateBehavior/>
                         </i:Interaction.Behaviors>
@@ -107,7 +107,7 @@
 
                 <StackPanel Orientation="Horizontal" Margin="10">
                     <md:PackIcon Kind="Lock" Width="35" Height="35" Foreground="{StaticResource PrimaryForegroundColor}" Margin="0 0 10 0"/>
-                    <PasswordBox Name="Password_PasswordBox" md:HintAssist.Hint="Hasło" Width="200" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="16">
+                    <PasswordBox Name="Password_PasswordBox" md:HintAssist.Hint="{DynamicResource password}" Width="200" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="16">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="PasswordChanged">
                                 <i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=PasswordBox}}"/>
@@ -118,7 +118,7 @@
 
                 <StackPanel Orientation="Horizontal" Margin="10" Visibility="{Binding RegisterVisibility}" IsVisibleChanged="RepeatPassword_IsVisibleChanged">
                     <md:PackIcon Kind="LockCheck" Width="35" Height="35" Foreground="{StaticResource PrimaryForegroundColor}" Margin="0 0 10 0"/>
-                    <PasswordBox Name="RepeatPassword_PasswordBox" md:HintAssist.Hint="Powtórz hasło" Width="200" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="16">
+                    <PasswordBox Name="RepeatPassword_PasswordBox" md:HintAssist.Hint="{DynamicResource repeat_password}" Width="200" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="16">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="PasswordChanged">
                                 <i:InvokeCommandAction Command="{Binding RepeatPasswordChangedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=PasswordBox}}"/>
@@ -127,8 +127,8 @@
                     </PasswordBox>
                 </StackPanel>
 
-                <Button Content="Zaloguj się" Margin="10 20 10 10" Command="{Binding LogInCommand}" Visibility="{Binding LogInVisibility}" IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertBooleanConverter}}"/>
-                <Button Content="Stwórz konto" Margin="10 20 10 10" Command="{Binding RegisterCommand}" Visibility="{Binding RegisterVisibility}" IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertBooleanConverter}}"/>
+                <Button Content="{DynamicResource log_in}" Margin="10 20 10 10" Command="{Binding LogInCommand}" Visibility="{Binding LogInVisibility}" IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertBooleanConverter}}"/>
+                <Button Content="{DynamicResource create_account}" Margin="10 20 10 10" Command="{Binding RegisterCommand}" Visibility="{Binding RegisterVisibility}" IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertBooleanConverter}}"/>
 
                 <Grid Margin="0 5">
                     <Grid.ColumnDefinitions>
@@ -138,12 +138,12 @@
                     </Grid.ColumnDefinitions>
 
                     <Separator Grid.Column="0" Margin="10"/>
-                    <TextBlock Grid.Column="1" Text="albo" Foreground="{StaticResource PrimaryForegroundColor}"/>
+                    <TextBlock Grid.Column="1" Text="{DynamicResource or}" Foreground="{StaticResource PrimaryForegroundColor}"/>
                     <Separator Grid.Column="2" Margin="10"/>
                 </Grid>
 
-                <Button Content="Stwórz konto" Margin="10 10 10 0" Command="{Binding GoToRegisterCommand}" Visibility="{Binding LogInVisibility}" IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertBooleanConverter}}"/>
-                <Button Content="Wróc do logowania" Margin="10 10 10 0" Command="{Binding GoToLogInCommand}" Visibility="{Binding RegisterVisibility}" IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertBooleanConverter}}"/>
+                <Button Content="{DynamicResource create_account}" Margin="10 10 10 0" Command="{Binding GoToRegisterCommand}" Visibility="{Binding LogInVisibility}" IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertBooleanConverter}}"/>
+                <Button Content="{DynamicResource go_back_to_log_in}" Margin="10 10 10 0" Command="{Binding GoToLogInCommand}" Visibility="{Binding RegisterVisibility}" IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertBooleanConverter}}"/>
             </StackPanel>
         </Grid>
     </Border>

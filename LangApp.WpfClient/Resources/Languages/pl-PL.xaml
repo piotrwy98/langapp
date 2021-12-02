@@ -1,0 +1,118 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="email">Email</system:String>
+    <system:String x:Key="username">Nazwa użytkownika</system:String>
+    <system:String x:Key="password">Hasło</system:String>
+    <system:String x:Key="repeat_password">Powtórz hasło</system:String>
+    <system:String x:Key="log_in">Zaloguj się</system:String>
+    <system:String x:Key="create_account">Stwórz konto</system:String>
+    <system:String x:Key="or">albo</system:String>
+    <system:String x:Key="go_back_to_log_in">Wróć do logowania</system:String>
+    <system:String x:Key="no_email_address_provided">Nie podano adresu email</system:String>
+    <system:String x:Key="invalid_email_format">Nieprawidłowy format email</system:String>
+    <system:String x:Key="no_password_provided">Nie podano hasła</system:String>
+    <system:String x:Key="no_server_connection">Brak połączenia z serwerem</system:String>
+    <system:String x:Key="incorrect_login_details">Błędne dane logowania</system:String>
+    <system:String x:Key="no_username_provided">Nie podano nazwy użytkownika</system:String>
+    <system:String x:Key="passwords_do_not_match">Hasła nie są zgodne</system:String>
+    <system:String x:Key="the_given_email_address_is_taken">Podany adres email jest zajęty</system:String>
+    <system:String x:Key="the_given_username_is_taken">Podana nazwa użytkownika jest zajęta</system:String>
+
+    <system:String x:Key="hello_comma">Witaj,</system:String>
+    <system:String x:Key="home">Ekran główny</system:String>
+    <system:String x:Key="learn">Nauka</system:String>
+    <system:String x:Key="test">Test</system:String>
+    <system:String x:Key="statistics">Statystyki</system:String>
+    <system:String x:Key="dictionary">Słownik</system:String>
+    <system:String x:Key="favourite_words">Ulubione słowa</system:String>
+    <system:String x:Key="settings">Ustawienia</system:String>
+    
+    <system:String x:Key="dictionary_colon">Słownik:</system:String>
+    <system:String x:Key="search_colon">Szukaj:</system:String>
+    <system:String x:Key="search_phrase">Wyszukiwana fraza</system:String>
+    <system:String x:Key="no_search_results">Brak wyników wyszukiwana</system:String>
+    <system:String x:Key="add_to_favourites">Dodaj do ulubionych</system:String>
+    <system:String x:Key="remove_from_favourites">Usuń z ulubionych</system:String>
+    <system:String x:Key="pronunciation">Wymowa</system:String>
+    <system:String x:Key="phonetic_notation">Zapis fonetyczny</system:String>
+    <system:String x:Key="part_of_speech">Część mowy</system:String>
+    <system:String x:Key="play">Odtwórz</system:String>
+    
+    <system:String x:Key="first_language">Pierwszy język</system:String>
+    <system:String x:Key="first_translation">Pierwsze tłumaczenie</system:String>
+    <system:String x:Key="second_language">Drugi język</system:String>
+    <system:String x:Key="second_translation">Drugie tłumaczenie</system:String>
+    <system:String x:Key="date_added">Data dodania</system:String>
+    
+    <system:String x:Key="question">Pytanie</system:String>
+    <system:String x:Key="whats_the_translation_of_the_word">What's the translation of the word</system:String>
+    <system:String x:Key="add_the_word_to_favourites">Dodaj słowo do ulubionych</system:String>
+    <system:String x:Key="remove_the_word_from_favourites">Usuń słowo z ulubionych</system:String>
+    <system:String x:Key="translation">Tłumaczenie</system:String>
+    <system:String x:Key="show_correct">Pokaż poprawną</system:String>
+    <system:String x:Key="correct_answer_colon">Poprawna odpowiedź:</system:String>
+    <system:String x:Key="finish">Zakończ</system:String>
+    <system:String x:Key="skip">Skip</system:String>
+    <system:String x:Key="check">Sprawdź</system:String>
+    <system:String x:Key="next">Dalej</system:String>
+    <system:String x:Key="correct_answer">Poprawna odpowiedź</system:String>
+    <system:String x:Key="incorrect_answer">Niepoprawna odpowiedź</system:String>
+    
+    <system:String x:Key="game_details">Szczegóły rozgrywki</system:String>
+    <system:String x:Key="language_colon">Język:</system:String>
+    <system:String x:Key="start_date_colon">Data rozpoczęcia:</system:String>
+    <system:String x:Key="mode_colon">Tryb:</system:String>
+    <system:String x:Key="number_of_questions_colon">Liczba pytań:</system:String>
+    <system:String x:Key="categories_colon">Kategorie:</system:String>
+    <system:String x:Key="answers_details">Szczegóły odpowiedzi</system:String>
+    <system:String x:Key="no_dot">Lp.</system:String>
+    <system:String x:Key="result">Rezultat</system:String>
+    <system:String x:Key="your_answer">Twoja odpowiedź</system:String>
+    <system:String x:Key="question_type">Typ pytania</system:String>
+    <system:String x:Key="answer_time">Czas odpowiedzi</system:String>
+    <system:String x:Key="percentage_of_answers">Procentowy udział odpowiedzi</system:String>
+    <system:String x:Key="correct">Poprawne</system:String>
+    <system:String x:Key="incorrect">Niepoprawne</system:String>
+    <system:String x:Key="unanswered">Nieudzielone</system:String>
+    
+    <system:String x:Key="completed">Wykonano</system:String>
+    <system:String x:Key="tasks_in">zadań z czasem</system:String>
+    <system:String x:Key="correctness_of_answers_equals">Poprawność odpowiedzi to</system:String>
+    <system:String x:Key="from">z</system:String>
+    <system:String x:Key="customize">Dostosuj</system:String>
+    <system:String x:Key="show_details">Pokaż szczegóły</system:String>
+    <system:String x:Key="play_again">Zagraj ponownie</system:String>
+    <system:String x:Key="learning_completed">Zakończono naukę</system:String>
+    <system:String x:Key="great_job_exc">Świetna robota!</system:String>
+    <system:String x:Key="pretty_good_exc">Całkiem nieźle!</system:String>
+    <system:String x:Key="you_can_do_better_exc">Potrafisz lepiej!</system:String>
+    
+    <system:String x:Key="language">Język</system:String>
+    <system:String x:Key="number_of_questions">Liczba pytań</system:String>
+    <system:String x:Key="question_types">Typy pytań</system:String>
+    <system:String x:Key="closed_questions">Pytania zamknięte</system:String>
+    <system:String x:Key="open_questions">Pytania otwarte</system:String>
+    <system:String x:Key="categories">Kategorie</system:String>
+    <system:String x:Key="start_learning">Rozpocznij naukę</system:String>
+    <system:String x:Key="start_test">Rozpocznij test</system:String>
+    <system:String x:Key="category_progress">Postęp kategorii</system:String>
+
+    <system:String x:Key="type_of_summary">Rodzaj podsumowania</system:String>
+    <system:String x:Key="number_of_games">Liczba rozgrywek</system:String>
+    <system:String x:Key="number_of_answers">Liczba udzielonych odpowiedzi</system:String>
+    <system:String x:Key="correctness_of_answers">Poprawność odpowiedzi</system:String>
+    <system:String x:Key="history_of_games">Historia rozgrywek</system:String>
+    <system:String x:Key="start_date">Data rozpoczęcia</system:String>
+    <system:String x:Key="mode">Tryb</system:String>
+
+    <system:String x:Key="interface_language">Język interfejsu</system:String>
+
+    <system:String x:Key="correct_singular">Poprawna</system:String>
+    <system:String x:Key="incorrect_singular">Niepoprawna</system:String>
+    <system:String x:Key="closed">Zamknięte</system:String>
+    <system:String x:Key="open">Otwarte</system:String>
+  
+</ResourceDictionary>

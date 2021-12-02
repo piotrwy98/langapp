@@ -16,10 +16,10 @@ namespace LangApp.WpfClient.ViewModels.Controls
     public class DictionaryViewModel : NotifyPropertyChanged
     {
         #region Commands
-        public ICommand SearchValueChangedCommand { get; set; }
-        public ICommand StarMouseLeftButtonDownCommand { get; set; }
-        public ICommand FirstVolumeMouseLeftButtonDownCommand { get; set; }
-        public ICommand SecondVolumeMouseLeftButtonDownCommand { get; set; }
+        public ICommand SearchValueChangedCommand { get; }
+        public ICommand StarMouseLeftButtonDownCommand { get; }
+        public ICommand FirstVolumeMouseLeftButtonDownCommand { get; }
+        public ICommand SecondVolumeMouseLeftButtonDownCommand { get; }
         #endregion
 
         #region Properties

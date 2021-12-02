@@ -8,7 +8,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
 {
     public class FavouriteWordsViewModel
     {
-        public ICommand StarMouseLeftButtonDownCommand { get; set; }
+        public ICommand StarMouseLeftButtonDownCommand { get; }
 
         public static ObservableCollection<FavouriteWord> FavouriteWords { get; set; }
 

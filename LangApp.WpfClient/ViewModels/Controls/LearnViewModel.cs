@@ -27,15 +27,15 @@ namespace LangApp.WpfClient.ViewModels.Controls
         #endregion
 
         #region Commands
-        public ICommand ExitCommand { get; set; }
-        public ICommand SkipCommand { get; set; }
-        public ICommand CheckCommand { get; set; }
-        public ICommand ShowAnswerCommand { get; set; }
-        public ICommand ClosedAnswerCheckedCommand { get; set; }
-        public ICommand RecordCommand { get; set; }
-        public ICommand RecordPlayCommand { get; set; }
-        public ICommand StarMouseLeftButtonDownCommand { get; set; }
-        public ICommand AnswerVolumeMouseLeftButtonDownCommand { get; set; }
+        public ICommand ExitCommand { get; }
+        public ICommand SkipCommand { get; }
+        public ICommand CheckCommand { get; }
+        public ICommand ShowAnswerCommand { get; }
+        public ICommand ClosedAnswerCheckedCommand { get; }
+        public ICommand RecordCommand { get; }
+        public ICommand RecordPlayCommand { get; }
+        public ICommand StarMouseLeftButtonDownCommand { get; }
+        public ICommand AnswerVolumeMouseLeftButtonDownCommand { get; }
         #endregion
 
         #region Properties
@@ -581,12 +581,12 @@ namespace LangApp.WpfClient.ViewModels.Controls
             {
                 if (await IsAnswerCorrect())
                 {
-                    CorrectMessage = "Poprawne tłumaczenie";
+                    CorrectMessage = Application.Current.Resources["correct_answer"].ToString();
                     CanGoFurther = true;
                 }
                 else
                 {
-                    IncorrectMessage = "Niepoprawne tłumaczenie";
+                    IncorrectMessage = Application.Current.Resources["incorrect_answer"].ToString();
                 }
             }
         }

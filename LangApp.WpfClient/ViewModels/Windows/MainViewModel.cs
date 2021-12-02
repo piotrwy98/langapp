@@ -1,5 +1,4 @@
 ﻿using LangApp.WpfClient.Models;
-using LangApp.WpfClient.ViewModels.Controls;
 using LangApp.WpfClient.Views.Controls;
 using System.Windows.Input;
 
@@ -8,16 +7,17 @@ namespace LangApp.WpfClient.ViewModels.Windows
     public class MainViewModel : NotifyPropertyChanged
     {
         #region Commands
-        public ICommand MainScreenCheckedCommand { get; set; }
-        public ICommand LearnCheckedCommand { get; set; }
-        public ICommand TestCheckedCommand { get; set; }
-        public ICommand StatsCheckedCommand { get; set; }
-        public ICommand DictionaryCheckedCommand { get; set; }
-        public ICommand FavouriteWordsCheckedCommand { get; set; }
+        public ICommand MainScreenCheckedCommand { get; }
+        public ICommand LearnCheckedCommand { get; }
+        public ICommand TestCheckedCommand { get; }
+        public ICommand StatsCheckedCommand { get; }
+        public ICommand DictionaryCheckedCommand { get; }
+        public ICommand FavouriteWordsCheckedCommand { get; }
+        public ICommand SettingsCheckedCommand { get; }
         #endregion
 
         #region Properties
-        public Configuration Configuration { get; set; } = Configuration.GetInstance();
+        public Configuration Configuration { get; } = Configuration.GetInstance();
         #endregion
 
         #region Controls
@@ -34,6 +34,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
             StatsCheckedCommand = new RelayCommand(StatsChecked);
             DictionaryCheckedCommand = new RelayCommand(DictionaryChecked);
             FavouriteWordsCheckedCommand = new RelayCommand(FavouriteWordsChecked);
+            SettingsCheckedCommand = new RelayCommand(SettingsChecked);
 
             MainScreenChecked();
         }
@@ -85,6 +86,11 @@ namespace LangApp.WpfClient.ViewModels.Windows
         private void FavouriteWordsChecked(object obj)
         {
             Configuration.CurrentView = _favouriteWordsControl;
+        }
+
+        private void SettingsChecked(object obj)
+        {
+            Configuration.CurrentView = Configuration.SettingsControl;
         }
     }
 }

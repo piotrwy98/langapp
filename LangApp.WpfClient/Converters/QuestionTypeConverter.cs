@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 using static LangApp.Shared.Models.Enums;
 
@@ -12,13 +13,13 @@ namespace LangApp.WpfClient.Converters
             switch ((QuestionType)value)
             {
                 case QuestionType.CLOSED:
-                    return "Zamknięte";
+                    return Application.Current.Resources["closed"].ToString();
 
                 case QuestionType.OPEN:
-                    return "Otwarte";
+                    return Application.Current.Resources["open"].ToString();
 
                 case QuestionType.PRONUNCIATION:
-                    return "Wymowa";
+                    return Application.Current.Resources["pronunciation"].ToString();
             }
 
             return null;

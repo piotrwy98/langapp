@@ -19,7 +19,7 @@
     
     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="14 0">
         <StackPanel Margin="0 0 10 0">
-            <TextBlock Text="Rodzaj podsumowania" FontSize="22" Foreground="{StaticResource PrimaryForegroundColor}"/>
+            <TextBlock Text="{DynamicResource type_of_summary}" FontSize="22" Foreground="{StaticResource PrimaryForegroundColor}"/>
             <Separator/>
 
             <ItemsControl ItemsSource="{Binding Periods}" Margin="0 10">
@@ -55,7 +55,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <TextBlock Text="Język" FontSize="22" Foreground="{StaticResource PrimaryForegroundColor}"/>
+            <TextBlock Text="{DynamicResource language}" FontSize="22" Foreground="{StaticResource PrimaryForegroundColor}"/>
             <Separator/>
 
             <ItemsControl ItemsSource="{Binding Languages}" Margin="0 10 0 25">
@@ -91,13 +91,13 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <TextBlock Text="Liczba rozgrywek" FontSize="22" Foreground="{StaticResource PrimaryForegroundColor}"/>
+            <TextBlock Text="{DynamicResource number_of_games}" FontSize="22" Foreground="{StaticResource PrimaryForegroundColor}"/>
             <Separator/>
 
             <lvc:CartesianChart LegendLocation="Left" Height="300" Margin="0 10 0 26">
                 <lvc:CartesianChart.Series>
-                    <lvc:LineSeries Title="Test" Values="{Binding SessionsTestValues}"/>
-                    <lvc:LineSeries Title="Nauka" Values="{Binding SessionsLearnValues}"/>
+                    <lvc:LineSeries Title="{DynamicResource test}" Values="{Binding SessionsTestValues}"/>
+                    <lvc:LineSeries Title="{DynamicResource learn}" Values="{Binding SessionsLearnValues}"/>
                 </lvc:CartesianChart.Series>
                 <lvc:CartesianChart.AxisX>
                     <lvc:Axis LabelFormatter="{Binding DateTimeFormatter}" 
@@ -114,13 +114,13 @@
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
 
-            <TextBlock Text="Liczba udzielonych odpowiedzi" FontSize="22" Foreground="{StaticResource PrimaryForegroundColor}"/>
+            <TextBlock Text="{DynamicResource number_of_answers}" FontSize="22" Foreground="{StaticResource PrimaryForegroundColor}"/>
             <Separator/>
 
             <lvc:CartesianChart LegendLocation="Left" Height="300" Margin="0 10 0 26">
                 <lvc:CartesianChart.Series>
-                    <lvc:LineSeries Title="Test" Values="{Binding AnswersTestValues}"/>
-                    <lvc:LineSeries Title="Nauka" Values="{Binding AnswersLearnValues}"/>
+                    <lvc:LineSeries Title="{DynamicResource test}" Values="{Binding AnswersTestValues}"/>
+                    <lvc:LineSeries Title="{DynamicResource learn}" Values="{Binding AnswersLearnValues}"/>
                 </lvc:CartesianChart.Series>
                 <lvc:CartesianChart.AxisX>
                     <lvc:Axis LabelFormatter="{Binding DateTimeFormatter}" 
@@ -137,12 +137,12 @@
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
 
-            <TextBlock Text="Poprawność odpowiedzi" FontSize="22" Foreground="{StaticResource PrimaryForegroundColor}"/>
+            <TextBlock Text="{DynamicResource correctness_of_answers}" FontSize="22" Foreground="{StaticResource PrimaryForegroundColor}"/>
             <Separator/>
 
             <lvc:CartesianChart LegendLocation="Left" Height="300" Margin="0 10 0 26">
                 <lvc:CartesianChart.Series>
-                    <lvc:LineSeries Title="Test" Values="{Binding PercentValues}"/>
+                    <lvc:LineSeries Title="{DynamicResource test}" Values="{Binding PercentValues}"/>
                 </lvc:CartesianChart.Series>
                 <lvc:CartesianChart.AxisX>
                     <lvc:Axis LabelFormatter="{Binding DateTimeFormatter}" 
@@ -159,7 +159,7 @@
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
             
-            <TextBlock Text="Historia rozgrywek" FontSize="22" Foreground="{StaticResource PrimaryForegroundColor}"/>
+            <TextBlock Text="{DynamicResource history_of_games}" FontSize="22" Foreground="{StaticResource PrimaryForegroundColor}"/>
             <Separator/>
 
             <ItemsControl ItemsSource="{Binding Sessions}" Margin="0 5 0 0">
@@ -183,10 +183,16 @@
                                     </Style>
                                 </Grid.Resources>
 
-                                <TextBlock Grid.Column="0" Text="{Binding StartDateTime, StringFormat=dd.MM.yyyy HH:mm:ss}" Margin="25 0 0 0" ToolTip="Data rozpoczęcia"/>
-                                <TextBlock Grid.Column="1" Text="{Binding Type, Converter={StaticResource SessionTypeConverter}}" FontWeight="Bold" ToolTip="Tryb"/>
-                                <TextBlock Grid.Column="2" Text="{Binding QuestionsNumber, StringFormat='Liczba pytań: {0}'}"/>
-                                <TextBlock Grid.Column="3" Text="{Binding Converter={StaticResource CorrectAnswersPercentConverter}, StringFormat='{}{0:N2} %'}" Foreground="{Binding Text, RelativeSource={RelativeSource Self}, Converter={StaticResource CorrectAnswersColorConverter}}" FontWeight="Bold" ToolTip="Poprawność odpowiedzi"/>
+                                <TextBlock Grid.Column="0" Text="{Binding StartDateTime, StringFormat=dd.MM.yyyy HH:mm:ss}" Margin="25 0 0 0" ToolTip="{DynamicResource start_date}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Type, Converter={StaticResource SessionTypeConverter}}" FontWeight="Bold" ToolTip="{DynamicResource mode}"/>
+
+                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                    <TextBlock Text="{DynamicResource number_of_questions_colon}"/>
+                                    <TextBlock Text="{Binding QuestionsNumber, StringFormat=' {0}'}"/>
+                                </StackPanel>
+
+                                <TextBlock Grid.Column="3" Text="{Binding Converter={StaticResource CorrectAnswersPercentConverter}, StringFormat='{}{0:N2} %'}" Foreground="{Binding Text, RelativeSource={RelativeSource Self}, Converter={StaticResource CorrectAnswersColorConverter}}" FontWeight="Bold" ToolTip="{DynamicResource correctness_of_answers}"/>
+
                                 <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 20 0">
                                     <Image Source="{Binding FirstLanguageId, Converter={StaticResource LanguageFlagConverter}}" ToolTip="{Binding FirstLanguageId, Converter={StaticResource LanguageNameConverter}}" Height="30"/>
                                     <TextBlock Text="➜" Margin="10 0" FontSize="24"/>

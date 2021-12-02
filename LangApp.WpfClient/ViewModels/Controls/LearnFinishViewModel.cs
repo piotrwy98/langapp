@@ -5,6 +5,7 @@ using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using static LangApp.Shared.Models.Enums;
@@ -14,9 +15,9 @@ namespace LangApp.WpfClient.ViewModels.Controls
     public class LearnFinishViewModel : NotifyPropertyChanged
     {
         #region Commands
-        public ICommand ShowDetailsCommand { get; set; }
-        public ICommand ChangeCategoryCommand { get; set; }
-        public ICommand LearnAgainCommand { get; set; }
+        public ICommand ShowDetailsCommand { get; }
+        public ICommand ChangeCategoryCommand { get; }
+        public ICommand LearnAgainCommand { get; }
         #endregion
 
         #region Properties
@@ -55,7 +56,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
             if(!IsTest)
             {
-                ResultText = "Zakończono naukę";
+                ResultText = Application.Current.Resources["learning_completed"].ToString();
                 ResultColorBrush = new SolidColorBrush(Color.FromRgb(0x03, 0xA9, 0xF4));
                 ResultIcon = PackIconKind.LearnOutline;
             }
@@ -65,19 +66,19 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
                 if(ResultPercent >= 80)
                 {
-                    ResultText = "Świetna robota!";
+                    ResultText = Application.Current.Resources["great_job_exc"].ToString();
                     ResultColorBrush = new SolidColorBrush(Colors.LawnGreen);
                     ResultIcon = PackIconKind.FaceExcitedOutline;
                 }
                 else if (ResultPercent >= 50)
                 {
-                    ResultText = "Całkiem nieźle!";
+                    ResultText = Application.Current.Resources["pretty_good_exc"].ToString();
                     ResultColorBrush = new SolidColorBrush(Colors.Orange);
                     ResultIcon = PackIconKind.FaceWinkOutline;
                 }
                 else
                 {
-                    ResultText = "Potrafisz lepiej!";
+                    ResultText = Application.Current.Resources["you_can_do_better_exc"].ToString();
                     ResultColorBrush = new SolidColorBrush(Colors.DarkRed);
                     ResultIcon = PackIconKind.FaceSadOutline;
                 }

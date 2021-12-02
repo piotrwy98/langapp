@@ -26,7 +26,7 @@
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="0 0 16 0">
             <StackPanel>
                 <StackPanel Margin="14 0 14 0">
-                    <TextBlock Text="Język" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="22"/>
+                    <TextBlock Text="{DynamicResource language}" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="22"/>
                     <Separator/>
 
                     <ItemsControl ItemsSource="{Binding Languages}" Margin="0 10">
@@ -64,7 +64,7 @@
                 </StackPanel>
 
                 <StackPanel Margin="14 10 14 5">
-                    <TextBlock Text="Liczba zadań" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="22"/>
+                    <TextBlock Text="{DynamicResource number_of_questions}" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="22"/>
                     <Separator/>
 
                     <ItemsControl ItemsSource="{Binding QuestionNumbers}">
@@ -102,7 +102,7 @@
                 </StackPanel>
 
                 <StackPanel Margin="14 10 14 0">
-                    <TextBlock Text="Typy zadań" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="22"/>
+                    <TextBlock Text="{DynamicResource question_types}" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="22"/>
                     <Separator/>
                 </StackPanel>
                 
@@ -150,7 +150,7 @@
                                 <TextBlock Text="C ..."/>
                             </StackPanel>
 
-                            <TextBlock Text="Pytania zamknięte" HorizontalAlignment="Center" Margin="0 5 0 0"/>
+                            <TextBlock Text="{DynamicResource closed_questions}" HorizontalAlignment="Center" Margin="0 5 0 0"/>
                         </StackPanel>
                     </Border>
 
@@ -174,7 +174,7 @@
 
                         <StackPanel>
                             <TextBlock Text="T" HorizontalAlignment="Center" FontFamily="Courier New" FontSize="110" Margin="0 -10 0 0"/>
-                            <TextBlock Text="Pytania otwarte" HorizontalAlignment="Center" Margin="0 -26 0 0"/>
+                            <TextBlock Text="{DynamicResource open_questions}" HorizontalAlignment="Center" Margin="0 -26 0 0"/>
                         </StackPanel>
                     </Border>
 
@@ -198,13 +198,13 @@
 
                         <StackPanel>
                             <md:PackIcon Kind="Microphone" HorizontalAlignment="Center" Height="90" Width="90" Margin="0 5 0 0"/>
-                            <TextBlock Text="Wymowa" HorizontalAlignment="Center" Margin="0 -5 0 0"/>
+                            <TextBlock Text="{DynamicResource pronunciation}" HorizontalAlignment="Center" Margin="0 -5 0 0"/>
                         </StackPanel>
                     </Border>
                 </Grid>
 
                 <StackPanel Margin="14 10 14 0">
-                    <TextBlock Text="Kategorie" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="22"/>
+                    <TextBlock Text="{DynamicResource categories}" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="22"/>
                     <Separator/>
                 </StackPanel>
 
@@ -255,7 +255,7 @@
                                             <TextBlock Text="{Binding Object.Category.Level, Converter={StaticResource LevelNameConverter}}" Margin="10 0 0 3"/>
                                         </StackPanel>
 
-                                        <lvc:Gauge Grid.Column="1" From="0" To="100" Value="{Binding Object, Converter={StaticResource CategoriesPercentConverter}}" GaugeActiveFill="{Binding Value, RelativeSource={RelativeSource Self}, Converter={StaticResource CorrectAnswersColorConverter}}" GaugeBackground="#152131" LabelsVisibility="Collapsed" Margin="0 10" ToolTip="Postęp kategorii" LabelFormatter="{Binding DataContext.GaugeLabelFormatter, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" AnimationsSpeed="0:0:2"/>
+                                        <lvc:Gauge Grid.Column="1" From="0" To="100" Value="{Binding Object, Converter={StaticResource CategoriesPercentConverter}}" GaugeActiveFill="{Binding Value, RelativeSource={RelativeSource Self}, Converter={StaticResource CorrectAnswersColorConverter}}" GaugeBackground="#152131" LabelsVisibility="Collapsed" Margin="0 10" ToolTip="{DynamicResource category_progress}" LabelFormatter="{Binding DataContext.GaugeLabelFormatter, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" AnimationsSpeed="0:0:2"/>
                                     </Grid>
                                 </Border>
                             </Border>
@@ -268,10 +268,10 @@
         <Button Grid.Row="1" Command="{Binding StartLearningCommand}" IsEnabled="{Binding CanStartLearning}" Height="40" Margin="14 10">
             <Button.Style>
                 <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                    <Setter Property="Content" Value="Rozpocznij naukę"/>
+                    <Setter Property="Content" Value="{DynamicResource start_learning}"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsTest}" Value="True">
-                            <Setter Property="Content" Value="Rozpocznij test"/>
+                            <Setter Property="Content" Value="{DynamicResource start_test}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

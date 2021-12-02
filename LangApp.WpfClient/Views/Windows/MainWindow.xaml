@@ -69,56 +69,56 @@
                 <md:PackIcon Kind="UserCircle" Foreground="{StaticResource PrimaryForegroundColor}" HorizontalAlignment="Center" Height="75" Width="75" Margin="0 20 0 0"/>
                 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 26">
-                    <TextBlock Text="Witaj, " FontSize="20" Foreground="{StaticResource PrimaryForegroundColor}"/>
-                    <TextBlock Text="{Binding Configuration.User.Username}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource SecondaryForegroundColor}"/>
+                    <TextBlock Text="{DynamicResource hello_comma}" FontSize="20" Foreground="{StaticResource PrimaryForegroundColor}"/>
+                    <TextBlock Text="{Binding Configuration.User.Username, StringFormat=' {0}'}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource SecondaryForegroundColor}"/>
                 </StackPanel>
                 
                 <RadioButton Style="{StaticResource MenuButton}" Command="{Binding MainScreenCheckedCommand}" IsChecked="True">
                     <StackPanel Orientation="Horizontal">
                         <md:PackIcon Kind="Home"/>
-                        <TextBlock Text="Ekran główny"/>
+                        <TextBlock Text="{DynamicResource home}"/>
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource MenuButton}" Command="{Binding LearnCheckedCommand}">
                     <StackPanel Orientation="Horizontal">
                         <md:PackIcon Kind="LearnOutline"/>
-                        <TextBlock Text="Nauka"/>
+                        <TextBlock Text="{DynamicResource learn}"/>
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource MenuButton}" Command="{Binding TestCheckedCommand}" IsEnabled="True">
                     <StackPanel Orientation="Horizontal">
                         <md:PackIcon Kind="CheckboxMarkedCircleOutline"/>
-                        <TextBlock Text="Test"/>
+                        <TextBlock Text="{DynamicResource test}"/>
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource MenuButton}" Command="{Binding StatsCheckedCommand}">
                     <StackPanel Orientation="Horizontal">
                         <md:PackIcon Kind="ChartLine"/>
-                        <TextBlock Text="Statystyki"/>
+                        <TextBlock Text="{DynamicResource statistics}"/>
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource MenuButton}" Command="{Binding DictionaryCheckedCommand}">
                     <StackPanel Orientation="Horizontal">
                         <md:PackIcon Kind="BookOpenPageVariant"/>
-                        <TextBlock Text="Słownik"/>
+                        <TextBlock Text="{DynamicResource dictionary}"/>
                     </StackPanel>
                 </RadioButton>
 
                 <RadioButton Style="{StaticResource MenuButton}" Command="{Binding FavouriteWordsCheckedCommand}">
                     <StackPanel Orientation="Horizontal">
                         <md:PackIcon Kind="Star"/>
-                        <TextBlock Text="Ulubione słowa"/>
+                        <TextBlock Text="{DynamicResource favourite_words}"/>
                     </StackPanel>
                 </RadioButton>
 
-                <RadioButton Style="{StaticResource MenuButton}">
+                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding SettingsCheckedCommand}">
                     <StackPanel Orientation="Horizontal">
                         <md:PackIcon Kind="Settings"/>
-                        <TextBlock Text="Ustawienia"/>
+                        <TextBlock Text="{DynamicResource settings}"/>
                     </StackPanel>
                 </RadioButton>
             </StackPanel>

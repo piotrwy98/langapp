@@ -14,7 +14,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
     public class LearnDetailsViewModel
     {
         #region Commands
-        public ICommand ReturnCommand { get; set; }
+        public ICommand ReturnCommand { get; }
         #endregion
 
         #region Properties

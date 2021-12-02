@@ -21,7 +21,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Ulubione słowa" FontSize="30" Margin="0 0 0 20"/>
+        <TextBlock Text="{DynamicResource favourite_words}" FontSize="30" Margin="0 0 0 20"/>
 
         <FrameworkElement x:Name="ProxyElement" DataContext="{Binding}"/>
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
@@ -30,7 +30,7 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <md:PackIcon Kind="Star" ToolTip="Usuń z ulubionych" Foreground="Gold" Background="Transparent" VerticalAlignment="Center" Width="28" Height="28" Margin="-2" Cursor="Hand">
+                                <md:PackIcon Kind="Star" ToolTip="{DynamicResource remove_from_favourites}" Foreground="Gold" Background="Transparent" VerticalAlignment="Center" Width="28" Height="28" Margin="-2" Cursor="Hand">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseLeftButtonDown">
                                             <i:InvokeCommandAction Command="{Binding DataContext.StarMouseLeftButtonDownCommand, Source={x:Reference ProxyElement}}" CommandParameter="{Binding Id}"/>
@@ -40,23 +40,23 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Pierwszy język">
+                    <DataGridTemplateColumn Header="{DynamicResource first_language}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Source="{Binding FirstTranslation.Language.ImagePath, Converter={StaticResource ImageConverter}}" ToolTip="{Binding FirstTranslation.Language.Id, Converter={StaticResource LanguageNameConverter}}" Height="24"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Pierwsze tłumaczenie" Binding="{Binding FirstTranslation.Value}"/>
-                    <DataGridTemplateColumn Header="Drugi język">
+                    <DataGridTextColumn Header="{DynamicResource first_translation}" Binding="{Binding FirstTranslation.Value}"/>
+                    <DataGridTemplateColumn Header="{DynamicResource second_language}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Source="{Binding SecondTranslation.Language.ImagePath, Converter={StaticResource ImageConverter}}" ToolTip="{Binding SecondTranslation.Language.Id, Converter={StaticResource LanguageNameConverter}}" Height="24"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Drugie tłumaczenie" Binding="{Binding SecondTranslation.Value}"/>
-                    <DataGridTextColumn Header="Data dodania" Binding="{Binding CreationDateTime, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"/>
+                    <DataGridTextColumn Header="{DynamicResource second_translation}" Binding="{Binding SecondTranslation.Value}"/>
+                    <DataGridTextColumn Header="{DynamicResource date_added}" Binding="{Binding CreationDateTime, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>

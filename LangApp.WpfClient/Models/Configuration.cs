@@ -13,22 +13,6 @@ namespace LangApp.WpfClient.Models
     {
         private static Configuration _instance;
 
-        private Configuration()
-        {
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects
-            };
-        }
-
-        public static Configuration GetInstance()
-        {
-            if (_instance == null)
-                _instance = new Configuration();
-
-            return _instance;
-        }
-
         #region Properties
         private string _token;
         public string Token
@@ -91,6 +75,24 @@ namespace LangApp.WpfClient.Models
         public LearnFinishControl LearnFinishControl { get; set; }
 
         public StatsControl StatsControl { get; set; }
+
+        public SettingsControl SettingsControl { get; } = new SettingsControl();
         #endregion
+
+        private Configuration()
+        {
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects
+            };
+        }
+
+        public static Configuration GetInstance()
+        {
+            if (_instance == null)
+                _instance = new Configuration();
+
+            return _instance;
+        }
     }
 }
