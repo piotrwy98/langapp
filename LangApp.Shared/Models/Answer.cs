@@ -7,6 +7,8 @@ namespace LangApp.Shared.Models
         public uint Id { get; set; }
         public uint SessionId { get; set; }
         public Session Session { get; set; }
+        public uint WordId { get; set; }
+        public Word Word { get; set; }
         public uint NumberInSession { get; set; }
         public QuestionType QuestionType { get; set; }
         public string Value { get; set; }
