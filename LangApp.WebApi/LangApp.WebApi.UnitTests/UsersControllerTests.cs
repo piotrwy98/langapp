@@ -24,7 +24,8 @@ namespace LangApp.WebApi.UnitTests
                 Email = Guid.NewGuid().ToString(),
                 Username = Guid.NewGuid().ToString(),
                 Password = Guid.NewGuid().ToString(),
-                Role = (UserRole) _random.Next(Enum.GetNames(typeof(UserRole)).Length - 1)
+                Role = (UserRole) _random.Next(Enum.GetNames(typeof(UserRole)).Length - 1),
+                RegisterDateTime = DateTime.Now
             };
         }
 
@@ -149,6 +150,7 @@ namespace LangApp.WebApi.UnitTests
             Assert.Equal(expectedUser.Username, actualUser.Username);
             Assert.Equal(expectedUser.Password, actualUser.Password);
             Assert.Equal(expectedUser.Role, actualUser.Role);
+            Assert.Equal(expectedUser.RegisterDateTime, actualUser.RegisterDateTime);
         }
 
         /// <summary>

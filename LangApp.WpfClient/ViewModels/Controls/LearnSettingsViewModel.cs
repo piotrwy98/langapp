@@ -7,6 +7,7 @@ using LangApp.WpfClient.Views.Controls;
 using LangApp.Shared.Models;
 using System.Threading.Tasks;
 using static LangApp.Shared.Models.Enums;
+using System;
 
 namespace LangApp.WpfClient.ViewModels.Controls
 {
@@ -95,6 +96,8 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     Categories.Count(x => x.IsChosen) > 0;
             }
         }
+
+        public Func<double, string> GaugeLabelFormatter { get; }
         #endregion
 
         public LearnSettingsViewModel(SessionType sessionType)
@@ -137,6 +140,8 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     Object = category
                 });
             }
+
+            GaugeLabelFormatter = value => value.ToString("0.##") + " %";
         }
 
         private void ClosedClick(object obj)

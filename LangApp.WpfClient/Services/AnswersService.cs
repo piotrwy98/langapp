@@ -61,11 +61,12 @@ namespace LangApp.WpfClient.Services
             return null;
         }
 
-        public static async Task<Answer> CreateAnswerAsync(uint sessionId, uint numberInSession, QuestionType questionType, string value, string correctAnswer, TimeSpan duration)
+        public static async Task<Answer> CreateAnswerAsync(uint sessionId, uint wordId, uint numberInSession, QuestionType questionType, string value, string correctAnswer, TimeSpan duration)
         {
             var answer = new Answer()
             {
                 SessionId = sessionId,
+                WordId = wordId,
                 NumberInSession = numberInSession,
                 QuestionType = questionType,
                 Value = value,
@@ -82,6 +83,7 @@ namespace LangApp.WpfClient.Services
                 answer = JsonConvert.DeserializeObject<Answer>(json);
                 GetInstance().Answers.Add(answer);
                 GetInstance().AddToStats(answer);
+                GetInstance().AddToDictionary(answer);
 
                 return answer;
             }
@@ -268,6 +270,15 @@ namespace LangApp.WpfClient.Services
                     }
                 }
 
+                if(PercentDailyValues[i].Count < 1)
+                {
+                    PercentDailyValues[i].Add(new ChartItem()
+                    {
+                        DateTime = DateTime.Now.Date,
+                        Value = 0
+                    });
+                }
+
                 foreach (var chartItem in PercentMonthlyValues[i].Reverse())
                 {
                     if (chartItem.Value is double.NaN)
@@ -276,12 +287,30 @@ namespace LangApp.WpfClient.Services
                     }
                 }
 
+                if (PercentMonthlyValues[i].Count < 1)
+                {
+                    PercentMonthlyValues[i].Add(new ChartItem()
+                    {
+                        DateTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
+                        Value = 0
+                    });
+                }
+
                 foreach (var chartItem in PercentYearlyValues[i].Reverse())
                 {
                     if(chartItem.Value is double.NaN)
                     {
                         PercentYearlyValues[i].Remove(chartItem);
                     }
+                }
+
+                if (PercentYearlyValues[i].Count < 1)
+                {
+                    PercentYearlyValues[i].Add(new ChartItem()
+                    {
+                        DateTime = new DateTime(DateTime.Now.Year, 1, 1),
+                        Value = 0
+                    });
                 }
             }
         }
@@ -375,11 +404,21 @@ namespace LangApp.WpfClient.Services
             dailyCorrectAnswers = PercentDailyValues[(int)session.SecondLanguageId].Last().Value / dailyValue;
             PercentDailyValues[(int)session.SecondLanguageId].Last().Value = 100 * dailyCorrectAnswers / SessionsService.GetInstance().TotalDailyAnswers[(int)session.SecondLanguageId].Last().Value;
 
-            /*_totalMonthlyValues[0].Last().Value += session.QuestionsNumber;
-            _totalMonthlyValues[(int)session.SecondLanguageId].Last().Value += session.QuestionsNumber;
+            var monthlyValue = 100 / (SessionsService.GetInstance().TotalMonthlyAnswers[0].Last().Value - session.QuestionsNumber);
+            var monthlyCorrectAnswers = PercentMonthlyValues[0].Last().Value / monthlyValue;
+            PercentMonthlyValues[0].Last().Value = 100 * monthlyCorrectAnswers / SessionsService.GetInstance().TotalMonthlyAnswers[0].Last().Value;
 
-            _totalYearlyValues[0].Last().Value += session.QuestionsNumber;
-            _totalYearlyValues[(int)session.SecondLanguageId].Last().Value += session.QuestionsNumber;*/
+            monthlyValue = 100 / (SessionsService.GetInstance().TotalMonthlyAnswers[(int)session.SecondLanguageId].Last().Value - session.QuestionsNumber);
+            monthlyCorrectAnswers = PercentMonthlyValues[(int)session.SecondLanguageId].Last().Value / monthlyValue;
+            PercentMonthlyValues[(int)session.SecondLanguageId].Last().Value = 100 * monthlyCorrectAnswers / SessionsService.GetInstance().TotalMonthlyAnswers[(int)session.SecondLanguageId].Last().Value;
+
+            var yearlyValue = 100 / (SessionsService.GetInstance().TotalYearlyAnswers[0].Last().Value - session.QuestionsNumber);
+            var yearlyCorrectAnswers = PercentYearlyValues[0].Last().Value / yearlyValue;
+            PercentYearlyValues[0].Last().Value = 100 * yearlyCorrectAnswers / SessionsService.GetInstance().TotalYearlyAnswers[0].Last().Value;
+
+            yearlyValue = 100 / (SessionsService.GetInstance().TotalYearlyAnswers[(int)session.SecondLanguageId].Last().Value - session.QuestionsNumber);
+            yearlyCorrectAnswers = PercentYearlyValues[(int)session.SecondLanguageId].Last().Value / yearlyValue;
+            PercentYearlyValues[(int)session.SecondLanguageId].Last().Value = 100 * yearlyCorrectAnswers / SessionsService.GetInstance().TotalYearlyAnswers[(int)session.SecondLanguageId].Last().Value;
         }
 
         private void AddToStats(Answer answer)
@@ -417,6 +456,49 @@ namespace LangApp.WpfClient.Services
                     dailyValue = 100 / SessionsService.GetInstance().TotalDailyAnswers[(int)session.SecondLanguageId].Last().Value;
                     dailyCorrectAnswers = PercentDailyValues[(int)session.SecondLanguageId].Last().Value / dailyValue;
                     PercentDailyValues[(int)session.SecondLanguageId].Last().Value = dailyValue * (dailyCorrectAnswers + 1);
+
+                    var motnhlyValue = 100 / SessionsService.GetInstance().TotalMonthlyAnswers[0].Last().Value;
+                    var monthlyCorrectAnswers = PercentMonthlyValues[0].Last().Value / motnhlyValue;
+                    PercentMonthlyValues[0].Last().Value = motnhlyValue * (monthlyCorrectAnswers + 1);
+
+                    motnhlyValue = 100 / SessionsService.GetInstance().TotalMonthlyAnswers[(int)session.SecondLanguageId].Last().Value;
+                    monthlyCorrectAnswers = PercentMonthlyValues[(int)session.SecondLanguageId].Last().Value / motnhlyValue;
+                    PercentMonthlyValues[(int)session.SecondLanguageId].Last().Value = motnhlyValue * (monthlyCorrectAnswers + 1);
+
+                    var yearlyValue = 100 / SessionsService.GetInstance().TotalYearlyAnswers[0].Last().Value;
+                    var yearlyCorrectAnswers = PercentYearlyValues[0].Last().Value / yearlyValue;
+                    PercentYearlyValues[0].Last().Value = yearlyValue * (yearlyCorrectAnswers + 1);
+
+                    yearlyValue = 100 / SessionsService.GetInstance().TotalYearlyAnswers[(int)session.SecondLanguageId].Last().Value;
+                    yearlyCorrectAnswers = PercentYearlyValues[(int)session.SecondLanguageId].Last().Value / yearlyValue;
+                    PercentYearlyValues[(int)session.SecondLanguageId].Last().Value = yearlyValue * (yearlyCorrectAnswers + 1);
+                }
+            }
+        }
+
+        public void GenerateAnswerCounts()
+        {
+            foreach(var answer in Answers)
+            {
+                AddToDictionary(answer);
+            }
+        }
+
+        private void AddToDictionary(Answer answer)
+        {
+            if (answer.IsAnswerCorrect)
+            {
+                var session = SessionsService.GetInstance().Sessions.First(x => x.Id == answer.SessionId);
+                var dictionary = TranslationsService.GetInstance().Dictionaries.First(x => x.FirstLanguage.Id == session.FirstLanguageId && x.SecondLanguage.Id == session.SecondLanguageId);
+                var pair = dictionary.Dictionary.First(x => x.Key.Id == answer.WordId);
+
+                if (session.Type == SessionType.LEARN)
+                {
+                    pair.Value.LearnCount++;
+                }
+                else
+                {
+                    pair.Value.TestCount++;
                 }
             }
         }

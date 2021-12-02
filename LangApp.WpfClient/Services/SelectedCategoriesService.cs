@@ -49,6 +49,7 @@ namespace LangApp.WpfClient.Services
                 CategoryId = categoryId
             };
 
+            var selectedCategories = GetInstance().SelectedCategories;
             var content = new StringContent(JsonConvert.SerializeObject(selectedCategory), Encoding.UTF8, "application/json");
             var response = await HttpClient.PostAsync("http://localhost:5000/selected-categories", content).ConfigureAwait(false);
 
@@ -56,7 +57,7 @@ namespace LangApp.WpfClient.Services
             {
                 var json = await response.Content.ReadAsStringAsync();
                 selectedCategory = JsonConvert.DeserializeObject<SelectedCategory>(json);
-                GetInstance().SelectedCategories.Add(selectedCategory);
+                selectedCategories.Add(selectedCategory);
                 return selectedCategory;
             }
 

@@ -74,6 +74,10 @@ namespace LangApp.WebApi.Api.Repositories.Db
                     .HasColumnType("int(10) unsigned")
                     .HasColumnName("session_id");
 
+                entity.Property(e => e.WordId)
+                    .HasColumnType("int(10) unsigned")
+                    .HasColumnName("word_id");
+
                 entity.Property(e => e.Value)
                     .IsRequired()
                     .HasMaxLength(100)

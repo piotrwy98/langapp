@@ -567,7 +567,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 }
 
                 // dodanie odpowiedzi
-                var answer = await Task.Run(() => AnswersService.CreateAnswerAsync(_session.Id, (uint) _questionCounter,
+                var answer = await Task.Run(() => AnswersService.CreateAnswerAsync(_session.Id, TranslationPair.Key.Id, (uint) _questionCounter,
                     _questionType, userAnswer, TranslationPair.Value.SecondLanguageTranslation.Value,
                     DateTime.Now - _questionAppearedTime));
 
@@ -650,6 +650,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         {
             if(QuestionCounter < NumberOfQuestions)
             {
+                /// przygotowanie interfejsu
                 if(!isSkipped)
                 {
                     QuestionCounter++;
@@ -680,71 +681,108 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 }
 
                 IsPlayButtonEnabled = false;
+                ///
 
-                if (_previousWordsIds.Count == _dictionary.Dictionary.Count)
+                // losowanie pytania
+                SetTranslationPair();
+
+                // losowanie typu pytania
+                SetQuestionType();
+            }
+            else
+            {
+                Finish();
+            }
+        }
+
+        private void SetTranslationPair()
+        {
+            // index wylosowanej kategorii
+            var caregoryIndex = _random.Next(0, _categoriesIds.Count);
+
+            // słowa należących do wylosowanej kategorii
+            var words = _dictionary.Dictionary.Where(x => x.Key.CategoryId == _categoriesIds[caregoryIndex]).ToList();
+
+            // index wylosowanego słowa
+            int wordIndex;
+
+            if (_random.Next(0, 2) == 0)
+            {
+                // liczba słów z najmniejszą liczbą poprawnych odpowiedzi
+                int minCount;
+
+                // uporządkowanie rosnąco względem liczby poprawnych odpowiedzi
+                if (_session.Type == SessionType.LEARN)
                 {
-                    _previousWordsIds.Clear();
+                    words = words.OrderBy(x => x.Value.LearnCount).ToList();
+                    minCount = words.FindIndex(x => x.Value.LearnCount > words[0].Value.LearnCount) + 1;
+                }
+                else
+                {
+                    words = words.OrderBy(x => x.Value.TestCount).ToList();
+                    minCount = words.FindIndex(x => x.Value.TestCount > words[0].Value.TestCount) + 1;
                 }
 
-                do
-                {
-                    int index = _random.Next(0, _dictionary.Dictionary.Count);
-                    TranslationPair = _dictionary.Dictionary.ElementAt(index);
-                } while (_previousWordsIds.Contains(TranslationPair.Key.Id));
+                wordIndex = _random.Next(0, minCount);
+            }
+            else
+            {
+                // losowanie słowa wśród wszystkich słów
+                wordIndex = _random.Next(0, words.Count);
+            }
 
-                _previousWordsIds.Add(TranslationPair.Key.Id);
+            if(_previousWordsIds.Contains(words[wordIndex].Key.Id))
+            {
+                // jeśli słowo pojawiło się już wcześniej w obrębie rozgrywki to losujemy od nowa
+                SetTranslationPair();
+            }
+            else
+            {
+                TranslationPair = words[wordIndex];
+                _previousWordsIds.Add(words[wordIndex].Key.Id);
+            }
+        }
 
-                int questionTypeIndex;
+        private void SetQuestionType()
+        {
+            int questionTypeIndex;
 
-                if(_isClosedChosen && _isOpenChosen && _isSpeakChosen)
-                {
-                    questionTypeIndex = _random.Next(0, 3);
-                    QuestionType = (QuestionType) questionTypeIndex;
-                }
-                else if(_isClosedChosen && _isOpenChosen)
-                {
-                    questionTypeIndex = _random.Next(0, 2);
+            if (_isClosedChosen && _isOpenChosen && _isSpeakChosen)
+            {
+                questionTypeIndex = _random.Next(0, 3);
+                QuestionType = (QuestionType)questionTypeIndex;
+            }
+            else if (_isClosedChosen && _isOpenChosen)
+            {
+                questionTypeIndex = _random.Next(0, 2);
 
-                    if (questionTypeIndex == 0)
-                    {
-                        QuestionType = QuestionType.CLOSED;
-                    }
-                    else
-                    {
-                        QuestionType = QuestionType.OPEN;
-                    }
-                }
-                else if (_isClosedChosen && _isSpeakChosen)
-                {
-                    questionTypeIndex = _random.Next(0, 2);
-
-                    if (questionTypeIndex == 0)
-                    {
-                        QuestionType = QuestionType.CLOSED;
-                    }
-                    else
-                    {
-                        QuestionType = QuestionType.PRONUNCIATION;
-                    }
-                }
-                else if (_isOpenChosen && _isSpeakChosen)
-                {
-                    questionTypeIndex = _random.Next(0, 2);
-
-                    if (questionTypeIndex == 0)
-                    {
-                        QuestionType = QuestionType.OPEN;
-                    }
-                    else
-                    {
-                        QuestionType = QuestionType.PRONUNCIATION;
-                    }
-                }
-                else if(_isClosedChosen)
+                if (questionTypeIndex == 0)
                 {
                     QuestionType = QuestionType.CLOSED;
                 }
-                else if (_isOpenChosen)
+                else
+                {
+                    QuestionType = QuestionType.OPEN;
+                }
+            }
+            else if (_isClosedChosen && _isSpeakChosen)
+            {
+                questionTypeIndex = _random.Next(0, 2);
+
+                if (questionTypeIndex == 0)
+                {
+                    QuestionType = QuestionType.CLOSED;
+                }
+                else
+                {
+                    QuestionType = QuestionType.PRONUNCIATION;
+                }
+            }
+            else if (_isOpenChosen && _isSpeakChosen)
+            {
+                questionTypeIndex = _random.Next(0, 2);
+
+                if (questionTypeIndex == 0)
                 {
                     QuestionType = QuestionType.OPEN;
                 }
@@ -753,9 +791,17 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     QuestionType = QuestionType.PRONUNCIATION;
                 }
             }
+            else if (_isClosedChosen)
+            {
+                QuestionType = QuestionType.CLOSED;
+            }
+            else if (_isOpenChosen)
+            {
+                QuestionType = QuestionType.OPEN;
+            }
             else
             {
-                Finish();
+                QuestionType = QuestionType.PRONUNCIATION;
             }
         }
 

@@ -9,6 +9,10 @@ namespace LangApp.WpfClient.Models
 
         public Translation SecondLanguageTranslation { get; set; }
 
+        public uint LearnCount { get; set; }
+
+        public uint TestCount { get; set; }
+
         private uint? _favouriteWordId;
         public uint? FavouriteWordId
         {

@@ -179,6 +179,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\CategoriesPercentConverter.cs" />
     <Compile Include="Converters\CorrectAnswersColorConverter.cs" />
     <Compile Include="Converters\CorrectAnswersPercentConverter.cs" />
     <Compile Include="Converters\DurationMsConverter.cs" />

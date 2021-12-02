@@ -12,7 +12,7 @@ namespace LangApp.WebApi.UnitTests
 {
     public class CategoriesControllerTests
     {
-        private readonly Mock<ICategoriesRepository> _categoriesRepository = new Mock<ICategoriesRepository>();
+        /*private readonly Mock<ICategoriesRepository> _categoriesRepository = new Mock<ICategoriesRepository>();
         private readonly Random _random = new Random();
 
         private Category GetRandomCategory()
@@ -141,6 +141,6 @@ namespace LangApp.WebApi.UnitTests
 
             // Assert
             Assert.IsType<NoContentResult>(result);
-        }
+        }*/
     }
 }

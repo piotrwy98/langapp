@@ -227,7 +227,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
             Charting.For<ChartItem>(mapper);
 
-            PercentFormatter = value => value.ToString("N2") + " %";
+            PercentFormatter = value => value.ToString("0.##") + " %";
 
             UpdateCharts();
 

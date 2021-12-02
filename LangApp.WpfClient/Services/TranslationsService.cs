@@ -43,6 +43,7 @@ namespace LangApp.WpfClient.Services
             if(_instace == null)
             {
                 _instace = new TranslationsService();
+                AnswersService.GetInstance().GenerateAnswerCounts();
             }
 
             return _instace;

@@ -24,7 +24,7 @@ namespace LangApp.WebApi.UnitTests
                 {
                     Id = (uint)_random.Next(0, int.MaxValue),
                     Code = Guid.NewGuid().ToString(),
-                    Name = Guid.NewGuid().ToString()
+                    ImagePath = Guid.NewGuid().ToString()
                 },
                 Word = new Word()
                 {

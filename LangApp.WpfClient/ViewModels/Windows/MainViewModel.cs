@@ -51,6 +51,10 @@ namespace LangApp.WpfClient.ViewModels.Windows
             }
             else
             {
+                var dataContext = Configuration.LearnSettingsControl.DataContext;
+                Configuration.LearnSettingsControl.DataContext = null;
+                Configuration.LearnSettingsControl.DataContext = dataContext;
+
                 Configuration.CurrentView = Configuration.LearnSettingsControl;
             }
         }
@@ -59,6 +63,10 @@ namespace LangApp.WpfClient.ViewModels.Windows
         {
             if (Configuration.IsNotDuringTest)
             {
+                var dataContext = Configuration.TestSettingsControl.DataContext;
+                Configuration.TestSettingsControl.DataContext = null;
+                Configuration.TestSettingsControl.DataContext = dataContext;
+
                 Configuration.CurrentView = Configuration.TestSettingsControl;
             }
         }

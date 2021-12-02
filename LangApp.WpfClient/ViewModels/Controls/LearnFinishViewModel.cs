@@ -78,7 +78,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 else
                 {
                     ResultText = "Potrafisz lepiej!";
-                    ResultColorBrush = new SolidColorBrush(Colors.Red);
+                    ResultColorBrush = new SolidColorBrush(Colors.DarkRed);
                     ResultIcon = PackIconKind.FaceSadOutline;
                 }
             }

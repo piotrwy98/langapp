@@ -186,7 +186,7 @@
                                 <TextBlock Grid.Column="0" Text="{Binding StartDateTime, StringFormat=dd.MM.yyyy HH:mm:ss}" Margin="25 0 0 0" ToolTip="Data rozpoczęcia"/>
                                 <TextBlock Grid.Column="1" Text="{Binding Type, Converter={StaticResource SessionTypeConverter}}" FontWeight="Bold" ToolTip="Tryb"/>
                                 <TextBlock Grid.Column="2" Text="{Binding QuestionsNumber, StringFormat='Liczba pytań: {0}'}"/>
-                                <TextBlock Grid.Column="3" Text="{Binding Converter={StaticResource CorrectAnswersPercentConverter}, StringFormat='{}{0:N2} %'}" Foreground="{Binding Converter={StaticResource CorrectAnswersColorConverter}}" FontWeight="Bold" ToolTip="Poprawność odpowiedzi"/>
+                                <TextBlock Grid.Column="3" Text="{Binding Converter={StaticResource CorrectAnswersPercentConverter}, StringFormat='{}{0:N2} %'}" Foreground="{Binding Text, RelativeSource={RelativeSource Self}, Converter={StaticResource CorrectAnswersColorConverter}}" FontWeight="Bold" ToolTip="Poprawność odpowiedzi"/>
                                 <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 20 0">
                                     <Image Source="{Binding FirstLanguageId, Converter={StaticResource LanguageFlagConverter}}" ToolTip="{Binding FirstLanguageId, Converter={StaticResource LanguageNameConverter}}" Height="30"/>
                                     <TextBlock Text="➜" Margin="10 0" FontSize="24"/>

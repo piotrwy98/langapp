@@ -1,8 +1,5 @@
-﻿using LangApp.Shared.Models;
-using LangApp.WpfClient.Services;
-using System;
+﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -12,9 +9,15 @@ namespace LangApp.WpfClient.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var session = value as Session;
-            var correctAnswers = AnswersService.GetInstance().Answers.Count(x => x.SessionId == session.Id && x.IsAnswerCorrect);
-            var percent = 100.0 * correctAnswers / session.QuestionsNumber;
+            double percent;
+            if(value is string valueString)
+            {
+                percent = double.Parse(valueString.Replace("%", "").Replace(".", ","));
+            }
+            else
+            {
+                percent = (double) value;
+            }
 
             if (percent >= 80)
             {
