@@ -1,4 +1,7 @@
-﻿using LangApp.WpfClient.Views.Windows;
+﻿using LangApp.Shared.Models.Controllers;
+using LangApp.WpfClient.Models;
+using LangApp.WpfClient.Services;
+using LangApp.WpfClient.Views.Windows;
 using System.Windows;
 
 namespace LangApp.WpfClient
@@ -8,12 +11,36 @@ namespace LangApp.WpfClient
     /// </summary>
     public partial class App : Application
     {
-        private void ApplicationStartup(object sender, StartupEventArgs e)
+        private async void ApplicationStartup(object sender, StartupEventArgs e)
         {
-            //var loginRegisterWindow = new LoginRegisterWindow();
-            //loginRegisterWindow.Show();
+            bool serverFailed = false;
 
-            new MainWindow().Show();
+            if(Settings.GetInstance().PreviousUserEmail != null)
+            {
+                UserWithToken userWithToken = null;
+
+                try
+                {
+                    userWithToken = await TokensService.GetUserWithTokenAsync(Settings.GetInstance().PreviousUserEmail,
+                        Settings.GetInstance().PreviousUserPassword);
+                }
+                catch
+                {
+                    serverFailed = true;
+                }
+
+                if (userWithToken != null)
+                {
+                    Configuration.GetInstance().User = userWithToken.User;
+                    Configuration.GetInstance().Token = userWithToken.Token;
+
+                    new MainWindow().Show();
+                    return;
+                }
+            }
+
+            var loginRegisterWindow = new LoginRegisterWindow(serverFailed);
+            loginRegisterWindow.Show();
         }
     }
 }

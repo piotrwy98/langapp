@@ -10,10 +10,10 @@ namespace LangApp.WpfClient.Views.Windows
     /// </summary>
     public partial class LoginRegisterWindow : Window
     {
-        public LoginRegisterWindow()
+        public LoginRegisterWindow(bool serverFailed)
         {
             InitializeComponent();
-            DataContext = new LoginRegisterViewModel();
+            DataContext = new LoginRegisterViewModel(serverFailed);
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)

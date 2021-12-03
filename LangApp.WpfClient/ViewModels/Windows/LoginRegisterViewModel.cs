@@ -135,7 +135,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
         }
         #endregion
 
-        public LoginRegisterViewModel()
+        public LoginRegisterViewModel(bool serverFailed)
         {
             LogInCommand = new RelayCommand(LogIn);
             RegisterCommand = new RelayCommand(Register);
@@ -144,6 +144,11 @@ namespace LangApp.WpfClient.ViewModels.Windows
             PasswordChangedCommand = new RelayCommand(PasswordChanged);
             RepeatPasswordChangedCommand = new RelayCommand(RepeatPasswordChanged);
             WindowKeyDownCommand = new RelayCommand(WindowKeyDown);
+
+            if(serverFailed)
+            {
+                ResultMessage = string.Empty;
+            }
         }
 
         private async void LogIn(object obj = null)
@@ -193,6 +198,10 @@ namespace LangApp.WpfClient.ViewModels.Windows
             {
                 Configuration.GetInstance().User = userWithToken.User;
                 Configuration.GetInstance().Token = userWithToken.Token;
+
+                Settings.GetInstance().PreviousUserEmail = userWithToken.User.Email;
+                Settings.GetInstance().PreviousUserPassword = userWithToken.User.Password;
+                Settings.Store();
 
                 new MainWindow().Show();
                 Application.Current.Windows[0].Close();

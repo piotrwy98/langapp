@@ -48,14 +48,14 @@
     <system:String x:Key="date_added">Data dodania</system:String>
     
     <system:String x:Key="question">Pytanie</system:String>
-    <system:String x:Key="whats_the_translation_of_the_word">What's the translation of the word</system:String>
+    <system:String x:Key="whats_the_translation_of_the_word">Jakie jest tłumaczenie słowa</system:String>
     <system:String x:Key="add_the_word_to_favourites">Dodaj słowo do ulubionych</system:String>
     <system:String x:Key="remove_the_word_from_favourites">Usuń słowo z ulubionych</system:String>
     <system:String x:Key="translation">Tłumaczenie</system:String>
     <system:String x:Key="show_correct">Pokaż poprawną</system:String>
     <system:String x:Key="correct_answer_colon">Poprawna odpowiedź:</system:String>
     <system:String x:Key="finish">Zakończ</system:String>
-    <system:String x:Key="skip">Skip</system:String>
+    <system:String x:Key="skip">Pomiń</system:String>
     <system:String x:Key="check">Sprawdź</system:String>
     <system:String x:Key="next">Dalej</system:String>
     <system:String x:Key="correct_answer">Poprawna odpowiedź</system:String>
