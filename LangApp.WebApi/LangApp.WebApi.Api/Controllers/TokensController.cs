@@ -30,7 +30,7 @@ namespace LangApp.WebApi.Api.Controllers
             var user = await _usersRepository.GetUserByEmailAsync(data.Email);
             if (user != null)
             {
-                if(user.Password == data.Password)
+                if (BCrypt.Net.BCrypt.Verify(data.Password, user.Password))
                 {
                     string token = await GenerateToken(data.Email);
                     var userWithToken = new UserWithToken()

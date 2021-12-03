@@ -52,6 +52,8 @@ namespace LangApp.WebApi.Api.Controllers
                 return BadRequest(RegisterResult.OCCUPIED_USERNAME);
             }
 
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
             return await _usersRepository.CreateUserAsync(user);
         }
 
