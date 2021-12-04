@@ -1,5 +1,6 @@
 ﻿using LangApp.Shared.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,16 +8,47 @@ using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.WpfClient.Services
 {
-    public abstract class UsersService : HttpClientService
+    public class UsersService : HttpClientService
     {
-        public async static Task<RegisterResult> CreateUserAsync(string email, string username, string password, UserRole role)
+        private static UsersService _instace;
+
+        public List<User> Users { get; }
+
+        private UsersService()
+        {
+            Users = (List<User>) GetUsersAsync().Result;
+        }
+
+        public static UsersService GetInstance()
+        {
+            if (_instace == null)
+            {
+                _instace = new UsersService();
+            }
+
+            return _instace;
+        }
+
+        private async Task<IEnumerable<User>> GetUsersAsync()
+        {
+            var response = await HttpClient.GetAsync("http://localhost:5000/users").ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<IEnumerable<User>>(json);
+            }
+
+            return null;
+        }
+
+        public async static Task<RegisterResult> CreateUserAsync(string email, string username, string password)
         {
             var user = new User()
             {
                 Email = email,
                 Username = username,
-                Password = password,
-                Role = role
+                Password = password
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");

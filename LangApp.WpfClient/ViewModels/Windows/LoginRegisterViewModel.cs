@@ -196,8 +196,8 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
             if (userWithToken != null)
             {
-                Configuration.GetInstance().User = userWithToken.User;
-                Configuration.GetInstance().Token = userWithToken.Token;
+                Configuration.User = userWithToken.User;
+                Configuration.Token = userWithToken.Token;
 
                 Settings.GetInstance().PreviousUserEmail = userWithToken.User.Email;
                 Settings.GetInstance().PreviousUserPassword = userWithToken.User.Password;
@@ -259,7 +259,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
             try
             {
-                registerResult = await UsersService.CreateUserAsync(Email.Trim(), Username.Trim(), Password.Trim(), UserRole.USER);
+                registerResult = await UsersService.CreateUserAsync(Email.Trim(), Username.Trim(), Password.Trim());
 
             }
             catch (HttpRequestException)

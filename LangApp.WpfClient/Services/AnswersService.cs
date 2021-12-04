@@ -106,7 +106,7 @@ namespace LangApp.WpfClient.Services
             PercentYearlyValues = LanguagesService.GetLanguageValues();
 
             int answerIndex = 0;
-            var dateTime = Configuration.GetInstance().User.RegisterDateTime.Date;
+            var dateTime = Configuration.User.RegisterDateTime.Date;
             int languagesCount = LanguagesService.GetInstance().Languages.Count + 1;
 
             while (dateTime <= DateTime.Now)

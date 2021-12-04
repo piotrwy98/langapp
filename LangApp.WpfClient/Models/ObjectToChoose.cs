@@ -4,7 +4,19 @@ namespace LangApp.WpfClient.Models
 {
     public class ObjectToChoose : NotifyPropertyChanged
     {
-        public object Object { get; set; }
+        private object _object;
+        public object Object
+        {
+            get
+            {
+                return _object;
+            }
+            set
+            {
+                _object = value;
+                OnPropertyChanged();
+            }
+        }
 
         private bool _isChosen;
         public bool IsChosen

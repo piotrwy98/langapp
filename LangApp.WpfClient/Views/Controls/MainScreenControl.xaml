@@ -1,11 +1,18 @@
 ﻿<UserControl x:Class="LangApp.WpfClient.Views.Controls.MainScreenControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:LangApp.WpfClient.Views.Controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:converters="clr-namespace:LangApp.WpfClient.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="14">
+    <UserControl.Resources>
+        <converters:UsernameConverter x:Key="UsernameConverter"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -33,9 +40,80 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Margin="10" Background="{StaticResource TertiaryBackgroundColor}">
+            <Grid Grid.Column="0" Margin="10" Background="{StaticResource TertiaryBackgroundColor}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource news}" FontSize="22" Margin="10 5"/>
+                <md:PackIcon Grid.Row="0" Grid.Column="1" Kind="Plus" Cursor="Hand" ToolTip="{DynamicResource add_post}" Background="Transparent" Foreground="LawnGreen" Width="34" Height="34" VerticalAlignment="Center" Visibility="{Binding IsUserAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding AddNewsCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </md:PackIcon>
 
-            </StackPanel>
+                <ScrollViewer Grid.Row="1" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto" Margin="0 0 0 10">
+                    <ItemsControl ItemsSource="{Binding News}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="10 5 10 0">
+                                    <Grid Visibility="{Binding IsChosen, Converter={StaticResource InverseBoolToVisConverter}}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Object.Title}" TextWrapping="Wrap" Foreground="{StaticResource SecondaryForegroundColor}" FontWeight="Bold"/>
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Object.CreationDateTime, StringFormat='dd.MM.yyyy HH:mm'}" ToolTip="{DynamicResource date_added}" Foreground="{StaticResource SecondaryForegroundColor}"/>
+
+                                        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Object.Content}" TextWrapping="Wrap" Margin="0 5 0 10"/>
+
+                                        <TextBlock Grid.Row="2" Grid.Column="0"  Text="{Binding Object.UserId, Converter={StaticResource UsernameConverter}}" Foreground="{StaticResource SecondaryForegroundColor}" FontStyle="Italic"/>
+                                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="{Binding DataContext.IsUserAdmin, RelativeSource={RelativeSource AncestorType=ItemsControl}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <md:PackIcon Kind="Pencil" Cursor="Hand" ToolTip="{DynamicResource edit_post}" Background="Transparent" Foreground="Orange" Width="20" Height="22">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                        <i:InvokeCommandAction Command="{Binding DataContext.EditNewsCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </md:PackIcon>
+                                            <md:PackIcon Kind="Remove" Cursor="Hand" ToolTip="{DynamicResource remove_post}" Background="Transparent" Foreground="Red" Width="24" Height="24" Margin="5 0 0 0">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                        <i:InvokeCommandAction Command="{Binding DataContext.RemoveNewsCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </md:PackIcon>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <StackPanel Visibility="{Binding IsChosen, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <TextBox Text="{Binding Object.Title}" TextWrapping="Wrap" Style="{StaticResource MaterialDesignOutlinedTextBox}" md:HintAssist.Hint="{DynamicResource title}" md:HintAssist.Background="{StaticResource TertiaryBackgroundColor}" MaxLength="200"/>
+                                        <TextBox Text="{Binding Object.Content}" TextWrapping="Wrap" Style="{StaticResource MaterialDesignOutlinedTextBox}" AcceptsReturn="True" md:HintAssist.Hint="{DynamicResource content}" md:HintAssist.Background="{StaticResource TertiaryBackgroundColor}" MaxLength="1000" Margin="0 26 0 16"/>
+                                        <Button Cursor="Hand" ToolTip="{DynamicResource save}" Background="Transparent" BorderBrush="Transparent" Width="55" Command="{Binding DataContext.SaveNewsCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" HorizontalAlignment="Right">
+                                            <md:PackIcon Kind="Check" Foreground="LawnGreen" Width="26" Height="26" HorizontalAlignment="Right"/>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <Separator Margin="0 10 0 5"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
 
             <StackPanel Grid.Column="1" Margin="10" Background="{StaticResource TertiaryBackgroundColor}">
 

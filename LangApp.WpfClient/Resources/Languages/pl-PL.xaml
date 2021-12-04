@@ -18,6 +18,7 @@
     <system:String x:Key="incorrect_login_details">Błędne dane logowania</system:String>
     <system:String x:Key="no_username_provided">Nie podano nazwy użytkownika</system:String>
     <system:String x:Key="passwords_do_not_match">Hasła nie są zgodne</system:String>
+    <system:String x:Key="account_created_successfully">Pomyślnie utworzono konto</system:String>
     <system:String x:Key="the_given_email_address_is_taken">Podany adres email jest zajęty</system:String>
     <system:String x:Key="the_given_username_is_taken">Podana nazwa użytkownika jest zajęta</system:String>
 
@@ -109,10 +110,19 @@
     <system:String x:Key="mode">Tryb</system:String>
 
     <system:String x:Key="interface_language">Język interfejsu</system:String>
+    <system:String x:Key="log_out">Wyloguj się</system:String>
 
     <system:String x:Key="correct_singular">Poprawna</system:String>
     <system:String x:Key="incorrect_singular">Niepoprawna</system:String>
     <system:String x:Key="closed">Zamknięte</system:String>
     <system:String x:Key="open">Otwarte</system:String>
+
+    <system:String x:Key="news">Aktualności</system:String>
+    <system:String x:Key="remove_post">Usuń wpis</system:String>
+    <system:String x:Key="edit_post">Edytuj wpis</system:String>
+    <system:String x:Key="add_post">Dodaj wpis</system:String>
+    <system:String x:Key="title">Tytuł</system:String>
+    <system:String x:Key="content">Treść</system:String>
+    <system:String x:Key="save">Zapisz</system:String>
   
 </ResourceDictionary>

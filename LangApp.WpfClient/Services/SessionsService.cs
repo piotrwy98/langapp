@@ -65,7 +65,7 @@ namespace LangApp.WpfClient.Services
         {
             var session = new Session()
             {
-                UserId = Configuration.GetInstance().User.Id,
+                UserId = Configuration.User.Id,
                 FirstLanguageId = firstLangugeId,
                 SecondLanguageId = secondLangugeId,
                 Type = type,
@@ -104,7 +104,7 @@ namespace LangApp.WpfClient.Services
             TotalYearlyAnswers = LanguagesService.GetLanguageValues();
 
             int sessionIndex = 0;
-            var dateTime = Configuration.GetInstance().User.RegisterDateTime.Date;
+            var dateTime = Configuration.User.RegisterDateTime.Date;
             int languagesCount = LanguagesService.GetInstance().Languages.Count + 1;
 
             while (dateTime <= DateTime.Now)

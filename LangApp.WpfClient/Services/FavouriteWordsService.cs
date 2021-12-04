@@ -35,7 +35,7 @@ namespace LangApp.WpfClient.Services
 
         private async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsOfUserAsync()
         {
-            var response = await HttpClient.GetAsync("http://localhost:5000/favourite-words/user/" + Configuration.GetInstance().User.Id).ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("http://localhost:5000/favourite-words/user/" + Configuration.User.Id).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -50,7 +50,7 @@ namespace LangApp.WpfClient.Services
         {
             var favouriteWord = new FavouriteWord()
             {
-                UserId = Configuration.GetInstance().User.Id,
+                UserId = Configuration.User.Id,
                 FirstTranslationId = firstTranslationId,
                 SecondTranslationId = secondTranslationId
             };

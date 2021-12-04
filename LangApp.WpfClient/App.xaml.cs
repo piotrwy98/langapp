@@ -31,8 +31,8 @@ namespace LangApp.WpfClient
 
                 if (userWithToken != null)
                 {
-                    Configuration.GetInstance().User = userWithToken.User;
-                    Configuration.GetInstance().Token = userWithToken.Token;
+                    Configuration.User = userWithToken.User;
+                    Configuration.Token = userWithToken.Token;
 
                     new MainWindow().Show();
                     return;

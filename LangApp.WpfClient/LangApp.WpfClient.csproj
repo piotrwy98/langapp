@@ -187,6 +187,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\AnswerResultConverter.cs" />
     <Compile Include="Converters\CategoriesPercentConverter.cs" />
     <Compile Include="Converters\CorrectAnswersColorConverter.cs" />
     <Compile Include="Converters\CorrectAnswersPercentConverter.cs" />
@@ -195,7 +196,7 @@
     <Compile Include="Converters\PartOfSpeechNameConverter.cs" />
     <Compile Include="Converters\LanguageNameConverter.cs" />
     <Compile Include="Converters\LevelNameConverter.cs" />
-    <Compile Include="Converters\AnswerResultConverter.cs" />
+    <Compile Include="Converters\UsernameConverter.cs" />
     <Compile Include="Converters\QuestionTypeConverter.cs" />
     <Compile Include="Converters\SessionTypeConverter.cs" />
     <Compile Include="Converters\TextBoxEnterKeyUpdateBehavior.cs" />
@@ -209,6 +210,7 @@
     <Compile Include="Models\TranslationSet.cs" />
     <Compile Include="Models\TranslationsList.cs" />
     <Compile Include="Services\AnswersService.cs" />
+    <Compile Include="Services\NewsService.cs" />
     <Compile Include="Services\PartsOfSpeechService.cs" />
     <Compile Include="Services\PronunciationsService.cs" />
     <Compile Include="Services\SelectedCategoriesService.cs" />

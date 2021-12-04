@@ -13,9 +13,8 @@ namespace LangApp.WpfClient.Models
     {
         private static Configuration _instance;
 
-        #region Properties
-        private string _token;
-        public string Token
+        private static string _token;
+        public static string Token
         {
             get
             {
@@ -28,8 +27,9 @@ namespace LangApp.WpfClient.Models
             }
         }
 
-        public User User { get; set; } = new User() { Id = 1, Username = "test", RegisterDateTime = DateTime.Now.AddDays(-10) };
+        public static User User { get; set; }
 
+        #region Properties
         private UserControl _currentView;
         public UserControl CurrentView
         {

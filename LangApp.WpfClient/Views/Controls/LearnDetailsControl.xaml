@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Foreground="White">
     <UserControl.Resources>
-        <converters:AnswerResultConverter x:Key="AnswerResultConverter"/>
+        <converters:UsernameConverter x:Key="AnswerResultConverter"/>
         <converters:QuestionTypeConverter x:Key="QuestionTypeConverter"/>
         <converters:DurationMsConverter x:Key="DurationMsConverter"/>
         <converters:SessionTypeConverter x:Key="SessionTypeConverter"/>
