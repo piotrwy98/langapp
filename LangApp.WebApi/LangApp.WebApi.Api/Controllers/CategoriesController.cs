@@ -1,12 +1,12 @@
 ﻿using LangApp.Shared.Models;
 using LangApp.WebApi.Api.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LangApp.WebApi.Api.Controllers
 {
-    //[Authorize]
     [ApiController]
     [Route("categories")]
     public class CategoriesController : ControllerBase
@@ -19,12 +19,14 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IEnumerable<CategoryName>> GetCategoriesAsync()
         {
             return await _categoriesRepository.GetCategoriesAsync();
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<CategoryName>> GetCategoryAsync(uint id)
         {
             var category = await _categoriesRepository.GetCategoryAsync(id);
@@ -37,12 +39,14 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<CategoryName>> CreateCategoryAsync([FromBody] CategoryName category)
         {
             return await _categoriesRepository.CreateCategoryAsync(category);
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> UpdateCategoryAsync([FromBody] CategoryName category)
         {
             await _categoriesRepository.UpdateCategoryAsync(category);
@@ -51,6 +55,7 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> DeleteCategoryAsync(uint id)
         {
             await _categoriesRepository.DeleteCategoryAsync(id);

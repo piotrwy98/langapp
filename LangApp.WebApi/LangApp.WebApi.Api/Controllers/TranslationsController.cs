@@ -1,15 +1,12 @@
 ﻿using LangApp.Shared.Models;
-using LangApp.Shared.Models.Controllers;
 using LangApp.WebApi.Api.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LangApp.WebApi.Api.Controllers
 {
-    //[Authorize]
     [ApiController]
     [Route("translations")]
     public class TranslationsController : ControllerBase
@@ -22,12 +19,14 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IEnumerable<Translation>> GetTranslationsAsync()
         {
             return await _translationsRepository.GetTranslationsAsync();
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Translation>> GetTranslationAsync(uint id)
         {
             var translation = await _translationsRepository.GetTranslationAsync(id);
@@ -40,6 +39,7 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Translation>> CreateTranslationAsync([FromBody] Translation translation)
         {
             if (await _translationsRepository.GetTranslationByWordAndLanguageAsync(translation.Word.Id, translation.Language.Id) != null)
@@ -51,6 +51,7 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> UpdateTranslationAsync([FromBody] Translation translation)
         {
             await _translationsRepository.UpdateTranslationAsync(translation);
@@ -59,6 +60,7 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> DeleteTranslationAsync(uint id)
         {
             await _translationsRepository.DeleteTranslationAsync(id);

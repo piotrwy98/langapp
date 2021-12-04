@@ -4,8 +4,8 @@
     {
         public enum UserRole
         {
-            USER = 0,
-            ADMIN = 1
+            USER,
+            ADMIN
         }
 
         public enum RegisterResult

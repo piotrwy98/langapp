@@ -8,7 +8,6 @@ using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.WebApi.Api.Controllers
 {
-    //[Authorize]
     [ApiController]
     [Route("users")]
     public class UsersController : ControllerBase
@@ -21,12 +20,21 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
-            return await _usersRepository.GetUsersAsync();
+            var users = await _usersRepository.GetUsersAsync();
+
+            foreach(var user in users)
+            {
+                user.Password = null;
+            }
+
+            return users;
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<User>> GetUserAsync(uint id)
         {
             var user = await _usersRepository.GetUserByIdAsync(id);
@@ -35,11 +43,12 @@ namespace LangApp.WebApi.Api.Controllers
                 return NotFound();
             }
 
+            user.Password = null;
+
             return user;
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<ActionResult<User>> CreateUserAsync([FromBody] User user)
         {
             if(await _usersRepository.GetUserByEmailAsync(user.Email) != null)
@@ -53,11 +62,13 @@ namespace LangApp.WebApi.Api.Controllers
             }
 
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            user.Role = UserRole.USER;
 
             return await _usersRepository.CreateUserAsync(user);
         }
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> UpdateUserAsync([FromBody] User user)
         {
             await _usersRepository.UpdateUserAsync(user);
@@ -66,6 +77,7 @@ namespace LangApp.WebApi.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult> DeleteUserAsync(uint id)
         {
             await _usersRepository.DeleteUserAsync(id);

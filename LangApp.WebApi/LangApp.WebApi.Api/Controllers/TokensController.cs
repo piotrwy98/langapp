@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.WebApi.Api.Controllers
 {
@@ -32,7 +34,9 @@ namespace LangApp.WebApi.Api.Controllers
             {
                 if (BCrypt.Net.BCrypt.Verify(data.Password, user.Password))
                 {
-                    string token = await GenerateToken(data.Email);
+                    string token = await GenerateToken(user.Email, user.Role);
+                    user.Password = data.Password;
+
                     var userWithToken = new UserWithToken()
                     {
                         User = user,
@@ -46,8 +50,11 @@ namespace LangApp.WebApi.Api.Controllers
             return Unauthorized();
         }
 
-        private Task<string> GenerateToken(string email)
+        private Task<string> GenerateToken(string email, UserRole userRole)
         {
+            var claims = new Dictionary<string, object>();
+            claims.Add(ClaimTypes.Role, userRole.ToString());
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["JWTSettings:SecretKey"]);
             var tokenDescriptor = new SecurityTokenDescriptor()
@@ -57,7 +64,8 @@ namespace LangApp.WebApi.Api.Controllers
                         new Claim(ClaimTypes.Email, email)
                 }),
                 Expires = DateTime.UtcNow.AddMonths(2),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Claims = claims
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
