@@ -1,10 +1,11 @@
 ﻿<UserControl x:Class="LangApp.WpfClient.Views.Controls.SettingsControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:LangApp.WpfClient.Views.Controls"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800" Foreground="{StaticResource PrimaryForegroundColor}"
              FontSize="16">
     <StackPanel>
@@ -23,5 +24,10 @@
         </StackPanel>
 
         <Button Content="{DynamicResource log_out}" Width="130" Command="{Binding LogOutCommand}" Background="DarkRed" BorderBrush="DarkRed" HorizontalAlignment="Left" Margin="0 10"/>
+
+        <StackPanel Orientation="Horizontal">
+            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding StartWithSystem}"/>
+            <TextBlock Text="{DynamicResource start_with_system}" Margin="10 0 0 0"/>
+        </StackPanel>
     </StackPanel>
 </UserControl>

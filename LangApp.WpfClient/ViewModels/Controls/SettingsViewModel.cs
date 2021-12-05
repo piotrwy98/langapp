@@ -2,9 +2,11 @@
 using LangApp.WpfClient.Models;
 using LangApp.WpfClient.Services;
 using LangApp.WpfClient.Views.Windows;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 
@@ -37,6 +39,31 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
                 Application.Current.Resources.MergedDictionaries.Remove(resourceDictionary);
                 Application.Current.Resources.MergedDictionaries.Add(resourceDictionary);
+            }
+        }
+
+        public bool StartWithSystem
+        {
+            get
+            {
+                return Settings.StartWithSystem;
+            }
+            set
+            {
+                RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+                Assembly assembly = Assembly.GetExecutingAssembly();
+
+                if (value == true)
+                {
+                    key.SetValue("LangApp", assembly.Location);
+                }
+                else
+                {
+                    key.DeleteValue("LangApp");
+                }
+
+                Settings.StartWithSystem = value;
+                Settings.Store();
             }
         }
         #endregion
