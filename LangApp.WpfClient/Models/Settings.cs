@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -17,6 +16,7 @@ namespace LangApp.WpfClient.Models
         public string PreviousUserEmail { get; set; }
         public string PreviousUserPassword { get; set; }
         public bool StartWithSystem { get; set; }
+        public bool MinimizeToSystemTray { get; set; }
 
         private Settings() { }
 

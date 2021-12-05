@@ -66,6 +66,19 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 Settings.Store();
             }
         }
+
+        public bool MinimizeToSystemTray
+        {
+            get
+            {
+                return Settings.MinimizeToSystemTray;
+            }
+            set
+            {
+                Settings.MinimizeToSystemTray = value;
+                Settings.Store();
+            }
+        }
         #endregion
 
         public SettingsViewModel()

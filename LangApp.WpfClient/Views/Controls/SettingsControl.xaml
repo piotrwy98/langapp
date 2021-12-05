@@ -29,5 +29,10 @@
             <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding StartWithSystem}"/>
             <TextBlock Text="{DynamicResource start_with_system}" Margin="10 0 0 0"/>
         </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding MinimizeToSystemTray}"/>
+            <TextBlock Text="{DynamicResource minimize_to_system_tray}" Margin="10 0 0 0"/>
+        </StackPanel>
     </StackPanel>
 </UserControl>

@@ -117,6 +117,7 @@
     <system:String x:Key="log_out">Wyloguj się</system:String>
     <system:String x:Key="log_out_confirmation">Czy na pewno chcesz się wylogować?</system:String>
     <system:String x:Key="start_with_system">Uruchamiaj aplikację przy starcie systemu</system:String>
+    <system:String x:Key="minimize_to_system_tray">Minimalizuj aplikację do paska zadań przy jej zamknięciu</system:String>
 
     <system:String x:Key="correct_singular">Poprawna</system:String>
     <system:String x:Key="incorrect_singular">Niepoprawna</system:String>
@@ -133,5 +134,7 @@
     <system:String x:Key="save">Zapisz</system:String>
     <system:String x:Key="yes">Tak</system:String>
     <system:String x:Key="no">Nie</system:String>
+    <system:String x:Key="open_context">Otwórz</system:String>
+    <system:String x:Key="close">Zamknij</system:String>
   
 </ResourceDictionary>
