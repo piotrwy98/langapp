@@ -175,6 +175,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Windows\ConfirmationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Windows\LoginRegisterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -233,6 +237,7 @@
     <Compile Include="ViewModels\Controls\LearnSettingsViewModel.cs" />
     <Compile Include="ViewModels\Controls\LearnViewModel.cs" />
     <Compile Include="ViewModels\Controls\MainScreenViewModel.cs" />
+    <Compile Include="ViewModels\Windows\ConfirmationViewModel.cs" />
     <Compile Include="ViewModels\Windows\LoginRegisterViewModel.cs" />
     <Compile Include="ViewModels\Windows\MainViewModel.cs" />
     <Compile Include="Views\Controls\DictionaryControl.xaml.cs">
@@ -261,6 +266,9 @@
     </Compile>
     <Compile Include="Views\Controls\StatsControl.xaml.cs">
       <DependentUpon>StatsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Windows\ConfirmationWindow.xaml.cs">
+      <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Windows\LoginRegisterWindow.xaml.cs">
       <DependentUpon>LoginRegisterWindow.xaml</DependentUpon>

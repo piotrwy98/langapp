@@ -37,6 +37,8 @@
     <system:String x:Key="no_search_results">Brak wyników wyszukiwana</system:String>
     <system:String x:Key="add_to_favourites">Dodaj do ulubionych</system:String>
     <system:String x:Key="remove_from_favourites">Usuń z ulubionych</system:String>
+    <system:String x:Key="remove_from_favourites_confirmation_part1">Czy na pewno chcesz usunąć słowo</system:String>
+    <system:String x:Key="remove_from_favourites_confirmation_part2">z ulubionych?</system:String>
     <system:String x:Key="pronunciation">Wymowa</system:String>
     <system:String x:Key="phonetic_notation">Zapis fonetyczny</system:String>
     <system:String x:Key="part_of_speech">Część mowy</system:String>
@@ -56,6 +58,8 @@
     <system:String x:Key="show_correct">Pokaż poprawną</system:String>
     <system:String x:Key="correct_answer_colon">Poprawna odpowiedź:</system:String>
     <system:String x:Key="finish">Zakończ</system:String>
+    <system:String x:Key="learn_finish_confirmation">Czy na pewno chcesz zakończyć naukę?</system:String>
+    <system:String x:Key="test_finish_confirmation">Czy na pewno chcesz zakończyć test?</system:String>
     <system:String x:Key="skip">Pomiń</system:String>
     <system:String x:Key="check">Sprawdź</system:String>
     <system:String x:Key="next">Dalej</system:String>
@@ -111,6 +115,7 @@
 
     <system:String x:Key="interface_language">Język interfejsu</system:String>
     <system:String x:Key="log_out">Wyloguj się</system:String>
+    <system:String x:Key="log_out_confirmation">Czy na pewno chcesz się wylogować?</system:String>
 
     <system:String x:Key="correct_singular">Poprawna</system:String>
     <system:String x:Key="incorrect_singular">Niepoprawna</system:String>
@@ -119,10 +124,13 @@
 
     <system:String x:Key="news">Aktualności</system:String>
     <system:String x:Key="remove_post">Usuń wpis</system:String>
+    <system:String x:Key="remove_post_confirmation">Czy na pewno chcesz usunąć wpis o tytule</system:String>
     <system:String x:Key="edit_post">Edytuj wpis</system:String>
     <system:String x:Key="add_post">Dodaj wpis</system:String>
     <system:String x:Key="title">Tytuł</system:String>
     <system:String x:Key="content">Treść</system:String>
     <system:String x:Key="save">Zapisz</system:String>
+    <system:String x:Key="yes">Tak</system:String>
+    <system:String x:Key="no">Nie</system:String>
   
 </ResourceDictionary>

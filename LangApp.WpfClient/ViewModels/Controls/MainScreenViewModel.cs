@@ -1,7 +1,9 @@
 ﻿using LangApp.Shared.Models;
 using LangApp.WpfClient.Models;
 using LangApp.WpfClient.Services;
+using LangApp.WpfClient.Views.Windows;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 using static LangApp.Shared.Models.Enums;
 
@@ -58,9 +60,16 @@ namespace LangApp.WpfClient.ViewModels.Controls
             var news = obj as ObjectToChoose;
             if (news != null)
             {
-                if (await NewsService.RemoveNewsAsync((news.Object as News).Id))
+                var confirmationWindow = new ConfirmationWindow(Application.Current.Resources["remove_post"].ToString(),
+                    Application.Current.Resources["remove_post_confirmation"].ToString() + " " + (news.Object as News).Title + "?");
+                confirmationWindow.ShowDialog();
+
+                if (confirmationWindow.DialogResult == true)
                 {
-                    News.Remove(news);
+                    if (await NewsService.RemoveNewsAsync((news.Object as News).Id))
+                    {
+                        News.Remove(news);
+                    }
                 }
             }
         }

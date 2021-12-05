@@ -54,16 +54,23 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         private void LogOut(object obj)
         {
-            // usunięcie danych z zapisanych ustawień
-            Settings.GetInstance().PreviousUserEmail = null;
-            Settings.GetInstance().PreviousUserPassword = null;
-            Settings.Store();
+            var confirmationWindow = new ConfirmationWindow(Application.Current.Resources["log_out"].ToString(),
+                Application.Current.Resources["log_out_confirmation"].ToString());
+            confirmationWindow.ShowDialog();
 
-            // wyświetlenie okna logowania/rejestracji
-            var loginRegisterWindow = new LoginRegisterWindow(false);
-            loginRegisterWindow.Show();
+            if (confirmationWindow.DialogResult == true)
+            {
+                // usunięcie danych z zapisanych ustawień
+                Settings.GetInstance().PreviousUserEmail = null;
+                Settings.GetInstance().PreviousUserPassword = null;
+                Settings.Store();
 
-            Application.Current.Windows[0].Close();
+                // wyświetlenie okna logowania/rejestracji
+                var loginRegisterWindow = new LoginRegisterWindow(false);
+                loginRegisterWindow.Show();
+
+                Application.Current.Windows[0].Close();
+            }
         }
     }
 }

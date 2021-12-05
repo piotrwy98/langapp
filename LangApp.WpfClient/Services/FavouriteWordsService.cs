@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System;
+using LangApp.WpfClient.Views.Windows;
 
 namespace LangApp.WpfClient.Services
 {
@@ -46,7 +47,7 @@ namespace LangApp.WpfClient.Services
             return null;
         }
 
-        public static async Task<FavouriteWord> CreateFavouriteWordAsync(uint firstTranslationId, uint secondTranslationId)
+        public static async Task CreateFavouriteWordAsync(uint firstTranslationId, uint secondTranslationId)
         {
             var favouriteWord = new FavouriteWord()
             {
@@ -81,21 +82,28 @@ namespace LangApp.WpfClient.Services
                         }
                     }
                 }
-
-                return newFavouriteWord;
             }
-
-            return null;
         }
 
-        public static async Task<bool> RemoveFavouriteWordAsync(uint id)
+        public static async Task RemoveFavouriteWordAsync(uint id)
         {
+            var favouriteWord = _instace.FavouriteWords.First(x => x.Id == id);
+            string favouriteWordInfo = " " + favouriteWord.FirstTranslation.Value + " (" + favouriteWord.SecondTranslation.Value + ") ";
+
+            var confirmationWindow = new ConfirmationWindow(Application.Current.Resources["remove_from_favourites"].ToString(),
+                Application.Current.Resources["remove_from_favourites_confirmation_part1"].ToString() + favouriteWordInfo +
+                Application.Current.Resources["remove_from_favourites_confirmation_part2"].ToString());
+            confirmationWindow.ShowDialog();
+
+            if (confirmationWindow.DialogResult != true)
+            {
+                return;
+            }
+
             var response = await HttpClient.DeleteAsync("http://localhost:5000/favourite-words/" + id).ConfigureAwait(false);
 
             if(response.IsSuccessStatusCode)
             {
-                var favouriteWord = _instace.FavouriteWords.FirstOrDefault(x => x.Id == id);
-                
                 _ = Application.Current.Dispatcher.BeginInvoke(new Action(() => 
                 {
                     _instace.FavouriteWords.Remove(favouriteWord);
@@ -111,11 +119,7 @@ namespace LangApp.WpfClient.Services
                         }
                     }
                 }
-
-                return true;
             }
-
-            return false;
         }
     }
 }

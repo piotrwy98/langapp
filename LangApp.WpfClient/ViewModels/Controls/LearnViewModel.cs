@@ -2,6 +2,7 @@
 using LangApp.WpfClient.Models;
 using LangApp.WpfClient.Services;
 using LangApp.WpfClient.Views.Controls;
+using LangApp.WpfClient.Views.Windows;
 using Microsoft.CognitiveServices.Speech.Audio;
 using NAudio.Utils;
 using NAudio.Wave;
@@ -532,12 +533,30 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         private void Exit(object obj)
         {
-            if (!CanGoFurther)
-            {
-                QuestionCounter--;
-            }
+            ConfirmationWindow confirmationWindow;
 
-            Finish();
+            if (IsTest)
+            {
+                confirmationWindow = new ConfirmationWindow(Application.Current.Resources["finish"].ToString(),
+                    Application.Current.Resources["test_finish_confirmation"].ToString());
+            }
+            else
+            {
+                confirmationWindow = new ConfirmationWindow(Application.Current.Resources["finish"].ToString(),
+                    Application.Current.Resources["learn_finish_confirmation"].ToString());
+            }
+                
+            confirmationWindow.ShowDialog();
+
+            if (confirmationWindow.DialogResult == true)
+            {
+                if (!CanGoFurther)
+                {
+                    QuestionCounter--;
+                }
+
+                Finish();
+            }
         }
 
         private void Skip(object obj)
@@ -807,7 +826,13 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         private void PrepareClosedAnswers()
         {
-            var closedAnswersWords = new List<uint>() { TranslationPair.Key.Id };
+            // index kategorii wylosowanego słowa
+            var caregoryId = TranslationPair.Key.CategoryId;
+
+            // słowa należące do kategorii
+            var words = _dictionary.Dictionary.Where(x => x.Key.CategoryId == caregoryId).ToList();
+
+            var closedAnswersWordsIds = new List<uint>() { TranslationPair.Key.Id };
             var closedAnswers = new string[4];
             closedAnswers[0] = TranslationPair.Value.SecondLanguageTranslation.Value;
             KeyValuePair<Word, TranslationSet> translationPair;
@@ -816,11 +841,11 @@ namespace LangApp.WpfClient.ViewModels.Controls
             {
                 do
                 {
-                    int index = _random.Next(0, _dictionary.Dictionary.Count);
-                    translationPair = _dictionary.Dictionary.ElementAt(index);
-                } while (closedAnswersWords.Contains(translationPair.Key.Id));
+                    int index = _random.Next(0, words.Count);
+                    translationPair = words.ElementAt(index);
+                } while (closedAnswersWordsIds.Contains(translationPair.Key.Id));
 
-                closedAnswersWords.Add(translationPair.Key.Id);
+                closedAnswersWordsIds.Add(translationPair.Key.Id);
                 closedAnswers[i] = translationPair.Value.SecondLanguageTranslation.Value;
             }
 
