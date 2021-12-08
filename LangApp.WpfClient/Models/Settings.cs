@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace LangApp.WpfClient.Models
@@ -17,8 +19,12 @@ namespace LangApp.WpfClient.Models
         public string PreviousUserPassword { get; set; }
         public bool StartWithSystem { get; set; }
         public bool MinimizeToSystemTray { get; set; }
+        public ObservableCollection<Schedule> Schedules { get; set; }
 
-        private Settings() { }
+        private Settings()
+        {
+            Schedules = new ObservableCollection<Schedule>();
+        }
 
         public static Settings GetInstance()
         {
@@ -73,7 +79,6 @@ namespace LangApp.WpfClient.Models
                             using (var streamReader = new StreamReader(cryptoStream))
                             {
                                 var json = streamReader.ReadToEnd();
-
                                 return JsonConvert.DeserializeObject<Settings>(json);
                             }
                         }

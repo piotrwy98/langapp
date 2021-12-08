@@ -83,6 +83,12 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     ResultIcon = PackIconKind.FaceSadOutline;
                 }
             }
+
+            if(Configuration.GetInstance().CurrentSchedule != null)
+            {
+                Configuration.ArrangeSchedule(Configuration.GetInstance().CurrentSchedule);
+                Configuration.GetInstance().CurrentSchedule = null;
+            }
         }
 
         private void ShowDetails(object obj)

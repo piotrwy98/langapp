@@ -104,6 +104,7 @@
     <system:String x:Key="start_learning">Rozpocznij naukę</system:String>
     <system:String x:Key="start_test">Rozpocznij test</system:String>
     <system:String x:Key="category_progress">Postęp kategorii</system:String>
+    <system:String x:Key="save_configuration">Zapisz konfigurację</system:String>
 
     <system:String x:Key="type_of_summary">Rodzaj podsumowania</system:String>
     <system:String x:Key="number_of_games">Liczba rozgrywek</system:String>
@@ -113,11 +114,26 @@
     <system:String x:Key="start_date">Data rozpoczęcia</system:String>
     <system:String x:Key="mode">Tryb</system:String>
 
+    <system:String x:Key="application_settings">Ustawienia aplikacji</system:String>
     <system:String x:Key="interface_language">Język interfejsu</system:String>
     <system:String x:Key="log_out">Wyloguj się</system:String>
     <system:String x:Key="log_out_confirmation">Czy na pewno chcesz się wylogować?</system:String>
     <system:String x:Key="start_with_system">Uruchamiaj aplikację przy starcie systemu</system:String>
     <system:String x:Key="minimize_to_system_tray">Minimalizuj aplikację do paska zadań przy jej zamknięciu</system:String>
+    <system:String x:Key="notifications_settings">Ustawienia powiadomień</system:String>
+    <system:String x:Key="add_notification">Dodaj powiadomienie</system:String>
+    <system:String x:Key="minutes">minut</system:String>
+    <system:String x:Key="remove_notification">Usuń powiadomienie</system:String>
+    <system:String x:Key="remove_notification_confirmation">Czy na pewno chcesz usunąć to powiadomienie?</system:String>
+    <system:String x:Key="customize_settings">Konfiguruj ustawienia</system:String>
+    <system:String x:Key="time_to_learn">Czas na naukę!</system:String>
+    <system:String x:Key="time_to_test">Czas na test!</system:String>
+    <system:String x:Key="minute">minuta</system:String>
+    <system:String x:Key="hour">godzina</system:String>
+    <system:String x:Key="snooze">Uśpij</system:String>
+    <system:String x:Key="start">Start</system:String>
+    <system:String x:Key="dismiss">Zakończ</system:String>
+    <system:String x:Key="interval_colon">Interwał:</system:String>
 
     <system:String x:Key="correct_singular">Poprawna</system:String>
     <system:String x:Key="incorrect_singular">Niepoprawna</system:String>

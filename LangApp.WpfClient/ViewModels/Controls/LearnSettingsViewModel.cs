@@ -24,19 +24,24 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         public ICommand OpenClickCommand { get; }
 
-        public ICommand SpeakClickCommand { get; }
+        public ICommand PronunciationClickCommand { get; }
 
         public ICommand StartLearningCommand { get; }
         #endregion
 
         #region Properties
-        public SessionType SessionType { get; }
+        public SessionType? SessionType { get; }
 
-        public bool IsTest
+        public bool? IsTest
         {
             get
             {
-                return SessionType == SessionType.TEST;
+                if(SessionType == null)
+                {
+                    return null;
+                }
+
+                return SessionType == Enums.SessionType.TEST;
             }
         }
 
@@ -46,53 +51,13 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         public List<ObjectToChoose> Categories { get; }
 
-        private bool _isClosedChosen;
-        public bool IsClosedChosen
-        {
-            get
-            {
-                return _isClosedChosen;
-            }
-            set
-            {
-                _isClosedChosen = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _isOpenChosen;
-        public bool IsOpenChosen
-        {
-            get
-            {
-                return _isOpenChosen;
-            }
-            set
-            {
-                _isOpenChosen = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _isSpeakChosen;
-        public bool IsSpeakChosen
-        {
-            get
-            {
-                return _isSpeakChosen;
-            }
-            set
-            {
-                _isSpeakChosen = value;
-                OnPropertyChanged();
-            }
-        }
+        public SessionSettings SessionSettings { get; }
 
         public bool CanStartLearning
         {
             get
             {
-                return (IsClosedChosen || IsOpenChosen || IsSpeakChosen) &&
+                return (SessionSettings.IsClosedChosen || SessionSettings.IsOpenChosen || SessionSettings.IsPronunciationChosen) &&
                     Categories.Count(x => x.IsChosen) > 0;
             }
         }
@@ -100,7 +65,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         public Func<double, string> GaugeLabelFormatter { get; }
         #endregion
 
-        public LearnSettingsViewModel(SessionType sessionType)
+        public LearnSettingsViewModel(SessionType? sessionType, SessionSettings sessionSettings)
         {
             SessionType = sessionType;
             LanguageClickCommand = new RelayCommand(LanguageClick);
@@ -108,7 +73,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             CategoryClickCommand = new RelayCommand(CategoryClick);
             ClosedClickCommand = new RelayCommand(ClosedClick);
             OpenClickCommand = new RelayCommand(OpenClick);
-            SpeakClickCommand = new RelayCommand(SpeakClick);
+            PronunciationClickCommand = new RelayCommand(PronunciationClick);
             StartLearningCommand = new RelayCommand(StartLearning);
 
             uint id = Settings.GetInstance().InterfaceLanguageId;
@@ -123,10 +88,8 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 });
             }
 
-            Languages[0].IsChosen = true;
-
             QuestionNumbers = new List<ObjectToChoose>();
-            QuestionNumbers.Add(new ObjectToChoose() { Object = (uint) 5, IsChosen = true });
+            QuestionNumbers.Add(new ObjectToChoose() { Object = (uint) 5 });
             QuestionNumbers.Add(new ObjectToChoose() { Object = (uint) 10 });
             QuestionNumbers.Add(new ObjectToChoose() { Object = (uint) 20 });
 
@@ -141,24 +104,43 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 });
             }
 
+            if (sessionSettings == null)
+            {
+                SessionSettings = new SessionSettings();
+                Languages[0].IsChosen = true;
+                QuestionNumbers[0].IsChosen = true;
+            }
+            else
+            {
+                SessionSettings = sessionSettings;
+
+                Languages.First(x => (x.Object as LanguageName).LanguageId == SessionSettings.LanguageId).IsChosen = true;
+                QuestionNumbers.First(x => (uint) x.Object == SessionSettings.NumberOfQuestions).IsChosen = true;
+
+                foreach(var category in Categories)
+                {
+                    category.IsChosen = SessionSettings.CategoriesIds.Contains((category.Object as CategoryName).CategoryId);
+                }
+            }
+
             GaugeLabelFormatter = value => value.ToString("0.##") + " %";
         }
 
         private void ClosedClick(object obj)
         {
-            IsClosedChosen = !IsClosedChosen;
+            SessionSettings.IsClosedChosen = !SessionSettings.IsClosedChosen;
             OnPropertyChanged("CanStartLearning");
         }
 
         private void OpenClick(object obj)
         {
-            IsOpenChosen = !IsOpenChosen;
+            SessionSettings.IsOpenChosen = !SessionSettings.IsOpenChosen;
             OnPropertyChanged("CanStartLearning");
         }
 
-        private void SpeakClick(object obj)
+        private void PronunciationClick(object obj)
         {
-            IsSpeakChosen = !IsSpeakChosen;
+            SessionSettings.IsPronunciationChosen = !SessionSettings.IsPronunciationChosen;
             OnPropertyChanged("CanStartLearning");
         }
 
@@ -202,39 +184,50 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         public async void StartLearning(object obj = null)
         {
-            var language = (Languages.First(x => x.IsChosen).Object as LanguageName).Language;
-            var numberOfQuestions = (uint) QuestionNumbers.First(x => x.IsChosen).Object;
+            SessionSettings.LanguageId = (Languages.First(x => x.IsChosen).Object as LanguageName).LanguageId;
+            SessionSettings.NumberOfQuestions = (uint)QuestionNumbers.First(x => x.IsChosen).Object;
+            SessionSettings.CategoriesIds.Clear();
 
             List<uint> categoriesIds = new List<uint>();
-            foreach(var category in Categories)
+            foreach (var category in Categories)
             {
-                if(category.IsChosen)
+                if (category.IsChosen)
                 {
-                    categoriesIds.Add((category.Object as CategoryName).Category.Id);
+                    SessionSettings.CategoriesIds.Add((category.Object as CategoryName).Category.Id);
                 }
             }
 
-            // utworzenie sesji
-            var session = await Task.Run(() => SessionsService.CreateSessionAsync(Settings.GetInstance().InterfaceLanguageId, language.Id, SessionType, numberOfQuestions));
-            
-            if(session != null)
+            if (SessionType != null)
             {
-                // dodanie wybranych kategori do utworzonej sesji
-                foreach(var id in categoriesIds)
-                {
-                    await Task.Run(() => SelectedCategoriesService.CreateSelectedCategoryAsync(session.Id, id));
-                }
+                // utworzenie sesji
+                var session = await Task.Run(() => SessionsService.CreateSessionAsync(Settings.GetInstance().InterfaceLanguageId, SessionSettings.LanguageId, SessionType.Value, SessionSettings.NumberOfQuestions));
 
-                if (SessionType == SessionType.TEST)
+                if (session != null)
                 {
-                    Configuration.GetInstance().TestControl = new LearnControl(session, language, categoriesIds, _isClosedChosen, _isOpenChosen, _isSpeakChosen);
-                    Configuration.GetInstance().CurrentView = Configuration.GetInstance().TestControl;
+                    // dodanie wybranych kategori do utworzonej sesji
+                    foreach (var id in categoriesIds)
+                    {
+                        await Task.Run(() => SelectedCategoriesService.CreateSelectedCategoryAsync(session.Id, id));
+                    }
+
+                    if (SessionType == Enums.SessionType.TEST)
+                    {
+                        Configuration.GetInstance().TestControl = new LearnControl(session, SessionSettings);
+                        Configuration.GetInstance().CurrentView = Configuration.GetInstance().TestControl;
+                    }
+                    else
+                    {
+                        Configuration.GetInstance().LearnControl = new LearnControl(session, SessionSettings);
+                        Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnControl;
+                    }
                 }
-                else
-                {
-                    Configuration.GetInstance().LearnControl = new LearnControl(session, language, categoriesIds, _isClosedChosen, _isOpenChosen, _isSpeakChosen);
-                    Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnControl;
-                }
+            }
+            else
+            {
+                (Configuration.GetInstance().SettingsControl.DataContext as SettingsViewModel)
+                    .CustomizingSchedule.SessionSettings = SessionSettings;
+                Settings.Store();
+                Configuration.GetInstance().CurrentView = Configuration.GetInstance().SettingsControl;
             }
         }
     }

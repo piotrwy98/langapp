@@ -1,10 +1,16 @@
 ﻿using LangApp.WpfClient.Models;
+using LangApp.WpfClient.Services;
 using LangApp.WpfClient.Views.Controls;
+using Microsoft.Toolkit.Uwp.Notifications;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.WpfClient.ViewModels.Windows
 {
-    public class MainViewModel : NotifyPropertyChanged
+    public class MainViewModel
     {
         #region Commands
         public ICommand MainScreenCheckedCommand { get; }
@@ -36,7 +42,63 @@ namespace LangApp.WpfClient.ViewModels.Windows
             FavouriteWordsCheckedCommand = new RelayCommand(FavouriteWordsChecked);
             SettingsCheckedCommand = new RelayCommand(SettingsChecked);
 
+            PrepareNotifications();
             MainScreenChecked();
+        }
+
+        private void PrepareNotifications()
+        {
+            ToastNotificationManagerCompat.OnActivated += async toastArgs =>
+            {
+                ToastArguments args = ToastArguments.Parse(toastArgs.Argument);
+                var schedule = Settings.GetInstance().Schedules.FirstOrDefault(x => x.Id.ToString() == args["id"]);
+
+                if(schedule != null)
+                {
+                    // utworzenie sesji
+                    var session = await Task.Run(() => SessionsService.CreateSessionAsync(Settings.GetInstance().InterfaceLanguageId, schedule.SessionSettings.LanguageId, schedule.SessionType, schedule.SessionSettings.NumberOfQuestions));
+
+                    if (session != null)
+                    {
+                        // dodanie wybranych kategori do utworzonej sesji
+                        foreach (var id in schedule.SessionSettings.CategoriesIds)
+                        {
+                            await Task.Run(() => SelectedCategoriesService.CreateSelectedCategoryAsync(session.Id, id));
+                        }
+
+                        // zapisanie w konfiguracji
+                        Configuration.CurrentSchedule = schedule;
+
+                        Application.Current.Dispatcher.Invoke(delegate
+                        {
+                            if (schedule.SessionType == SessionType.TEST)
+                            {
+                                Configuration.GetInstance().TestControl = new LearnControl(session, schedule.SessionSettings);
+                                Configuration.GetInstance().CurrentView = Configuration.GetInstance().TestControl;
+                                Configuration.GetInstance().IsTestChecked = true;
+                            }
+                            else
+                            {
+                                Configuration.GetInstance().LearnControl = new LearnControl(session, schedule.SessionSettings);
+                                Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnControl;
+                                Configuration.GetInstance().IsLearnChecked = true;
+                            }
+
+                            Application.Current.Windows[0].Show();
+                            Application.Current.Windows[0].WindowState = WindowState.Normal;
+                        });
+                    }
+                }
+            };
+
+            // uruchomienie aktywnych powiadomień
+            foreach (var schedule in Settings.GetInstance().Schedules)
+            {
+                if (schedule.IsActive && schedule.UserId == Configuration.User.Id)
+                {
+                    Configuration.ArrangeSchedule(schedule);
+                }
+            }
         }
 
         private void MainScreenChecked(object obj = null)

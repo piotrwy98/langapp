@@ -42,6 +42,8 @@ namespace LangApp.WpfClient.ViewModels.Controls
         #region Properties
         public bool IsTest { get; }
 
+        public SessionSettings SessionSettings { get; }
+
         private KeyValuePair<Word, TranslationSet> _translationPair;
         public KeyValuePair<Word, TranslationSet> TranslationPair
         {
@@ -225,8 +227,6 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 OnPropertyChanged("AreAnswersEnabled");
             }
         }
-
-        public uint NumberOfQuestions { get; }
 
         private int _questionCounter;
         public int QuestionCounter
@@ -421,10 +421,6 @@ namespace LangApp.WpfClient.ViewModels.Controls
         #region Variables
         private Session _session;
         private Language _language;
-        private List<uint> _categoriesIds;
-        private bool _isClosedChosen;
-        private bool _isOpenChosen;
-        private bool _isSpeakChosen;
 
         private BilingualDictionary _dictionary;
         private Random _random;
@@ -448,16 +444,12 @@ namespace LangApp.WpfClient.ViewModels.Controls
         private double _recordPlayValueToAdd;
         #endregion
 
-        public LearnViewModel(Session session, Language language, List<uint> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen)
+        public LearnViewModel(Session session, SessionSettings sessionSettings)
         {
             _session = session;
+            _language = LanguagesService.GetInstance().Languages.First(x => x.Id == sessionSettings.LanguageId);
             IsTest = session.Type == SessionType.TEST;
-            _language = language;
-            _categoriesIds = categoriesIds;
-            _isClosedChosen = isClosedChosen;
-            _isOpenChosen = isOpenChosen;
-            _isSpeakChosen = isSpeakChosen;
-            NumberOfQuestions = session.QuestionsNumber;
+            SessionSettings = sessionSettings;
 
             _dictionary = TranslationsService.GetInstance().Dictionaries.First(x => 
                 x.FirstLanguage.Id == LanguagesService.GetInstance().Languages[0].Id &&
@@ -667,7 +659,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         private void GetNextQuestion(bool isSkipped = false)
         {
-            if(QuestionCounter < NumberOfQuestions)
+            if(QuestionCounter < SessionSettings.NumberOfQuestions)
             {
                 /// przygotowanie interfejsu
                 if(!isSkipped)
@@ -717,10 +709,10 @@ namespace LangApp.WpfClient.ViewModels.Controls
         private void SetTranslationPair()
         {
             // index wylosowanej kategorii
-            var caregoryIndex = _random.Next(0, _categoriesIds.Count);
+            var caregoryIndex = _random.Next(0, SessionSettings.CategoriesIds.Count);
 
             // słowa należących do wylosowanej kategorii
-            var words = _dictionary.Dictionary.Where(x => x.Key.CategoryId == _categoriesIds[caregoryIndex]).ToList();
+            var words = _dictionary.Dictionary.Where(x => x.Key.CategoryId == SessionSettings.CategoriesIds[caregoryIndex]).ToList();
 
             // index wylosowanego słowa
             int wordIndex;
@@ -766,12 +758,12 @@ namespace LangApp.WpfClient.ViewModels.Controls
         {
             int questionTypeIndex;
 
-            if (_isClosedChosen && _isOpenChosen && _isSpeakChosen)
+            if (SessionSettings.IsClosedChosen && SessionSettings.IsOpenChosen && SessionSettings.IsPronunciationChosen)
             {
                 questionTypeIndex = _random.Next(0, 3);
                 QuestionType = (QuestionType)questionTypeIndex;
             }
-            else if (_isClosedChosen && _isOpenChosen)
+            else if (SessionSettings.IsClosedChosen && SessionSettings.IsOpenChosen)
             {
                 questionTypeIndex = _random.Next(0, 2);
 
@@ -784,7 +776,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     QuestionType = QuestionType.OPEN;
                 }
             }
-            else if (_isClosedChosen && _isSpeakChosen)
+            else if (SessionSettings.IsClosedChosen && SessionSettings.IsPronunciationChosen)
             {
                 questionTypeIndex = _random.Next(0, 2);
 
@@ -797,7 +789,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     QuestionType = QuestionType.PRONUNCIATION;
                 }
             }
-            else if (_isOpenChosen && _isSpeakChosen)
+            else if (SessionSettings.IsOpenChosen && SessionSettings.IsPronunciationChosen)
             {
                 questionTypeIndex = _random.Next(0, 2);
 
@@ -810,11 +802,11 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     QuestionType = QuestionType.PRONUNCIATION;
                 }
             }
-            else if (_isClosedChosen)
+            else if (SessionSettings.IsClosedChosen)
             {
                 QuestionType = QuestionType.CLOSED;
             }
-            else if (_isOpenChosen)
+            else if (SessionSettings.IsOpenChosen)
             {
                 QuestionType = QuestionType.OPEN;
             }

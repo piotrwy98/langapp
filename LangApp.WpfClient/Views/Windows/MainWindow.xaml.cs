@@ -1,12 +1,15 @@
 ﻿using LangApp.WpfClient.Models;
 using LangApp.WpfClient.ViewModels.Windows;
+using Microsoft.Toolkit.Uwp.Notifications;
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Windows.UI.Notifications;
 
 namespace LangApp.WpfClient.Views.Windows
 {
@@ -15,12 +18,13 @@ namespace LangApp.WpfClient.Views.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
+        private NotifyIcon _notifyIcon;
+
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
-
             PrepareSystemTray();
+            DataContext = new MainViewModel();
         }
 
         private void PrepareSystemTray()
@@ -28,10 +32,11 @@ namespace LangApp.WpfClient.Views.Windows
             Stream iconStream = Assembly.GetExecutingAssembly()
                 .GetManifestResourceStream("LangApp.WpfClient.Resources.icon.ico");
 
-            NotifyIcon notifyIcon = new NotifyIcon();
-            notifyIcon.Icon = new Icon(iconStream);
-            notifyIcon.Visible = true;
-            notifyIcon.DoubleClick += delegate (object sender, EventArgs args)
+            _notifyIcon = new NotifyIcon();
+            _notifyIcon.Icon = new Icon(iconStream);
+            _notifyIcon.Visible = true;
+
+            _notifyIcon.DoubleClick += delegate (object sender, EventArgs args)
             {
                 Show();
                 WindowState = WindowState.Normal;
@@ -50,9 +55,9 @@ namespace LangApp.WpfClient.Views.Windows
                 Close();
             };
 
-            notifyIcon.ContextMenu = new ContextMenu();
-            notifyIcon.ContextMenu.MenuItems.Add(openMenuItem);
-            notifyIcon.ContextMenu.MenuItems.Add(closeMenuItem);
+            _notifyIcon.ContextMenu = new ContextMenu();
+            _notifyIcon.ContextMenu.MenuItems.Add(openMenuItem);
+            _notifyIcon.ContextMenu.MenuItems.Add(closeMenuItem);
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -78,6 +83,25 @@ namespace LangApp.WpfClient.Views.Windows
         private void MinimizeWindow_Button_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            // usunięcie ikony w pasku zadań
+            _notifyIcon.Visible = false;
+            _notifyIcon.Dispose();
+
+            // usunięcie aktualnych notifykacji
+            ToastNotificationManagerCompat.History.Clear();
+
+            // usunięcie nadchodzących notyfikacji
+            var notifier = ToastNotificationManagerCompat.CreateToastNotifier();
+            var scheduledToasts = notifier.GetScheduledToastNotifications();
+
+            foreach(var toast in scheduledToasts)
+            {
+                notifier.RemoveFromSchedule(toast);
+            }
         }
     }
 }

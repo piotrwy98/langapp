@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         Height="650" Width="1100" MinHeight="650" MinWidth="1000" WindowStyle="None" ResizeMode="CanResizeWithGrip"
         AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen"
-        MouseDown="Window_MouseDown" Title="LangApp" RenderOptions.BitmapScalingMode="HighQuality">
+        MouseDown="Window_MouseDown" Title="LangApp" RenderOptions.BitmapScalingMode="HighQuality"
+        Closing="Window_Closing">
     <Window.Resources>
         <Style x:Key="MenuButton" TargetType="RadioButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
             <Setter Property="Template">
@@ -80,14 +81,14 @@
                     </StackPanel>
                 </RadioButton>
 
-                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding LearnCheckedCommand}">
+                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding LearnCheckedCommand}" IsChecked="{Binding Configuration.IsLearnChecked}">
                     <StackPanel Orientation="Horizontal">
                         <md:PackIcon Kind="LearnOutline"/>
                         <TextBlock Text="{DynamicResource learn}"/>
                     </StackPanel>
                 </RadioButton>
 
-                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding TestCheckedCommand}" IsEnabled="True">
+                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding TestCheckedCommand}" IsChecked="{Binding Configuration.IsTestChecked}" IsEnabled="True">
                     <StackPanel Orientation="Horizontal">
                         <md:PackIcon Kind="CheckboxMarkedCircleOutline"/>
                         <TextBlock Text="{DynamicResource test}"/>

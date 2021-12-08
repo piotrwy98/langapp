@@ -4,35 +4,140 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:LangApp.WpfClient.Views.Controls"
+             xmlns:converters="clr-namespace:LangApp.WpfClient.Converters"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800" Foreground="{StaticResource PrimaryForegroundColor}"
              FontSize="16">
-    <StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{DynamicResource interface_language}" VerticalAlignment="Center" Margin="0 0 10 0"/>
-            <ComboBox ItemsSource="{Binding InterfaceLanguages}" SelectedItem="{Binding SelectedInterfaceLanguage}" Width="200">
-                <ComboBox.ItemTemplate>
+    <UserControl.Resources>
+        <converters:SessionTypeCheckedConverter x:Key="SessionTypeCheckedConverter"/>
+    </UserControl.Resources>
+    
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="14 0">
+        <StackPanel Margin="0 0 10 0">
+            <TextBlock Text="{DynamicResource application_settings}" FontSize="22"/>
+            <Separator/>
+
+            <StackPanel Orientation="Horizontal" Margin="0 10">
+                <TextBlock Text="{DynamicResource interface_language}" VerticalAlignment="Center" Margin="0 0 10 0"/>
+                <ComboBox ItemsSource="{Binding InterfaceLanguages}" SelectedItem="{Binding SelectedInterfaceLanguage}" Width="200">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding Language.ImagePath}" Height="28" Margin="5 0 10 0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <TextBlock Text="{Binding Value}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0 10">
+                <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding StartWithSystem}"/>
+                <TextBlock Text="{DynamicResource start_with_system}" Margin="10 0 0 0"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0 10">
+                <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding MinimizeToSystemTray}"/>
+                <TextBlock Text="{DynamicResource minimize_to_system_tray}" Margin="10 0 0 0"/>
+            </StackPanel>
+            
+            <Button Content="{DynamicResource log_out}" Width="130" Command="{Binding LogOutCommand}" Background="DarkRed" BorderBrush="DarkRed" HorizontalAlignment="Left" Margin="0 10"/>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{DynamicResource notifications_settings}" FontSize="22"/>
+                <md:PackIcon Kind="Plus" Cursor="Hand" ToolTip="{DynamicResource add_notification}" Background="Transparent" Foreground="LawnGreen" Width="30" Height="30" VerticalAlignment="Center" Margin="3 0 0 0">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding AddNotificationCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </md:PackIcon>
+            </StackPanel>
+            <Separator/>
+
+            <ItemsControl ItemsSource="{Binding Settings.Schedules}" Margin="0 5 0 0">
+                <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding Language.ImagePath}" Height="28" Margin="5 0 10 0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <TextBlock Text="{Binding Value}" VerticalAlignment="Center"/>
-                        </StackPanel>
+                        <Border BorderThickness="2" BorderBrush="{StaticResource SecondaryForegroundColor}" Margin="0 5" CornerRadius="20" Background="#B0152131">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundColor}"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="FontSize" Value="16"/>
+                                    </Style>
+                                </Grid.Resources>
+
+                                <ToggleButton Grid.Column="0" Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding IsActive}" Command="{Binding DataContext.IsActiveClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Margin="10 0 0 0"/>
+
+                                <StackPanel Grid.Column="1" Margin="20 10">
+                                    <StackPanel Orientation="Horizontal" Margin="0 5">
+                                        <TextBlock Text="{DynamicResource language_colon}" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding SessionSettings.LanguageInfo, StringFormat=' {0}'}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal"  Margin="0 5">
+                                        <TextBlock Text="{DynamicResource number_of_questions_colon}" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding SessionSettings.NumberOfQuestions, StringFormat=' {0}'}"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" Margin="0 10">
+                                    <StackPanel Orientation="Horizontal" Margin="0 5">
+                                        <TextBlock Text="{DynamicResource categories_colon}" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding SessionSettings.CategoriesInfo, StringFormat=' {0}'}" TextWrapping="Wrap"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
+                                        <TextBlock Text="{DynamicResource mode_colon}" FontWeight="Bold"/>
+                                        <RadioButton Content="{DynamicResource learn}" IsChecked="{Binding SessionType, Converter={StaticResource SessionTypeCheckedConverter}, ConverterParameter=0}" Checked="Mode_RadioButton_Checked" Margin="10 0"/>
+                                        <RadioButton Content="{DynamicResource test}" IsChecked="{Binding SessionType, Converter={StaticResource SessionTypeCheckedConverter}, ConverterParameter=1}" Checked="Mode_RadioButton_Checked"/>
+
+                                        <StackPanel Orientation="Horizontal" Margin="20 2 0 0">
+                                            <TextBlock Text="{DynamicResource interval_colon}" FontWeight="Bold"/>
+                                            <RepeatButton Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="20" Width="20" Margin="10 0" Command="{Binding DataContext.DecrementIntervalCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" IsEnabled="{Binding CanIntervalBeDecremented}">
+                                                <md:PackIcon Kind="Minus" Height="16" Width="16"/>
+                                            </RepeatButton>
+                                            <TextBlock Text="{Binding IntervalMinutes}" FontSize="20" VerticalAlignment="Center" FontWeight="Bold"/>
+                                            <RepeatButton Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="20" Width="20" Margin="10 0" Command="{Binding DataContext.IncrementIntervalCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" IsEnabled="{Binding CanIntervalBeIncremented}">
+                                                <md:PackIcon Kind="Plus" Height="16" Width="16"/>
+                                            </RepeatButton>
+                                            <TextBlock Text="{DynamicResource minutes}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="3" Orientation="Horizontal">
+                                    <md:PackIcon Kind="Edit" Cursor="Hand" ToolTip="{DynamicResource customize_settings}" Background="Transparent" Foreground="Orange" Width="22" Height="22" VerticalAlignment="Center" Margin="0 0 10 0">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.CustomizeNotificationSettingsCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </md:PackIcon>
+                                    
+                                    <md:PackIcon Kind="Remove" Cursor="Hand" ToolTip="{DynamicResource remove_notification}" Background="Transparent" Foreground="Red" Width="26" Height="26" VerticalAlignment="Center" Margin="0 0 10 0">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.RemoveNotificationCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </md:PackIcon>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
                     </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
-
-        <Button Content="{DynamicResource log_out}" Width="130" Command="{Binding LogOutCommand}" Background="DarkRed" BorderBrush="DarkRed" HorizontalAlignment="Left" Margin="0 10"/>
-
-        <StackPanel Orientation="Horizontal">
-            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding StartWithSystem}"/>
-            <TextBlock Text="{DynamicResource start_with_system}" Margin="10 0 0 0"/>
-        </StackPanel>
-
-        <StackPanel Orientation="Horizontal">
-            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="{Binding MinimizeToSystemTray}"/>
-            <TextBlock Text="{DynamicResource minimize_to_system_tray}" Margin="10 0 0 0"/>
-        </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
 </UserControl>

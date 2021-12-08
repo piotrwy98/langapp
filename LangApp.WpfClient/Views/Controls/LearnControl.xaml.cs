@@ -1,6 +1,6 @@
 ﻿using LangApp.Shared.Models;
+using LangApp.WpfClient.Models;
 using LangApp.WpfClient.ViewModels.Controls;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,10 +12,10 @@ namespace LangApp.WpfClient.Views.Controls
     /// </summary>
     public partial class LearnControl : UserControl
     {
-        public LearnControl(Session session, Language language, List<uint> categoriesIds, bool isClosedChosen, bool isOpenChosen, bool isSpeakChosen)
+        public LearnControl(Session session, SessionSettings sessionSettings)
         {
             InitializeComponent();
-            DataContext = new LearnViewModel(session, language, categoriesIds, isClosedChosen, isOpenChosen, isSpeakChosen);
+            DataContext = new LearnViewModel(session, sessionSettings);
         }
 
         private void TextBox_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)

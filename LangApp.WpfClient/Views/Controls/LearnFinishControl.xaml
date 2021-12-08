@@ -39,7 +39,7 @@
                 <TextBlock Text="/"/>
                 <TextBlock Text="{Binding NumberOfQuestions, StringFormat='{}{0} '}"/>
                 <TextBlock Text="{DynamicResource tasks_in}"/>
-                <TextBlock Text="{Binding Timer, StringFormat=' mm\\:ss\\.fff'}"/>
+                <TextBlock Text="{Binding Timer, StringFormat=' {0:mm\\:ss\\.fff}'}"/>
             </WrapPanel>
 
             <WrapPanel HorizontalAlignment="Center" Visibility="{Binding IsTest, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -49,7 +49,7 @@
                 <TextBlock Text="{DynamicResource from}"/>
                 <TextBlock Text="{Binding NumberOfQuestions, StringFormat=' {0}' }"/>
                 <TextBlock Text="{DynamicResource tasks_in}"/>
-                <TextBlock Text="{Binding Timer, StringFormat=' mm\\:ss\\.fff'}"/>
+                <TextBlock Text="{Binding Timer, StringFormat=' {0:mm\\:ss\\.fff}'}"/>
             </WrapPanel>
 
             <WrapPanel Margin="0 40 0 20">

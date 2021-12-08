@@ -30,7 +30,7 @@
                     <TextBlock Text="{DynamicResource question}"/>
                     <TextBlock Text="{Binding QuestionCounter, StringFormat=' {0}'}"/>
                     <TextBlock Text="/"/>
-                    <TextBlock Text="{Binding NumberOfQuestions}"/>
+                    <TextBlock Text="{Binding SessionSettings.NumberOfQuestions}"/>
                 </StackPanel>
 
                 <TextBlock Text="{Binding Timer}" HorizontalAlignment="Right"/>

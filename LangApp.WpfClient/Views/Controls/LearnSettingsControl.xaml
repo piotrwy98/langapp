@@ -121,7 +121,7 @@
                             <Style TargetType="Border">
                                 <Setter Property="BorderBrush" Value="Transparent"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsClosedChosen}" Value="True">
+                                    <DataTrigger Binding="{Binding SessionSettings.IsClosedChosen}" Value="True">
                                         <Setter Property="BorderBrush" Value="LawnGreen"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -159,7 +159,7 @@
                             <Style TargetType="Border">
                                 <Setter Property="BorderBrush" Value="Transparent"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsOpenChosen}" Value="True">
+                                    <DataTrigger Binding="{Binding SessionSettings.IsOpenChosen}" Value="True">
                                         <Setter Property="BorderBrush" Value="LawnGreen"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -183,7 +183,7 @@
                             <Style TargetType="Border">
                                 <Setter Property="BorderBrush" Value="Transparent"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsSpeakChosen}" Value="True">
+                                    <DataTrigger Binding="{Binding SessionSettings.IsPronunciationChosen}" Value="True">
                                         <Setter Property="BorderBrush" Value="LawnGreen"/>
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -192,7 +192,7 @@
 
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseLeftButtonDown">
-                                <i:InvokeCommandAction Command="{Binding SpeakClickCommand}"/>
+                                <i:InvokeCommandAction Command="{Binding PronunciationClickCommand}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
 
@@ -272,6 +272,9 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsTest}" Value="True">
                             <Setter Property="Content" Value="{DynamicResource start_test}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsTest}" Value="{x:Null}">
+                            <Setter Property="Content" Value="{DynamicResource save_configuration}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
