@@ -15,9 +15,9 @@ namespace LangApp.WebApi.Api.Repositories.Db
             _context = langAppContext;
         }
 
-        public async Task<IEnumerable<Answer>> GetAnswersAsync()
+        public async Task<IEnumerable<Answer>> GetAnswersAsync(uint userId)
         {
-            return await Task.FromResult(_context.Answers);
+            return await Task.FromResult(_context.Answers.Where(x => x.Session.UserId == userId));
         }
 
         public async Task<Answer> GetAnswerAsync(uint id)
@@ -27,7 +27,7 @@ namespace LangApp.WebApi.Api.Repositories.Db
 
         public async Task<Answer> CreateAnswerAsync(Answer answer)
         {
-            var entity = _context.Answers.Add(answer);
+            var entity = await _context.Answers.AddAsync(answer);
             await _context.SaveChangesAsync();
 
             return await GetAnswerAsync(entity.Entity.Id);

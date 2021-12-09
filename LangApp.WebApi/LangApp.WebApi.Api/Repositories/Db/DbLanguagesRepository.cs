@@ -29,7 +29,7 @@ namespace LangApp.WebApi.Api.Repositories.Db
 
         public async Task<LanguageName> CreateLanguageAsync(LanguageName language)
         {
-            var entity = _context.LanguageNames.Add(language);
+            var entity = await _context.LanguageNames.AddAsync(language);
             await _context.SaveChangesAsync();
 
             return await GetLanguageAsync(entity.Entity.Id);

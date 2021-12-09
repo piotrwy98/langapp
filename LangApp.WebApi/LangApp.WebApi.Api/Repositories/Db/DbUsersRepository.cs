@@ -37,7 +37,7 @@ namespace LangApp.WebApi.Api.Repositories.Db
 
         public async Task<User> CreateUserAsync(User user)
         {
-            var entity = _context.Users.Add(user);
+            var entity = await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
 
             return await GetUserByIdAsync(entity.Entity.Id);

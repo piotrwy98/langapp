@@ -28,7 +28,7 @@ namespace LangApp.WebApi.Api.Repositories.Db
 
         public async Task<PartOfSpeechName> CreatePartOfSpeechAsync(PartOfSpeechName partOfSpeech)
         {
-            var entity = _context.PartOfSpeechNames.Add(partOfSpeech);
+            var entity = await _context.PartOfSpeechNames.AddAsync(partOfSpeech);
             await _context.SaveChangesAsync();
 
             return await GetPartOfSpeechAsync(entity.Entity.Id);

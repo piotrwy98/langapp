@@ -35,7 +35,7 @@ namespace LangApp.WebApi.Api.Repositories.Local
 
         public async Task<Translation> CreateTranslationAsync(Translation translation)
         {
-            var entity = _context.Translations.Add(translation);
+            var entity = await _context.Translations.AddAsync(translation);
             await _context.SaveChangesAsync();
 
             return await GetTranslationAsync(entity.Entity.Id);

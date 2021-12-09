@@ -3,6 +3,7 @@ using LangApp.WebApi.Api.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace LangApp.WebApi.Api.Controllers
@@ -22,7 +23,8 @@ namespace LangApp.WebApi.Api.Controllers
         [Authorize]
         public async Task<IEnumerable<Session>> GetSessionsAsync()
         {
-            return await _sessionsRepository.GetSessionsAsync();
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return await _sessionsRepository.GetSessionsAsync(uint.Parse(userId));
         }
 
         [HttpGet("{id}")]
@@ -30,9 +32,17 @@ namespace LangApp.WebApi.Api.Controllers
         public async Task<ActionResult<Session>> GetSessionAsync(uint id)
         {
             var session = await _sessionsRepository.GetSessionAsync(id);
+
             if (session == null)
             {
                 return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (session.UserId != uint.Parse(userId))
+            {
+                return Unauthorized();
             }
 
             return session;
@@ -42,6 +52,13 @@ namespace LangApp.WebApi.Api.Controllers
         [Authorize]
         public async Task<ActionResult<Session>> CreateSessionAsync([FromBody] Session session)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (session.UserId != uint.Parse(userId))
+            {
+                return Unauthorized();
+            }
+
             return await _sessionsRepository.CreateSessionAsync(session);
         }
 

@@ -29,7 +29,7 @@ namespace LangApp.WebApi.Api.Repositories.Local
 
         public async Task<CategoryName> CreateCategoryAsync(CategoryName category)
         {
-            var entity = _context.CategoryNames.Add(category);
+            var entity = await _context.CategoryNames.AddAsync(category);
             await _context.SaveChangesAsync();
 
             return await GetCategoryAsync(entity.Entity.Id);

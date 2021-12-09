@@ -1,4 +1,5 @@
-﻿using LangApp.Shared.Models.Controllers;
+﻿using LangApp.Shared.Models;
+using LangApp.Shared.Models.Controllers;
 using LangApp.WebApi.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -34,7 +35,7 @@ namespace LangApp.WebApi.Api.Controllers
             {
                 if (BCrypt.Net.BCrypt.Verify(data.Password, user.Password))
                 {
-                    string token = await GenerateToken(user.Email, user.Role);
+                    string token = await GenerateToken(user);
                     user.Password = data.Password;
 
                     var userWithToken = new UserWithToken()
@@ -50,19 +51,16 @@ namespace LangApp.WebApi.Api.Controllers
             return Unauthorized();
         }
 
-        private Task<string> GenerateToken(string email, UserRole userRole)
+        private Task<string> GenerateToken(User user)
         {
             var claims = new Dictionary<string, object>();
-            claims.Add(ClaimTypes.Role, userRole.ToString());
+            claims.Add(ClaimTypes.Role, user.Role);
+            claims.Add(ClaimTypes.NameIdentifier, user.Id.ToString());
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["JWTSettings:SecretKey"]);
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                        new Claim(ClaimTypes.Email, email)
-                }),
                 Expires = DateTime.UtcNow.AddMonths(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Claims = claims

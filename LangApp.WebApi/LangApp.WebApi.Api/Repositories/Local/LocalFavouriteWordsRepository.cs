@@ -29,12 +29,7 @@ namespace LangApp.WebApi.Api.Repositories.Local
             }
         };
 
-        public async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsAsync()
-        {
-            return await Task.FromResult(_favouriteWords);
-        }
-
-        public async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsOfUserAsync(uint userId)
+        public async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsAsync(uint userId)
         {
             return await Task.FromResult(_favouriteWords.FindAll(x => x.UserId == userId));
         }

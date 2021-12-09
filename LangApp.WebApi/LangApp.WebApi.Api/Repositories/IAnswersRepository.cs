@@ -6,7 +6,7 @@ namespace LangApp.WebApi.Api.Repositories
 {
     public interface IAnswersRepository
     {
-        Task<IEnumerable<Answer>> GetAnswersAsync();
+        Task<IEnumerable<Answer>> GetAnswersAsync(uint userId);
         Task<Answer> GetAnswerAsync(uint id);
         Task<Answer> CreateAnswerAsync(Answer answer);
         Task UpdateAnswerAsync(Answer answer);

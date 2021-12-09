@@ -6,7 +6,7 @@ namespace LangApp.WebApi.Api.Repositories
 {
     public interface ISelectedCategoriesRepository
     {
-        Task<IEnumerable<SelectedCategory>> GetSelectedCategoriesAsync();
+        Task<IEnumerable<SelectedCategory>> GetSelectedCategoriesAsync(uint userId);
         Task<SelectedCategory> GetSelectedCategoryAsync(uint id);
         Task<SelectedCategory> CreateSelectedCategoryAsync(SelectedCategory selectedCategory);
         Task UpdateSelectedCategoryAsync(SelectedCategory selectedCategory);

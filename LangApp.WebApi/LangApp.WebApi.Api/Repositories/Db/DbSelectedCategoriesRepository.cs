@@ -15,9 +15,9 @@ namespace LangApp.WebApi.Api.Repositories.Db
             _context = langAppContext;
         }
 
-        public async Task<IEnumerable<SelectedCategory>> GetSelectedCategoriesAsync()
+        public async Task<IEnumerable<SelectedCategory>> GetSelectedCategoriesAsync(uint userId)
         {
-            return await Task.FromResult(_context.SelectedCategories);
+            return await Task.FromResult(_context.SelectedCategories.Where(x => x.Session.UserId == userId));
         }
 
         public async Task<SelectedCategory> GetSelectedCategoryAsync(uint id)
@@ -27,7 +27,7 @@ namespace LangApp.WebApi.Api.Repositories.Db
 
         public async Task<SelectedCategory> CreateSelectedCategoryAsync(SelectedCategory selectedCategory)
         {
-            var entity = _context.SelectedCategories.Add(selectedCategory);
+            var entity = await _context.SelectedCategories.AddAsync(selectedCategory);
             await _context.SaveChangesAsync();
 
             return await GetSelectedCategoryAsync(entity.Entity.Id);

@@ -3,6 +3,7 @@ using LangApp.WebApi.Api.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace LangApp.WebApi.Api.Controllers
@@ -22,14 +23,8 @@ namespace LangApp.WebApi.Api.Controllers
         [Authorize]
         public async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsAsync()
         {
-            return await _favouriteWordsRepository.GetFavouriteWordsAsync();
-        }
-
-        [HttpGet("user/{userId}")]
-        [Authorize]
-        public async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsOfUserAsync(uint userId)
-        {
-            return await _favouriteWordsRepository.GetFavouriteWordsOfUserAsync(userId);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return await _favouriteWordsRepository.GetFavouriteWordsAsync(uint.Parse(userId));
         }
 
         [HttpGet("{id}")]
@@ -37,9 +32,17 @@ namespace LangApp.WebApi.Api.Controllers
         public async Task<ActionResult<FavouriteWord>> GetFavouriteWordAsync(uint id)
         {
             var favouriteWord = await _favouriteWordsRepository.GetFavouriteWordAsync(id);
+            
             if (favouriteWord == null)
             {
                 return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (favouriteWord.UserId != uint.Parse(userId))
+            {
+                return Unauthorized();
             }
 
             return favouriteWord;
@@ -49,6 +52,13 @@ namespace LangApp.WebApi.Api.Controllers
         [Authorize]
         public async Task<ActionResult<FavouriteWord>> CreateFavouriteWordAsync([FromBody] FavouriteWord favouriteWord)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (favouriteWord.UserId != uint.Parse(userId))
+            {
+                return Unauthorized();
+            }
+
             return await _favouriteWordsRepository.CreateFavouriteWordAsync(favouriteWord);
         }
 
@@ -56,6 +66,20 @@ namespace LangApp.WebApi.Api.Controllers
         [Authorize]
         public async Task<ActionResult> DeleteFavouriteWordAsync(uint id)
         {
+            var favouriteWord = await _favouriteWordsRepository.GetFavouriteWordAsync(id);
+
+            if (favouriteWord == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (favouriteWord.UserId != uint.Parse(userId))
+            {
+                return Unauthorized();
+            }
+
             await _favouriteWordsRepository.DeleteFavouriteWordAsync(id);
 
             return NoContent();

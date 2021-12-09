@@ -28,7 +28,7 @@ namespace LangApp.WebApi.Api.Repositories.Db
 
         public async Task<News> CreateNewsAsync(News news)
         {
-            var entity = _context.News.Add(news);
+            var entity = await _context.News.AddAsync(news);
             await _context.SaveChangesAsync();
 
             return await GetNewsAsync(entity.Entity.Id);

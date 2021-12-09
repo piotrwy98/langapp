@@ -3,6 +3,7 @@ using LangApp.WebApi.Api.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace LangApp.WebApi.Api.Controllers
@@ -12,17 +13,20 @@ namespace LangApp.WebApi.Api.Controllers
     public class SelectedCategoriesController : ControllerBase
     {
         private readonly ISelectedCategoriesRepository _selectedCategoriesRepository;
+        private readonly ISessionsRepository _sessionsRepository;
 
-        public SelectedCategoriesController(ISelectedCategoriesRepository selectedCategoriesRepository)
+        public SelectedCategoriesController(ISelectedCategoriesRepository selectedCategoriesRepository, ISessionsRepository sessionsRepository)
         {
             _selectedCategoriesRepository = selectedCategoriesRepository;
+            _sessionsRepository = sessionsRepository;
         }
 
         [HttpGet]
         [Authorize]
         public async Task<IEnumerable<SelectedCategory>> GetSelectedCategoriesAsync()
         {
-            return await _selectedCategoriesRepository.GetSelectedCategoriesAsync();
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return await _selectedCategoriesRepository.GetSelectedCategoriesAsync(uint.Parse(userId));
         }
 
         [HttpGet("{id}")]
@@ -30,18 +34,45 @@ namespace LangApp.WebApi.Api.Controllers
         public async Task<ActionResult<SelectedCategory>> GetSelectedCategoryAsync(uint id)
         {
             var selectedCategory = await _selectedCategoriesRepository.GetSelectedCategoryAsync(id);
-            if (selectedCategory == null)
+
+            if (selectedCategory != null)
             {
-                return NotFound();
+                var session = await _sessionsRepository.GetSessionAsync(selectedCategory.SessionId);
+
+                if (session != null)
+                {
+                    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                    if (session.UserId != uint.Parse(userId))
+                    {
+                        return Unauthorized();
+                    }
+                }
+
+                return selectedCategory;
             }
 
-            return selectedCategory;
+            return NotFound();
         }
 
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<SelectedCategory>> CreateSelectedCategoryAsync([FromBody] SelectedCategory selectedCategory)
         {
+            var session = await _sessionsRepository.GetSessionAsync(selectedCategory.SessionId);
+
+            if (session == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (session.UserId != uint.Parse(userId))
+            {
+                return Unauthorized();
+            }
+
             return await _selectedCategoriesRepository.CreateSelectedCategoryAsync(selectedCategory);
         }
 

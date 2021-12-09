@@ -16,14 +16,7 @@ namespace LangApp.WebApi.Api.Repositories.Local
             _context = langAppContext;
         }
 
-        public async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsAsync()
-        {
-            return await Task.FromResult(_context.FavouriteWords
-                .Include(x => x.FirstTranslation).ThenInclude(y => y.Language)
-                .Include(x => x.SecondTranslation).ThenInclude(y => y.Language));
-        }
-
-        public async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsOfUserAsync(uint userId)
+        public async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsAsync(uint userId)
         {
             return await Task.FromResult(_context.FavouriteWords.Where(x => x.UserId == userId)
                 .Include(x => x.FirstTranslation).ThenInclude(y => y.Language)
@@ -40,7 +33,7 @@ namespace LangApp.WebApi.Api.Repositories.Local
 
         public async Task<FavouriteWord> CreateFavouriteWordAsync(FavouriteWord favouriteWord)
         {
-            var entity = _context.FavouriteWords.Add(favouriteWord);
+            var entity = await _context.FavouriteWords.AddAsync(favouriteWord);
             await _context.SaveChangesAsync();
 
             return await GetFavouriteWordAsync(entity.Entity.Id);

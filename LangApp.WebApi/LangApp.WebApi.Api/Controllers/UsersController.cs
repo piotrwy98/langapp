@@ -27,7 +27,9 @@ namespace LangApp.WebApi.Api.Controllers
 
             foreach(var user in users)
             {
+                // ukrywamy te dane
                 user.Password = null;
+                user.Email = null;
             }
 
             return users;
@@ -38,12 +40,15 @@ namespace LangApp.WebApi.Api.Controllers
         public async Task<ActionResult<User>> GetUserAsync(uint id)
         {
             var user = await _usersRepository.GetUserByIdAsync(id);
+
             if (user == null)
             {
                 return NotFound();
             }
 
+            // ukrywamy te dane
             user.Password = null;
+            user.Email = null;
 
             return user;
         }

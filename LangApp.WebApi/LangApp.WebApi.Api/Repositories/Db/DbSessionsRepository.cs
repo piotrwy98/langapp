@@ -15,9 +15,9 @@ namespace LangApp.WebApi.Api.Repositories.Db
             _context = langAppContext;
         }
 
-        public async Task<IEnumerable<Session>> GetSessionsAsync()
+        public async Task<IEnumerable<Session>> GetSessionsAsync(uint userId)
         {
-            return await Task.FromResult(_context.Sessions);
+            return await Task.FromResult(_context.Sessions.Where(x => x.UserId == userId));
         }
 
         public async Task<Session> GetSessionAsync(uint id)
@@ -27,7 +27,7 @@ namespace LangApp.WebApi.Api.Repositories.Db
 
         public async Task<Session> CreateSessionAsync(Session session)
         {
-            var entity = _context.Sessions.Add(session);
+            var entity = await _context.Sessions.AddAsync(session);
             await _context.SaveChangesAsync();
 
             return await GetSessionAsync(entity.Entity.Id);
