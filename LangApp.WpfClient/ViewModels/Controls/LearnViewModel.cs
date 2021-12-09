@@ -965,7 +965,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             if (!_isAnswerPlaying)
             {
                 IsAnswerPlaying = true;
-                await Task.Run(() => PronunciationsService.PlayPronunciation(TranslationPair.Value.SecondLanguageTranslation));
+                await Task.Run(() => PronunciationsService.GetInstance().PlayPronunciation(TranslationPair.Value.SecondLanguageTranslation));
                 IsAnswerPlaying = false;
             }
         }

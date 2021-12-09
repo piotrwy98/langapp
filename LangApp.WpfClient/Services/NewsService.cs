@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,6 +53,11 @@ namespace LangApp.WpfClient.Services
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<IEnumerable<News>>(json);
             }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                return await GetNewsAsync();
+            }
 
             return null;
         }
@@ -66,6 +72,11 @@ namespace LangApp.WpfClient.Services
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<News>(json);
             }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                return await CreateNewsAsync(news);
+            }
 
             return null;
         }
@@ -75,14 +86,34 @@ namespace LangApp.WpfClient.Services
             var content = new StringContent(JsonConvert.SerializeObject(news), Encoding.UTF8, "application/json");
             var response = await HttpClient.PutAsync("http://localhost:5000/news", content).ConfigureAwait(false);
 
-            return response.IsSuccessStatusCode;
+            if(response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                return await UpdateNewsAsync(news);
+            }
+
+            return false;
         }
 
         public static async Task<bool> RemoveNewsAsync(uint id)
         {
             var response = await HttpClient.DeleteAsync("http://localhost:5000/news/" + id).ConfigureAwait(false);
 
-            return response.IsSuccessStatusCode;
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                return await RemoveNewsAsync(id);
+            }
+
+            return false;
         }
     }
 }

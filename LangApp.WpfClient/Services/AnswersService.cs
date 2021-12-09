@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,6 +77,11 @@ namespace LangApp.WpfClient.Services
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<IEnumerable<Answer>>(json);
             }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                return await GetAnswersAsync();
+            }
 
             return null;
         }
@@ -114,6 +120,11 @@ namespace LangApp.WpfClient.Services
                 }
 
                 return answer;
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                return await CreateAnswerAsync(session, wordId, numberInSession, questionType, value, correctAnswer, duration);
             }
 
             return null;

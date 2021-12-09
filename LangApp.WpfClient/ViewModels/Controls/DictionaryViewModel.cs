@@ -151,7 +151,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             if(translationSet != null && !translationSet.IsFirstPlaying)
             {
                 translationSet.IsFirstPlaying = true;
-                await Task.Run(() => PronunciationsService.PlayPronunciation(translationSet.FirstLanguageTranslation));
+                await Task.Run(() => PronunciationsService.GetInstance().PlayPronunciation(translationSet.FirstLanguageTranslation));
                 translationSet.IsFirstPlaying = false;
             }
         }
@@ -162,7 +162,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             if (translationSet != null && !translationSet.IsSecondPlaying)
             {
                 translationSet.IsSecondPlaying = true;
-                await Task.Run(() => PronunciationsService.PlayPronunciation(translationSet.SecondLanguageTranslation));
+                await Task.Run(() => PronunciationsService.GetInstance().PlayPronunciation(translationSet.SecondLanguageTranslation));
                 translationSet.IsSecondPlaying = false;
             }
         }

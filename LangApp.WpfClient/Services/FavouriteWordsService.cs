@@ -10,6 +10,7 @@ using System.Linq;
 using System.Windows;
 using System;
 using LangApp.WpfClient.Views.Windows;
+using System.Net;
 
 namespace LangApp.WpfClient.Services
 {
@@ -42,6 +43,11 @@ namespace LangApp.WpfClient.Services
             {
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<IEnumerable<FavouriteWord>>(json);
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                return await GetFavouriteWordsAsync();
             }
 
             return null;
@@ -83,21 +89,30 @@ namespace LangApp.WpfClient.Services
                     }
                 }
             }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                await CreateFavouriteWordAsync(firstTranslationId, secondTranslationId);
+            }
         }
 
-        public static async Task RemoveFavouriteWordAsync(uint id)
+        public static async Task RemoveFavouriteWordAsync(uint id, bool confirmed = false)
         {
             var favouriteWord = _instace.FavouriteWords.First(x => x.Id == id);
-            string favouriteWordInfo = " " + favouriteWord.FirstTranslation.Value + " (" + favouriteWord.SecondTranslation.Value + ") ";
 
-            var confirmationWindow = new ConfirmationWindow(Application.Current.Resources["remove_from_favourites"].ToString(),
-                Application.Current.Resources["remove_from_favourites_confirmation_part1"].ToString() + favouriteWordInfo +
-                Application.Current.Resources["remove_from_favourites_confirmation_part2"].ToString());
-            confirmationWindow.ShowDialog();
-
-            if (confirmationWindow.DialogResult != true)
+            if (!confirmed)
             {
-                return;
+                string favouriteWordInfo = " " + favouriteWord.FirstTranslation.Value + " (" + favouriteWord.SecondTranslation.Value + ") ";
+
+                var confirmationWindow = new ConfirmationWindow(Application.Current.Resources["remove_from_favourites"].ToString(),
+                    Application.Current.Resources["remove_from_favourites_confirmation_part1"].ToString() + favouriteWordInfo +
+                    Application.Current.Resources["remove_from_favourites_confirmation_part2"].ToString());
+                confirmationWindow.ShowDialog();
+
+                if (confirmationWindow.DialogResult != true)
+                {
+                    return;
+                }
             }
 
             var response = await HttpClient.DeleteAsync("http://localhost:5000/favourite-words/" + id).ConfigureAwait(false);
@@ -119,6 +134,11 @@ namespace LangApp.WpfClient.Services
                         }
                     }
                 }
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                await RemoveFavouriteWordAsync(id, true);
             }
         }
     }

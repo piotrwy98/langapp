@@ -3,6 +3,7 @@ using LangApp.WpfClient.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -57,6 +58,11 @@ namespace LangApp.WpfClient.Services
             {
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<IEnumerable<Translation>>(json);
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                return await GetTranslationsAsync();
             }
 
             return null;

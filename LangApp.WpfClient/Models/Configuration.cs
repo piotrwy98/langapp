@@ -6,6 +6,7 @@ using Microsoft.Toolkit.Uwp.Notifications;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using static LangApp.Shared.Models.Enums;
@@ -281,6 +282,12 @@ namespace LangApp.WpfClient.Models
             }
 
             return dateTime?.ToString("dd.MM.yyyy HH:mm:ss");
+        }
+
+        public static async Task RefreshToken()
+        {
+            var userWithToken = await TokensService.GetUserWithTokenAsync(User.Email, User.Password);
+            Token = userWithToken.Token;
         }
     }
 }

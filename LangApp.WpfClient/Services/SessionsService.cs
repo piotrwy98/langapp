@@ -62,6 +62,11 @@ namespace LangApp.WpfClient.Services
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<IEnumerable<Session>>(json);
             }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                return await GetSessionsAsync();
+            }
 
             return null;
         }
@@ -100,6 +105,11 @@ namespace LangApp.WpfClient.Services
                 }
 
                 return session;
+            }
+            else if(response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                return await CreateSessionAsync(firstLangugeId, secondLangugeId, type, questionsNumber);
             }
 
             return null;

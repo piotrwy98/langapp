@@ -1,6 +1,8 @@
 ﻿using LangApp.Shared.Models;
+using LangApp.WpfClient.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace LangApp.WpfClient.Services
@@ -34,6 +36,11 @@ namespace LangApp.WpfClient.Services
             {
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<IEnumerable<PartOfSpeechName>>(json);
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                return await GetPartsOfSpeechAsync();
             }
 
             return null;

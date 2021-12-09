@@ -1,6 +1,8 @@
 ﻿using LangApp.Shared.Models;
+using LangApp.WpfClient.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,6 +39,11 @@ namespace LangApp.WpfClient.Services
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<IEnumerable<SelectedCategory>>(json);
             }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                return await GetSelectedCategoriesAsync();
+            }
 
             return null;
         }
@@ -59,6 +66,11 @@ namespace LangApp.WpfClient.Services
                 selectedCategory = JsonConvert.DeserializeObject<SelectedCategory>(json);
                 selectedCategories.Add(selectedCategory);
                 return selectedCategory;
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                return await CreateSelectedCategoryAsync(sessionId, categoryId);
             }
 
             return null;

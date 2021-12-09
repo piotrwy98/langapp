@@ -3,6 +3,7 @@ using LangApp.WpfClient.Models;
 using LiveCharts;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace LangApp.WpfClient.Services
@@ -49,6 +50,11 @@ namespace LangApp.WpfClient.Services
             {
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<IEnumerable<LanguageName>>(json);
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await Configuration.RefreshToken();
+                return await GetLanguagesAsync();
             }
 
             return null;
