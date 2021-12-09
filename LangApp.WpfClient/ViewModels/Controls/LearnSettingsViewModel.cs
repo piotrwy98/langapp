@@ -188,7 +188,6 @@ namespace LangApp.WpfClient.ViewModels.Controls
             SessionSettings.NumberOfQuestions = (uint)QuestionNumbers.First(x => x.IsChosen).Object;
             SessionSettings.CategoriesIds.Clear();
 
-            List<uint> categoriesIds = new List<uint>();
             foreach (var category in Categories)
             {
                 if (category.IsChosen)
@@ -205,7 +204,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 if (session != null)
                 {
                     // dodanie wybranych kategori do utworzonej sesji
-                    foreach (var id in categoriesIds)
+                    foreach (var id in SessionSettings.CategoriesIds)
                     {
                         await Task.Run(() => SelectedCategoriesService.CreateSelectedCategoryAsync(session.Id, id));
                     }

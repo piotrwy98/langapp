@@ -36,6 +36,25 @@ namespace LangApp.WpfClient.Services
         {
             Answers = (List<Answer>) GetAnswersAsync().Result;
             GenerateStats();
+
+            Session session = null;
+
+            foreach (var answer in Answers)
+            {
+                if (session == null || answer.SessionId != session.Id)
+                {
+                    session = SessionsService.GetInstance().Sessions.First(x => x.Id == answer.SessionId);
+                }
+
+                if (session.Type == SessionType.LEARN)
+                {
+                    Configuration.GetInstance().LearnAnswerCounter++;
+                }
+                else
+                {
+                    Configuration.GetInstance().TestAnswerCounter++;
+                }
+            }
         }
 
         public static AnswersService GetInstance()
@@ -61,11 +80,11 @@ namespace LangApp.WpfClient.Services
             return null;
         }
 
-        public static async Task<Answer> CreateAnswerAsync(uint sessionId, uint wordId, uint numberInSession, QuestionType questionType, string value, string correctAnswer, TimeSpan duration)
+        public static async Task<Answer> CreateAnswerAsync(Session session, uint wordId, uint numberInSession, QuestionType questionType, string value, string correctAnswer, TimeSpan duration)
         {
             var answer = new Answer()
             {
-                SessionId = sessionId,
+                SessionId = session.Id,
                 WordId = wordId,
                 NumberInSession = numberInSession,
                 QuestionType = questionType,
@@ -84,6 +103,15 @@ namespace LangApp.WpfClient.Services
                 GetInstance().Answers.Add(answer);
                 GetInstance().AddToStats(answer);
                 GetInstance().AddToDictionary(answer);
+
+                if (session.Type == SessionType.LEARN)
+                {
+                    Configuration.GetInstance().LearnAnswerCounter++;
+                }
+                else
+                {
+                    Configuration.GetInstance().TestAnswerCounter++;
+                }
 
                 return answer;
             }
@@ -188,7 +216,7 @@ namespace LangApp.WpfClient.Services
                 // dodajemy wartości
                 while (answerIndex < Answers.Count)
                 {
-                    if(session == null || session.Id != Answers[answerIndex].SessionId)
+                    if (session == null || session.Id != Answers[answerIndex].SessionId)
                     {
                         session = SessionsService.GetInstance().Sessions.First(x => x.Id == Answers[answerIndex].SessionId);
 

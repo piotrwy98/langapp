@@ -21,6 +21,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         #region Properties
         public ObservableCollection<ObjectToChoose> News { get; }
         public bool IsUserAdmin { get; }
+        public Configuration Configuration { get; }
         #endregion
 
         public MainScreenViewModel()
@@ -32,6 +33,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
             News = NewsService.GetInstance().News;
             IsUserAdmin = Configuration.User.Role == UserRole.ADMIN;
+            Configuration = Configuration.GetInstance();
         }
 
         private void AddNews(object obj)

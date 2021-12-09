@@ -59,7 +59,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
             PointLabel = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
 
-            foreach(var selectedCategory in SelectedCategoriesService.GetInstance().SelectedCategories)
+            foreach (var selectedCategory in SelectedCategoriesService.GetInstance().SelectedCategories)
             {
                 if(selectedCategory.SessionId == Session.Id)
                 {

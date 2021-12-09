@@ -110,6 +110,108 @@ namespace LangApp.WpfClient.Models
                 OnPropertyChanged();
             }
         }
+
+        private uint _learnSessionCounter;
+        public uint LearnSessionCounter
+        {
+            get
+            {
+                return _learnSessionCounter;
+            }
+            set
+            {
+                _learnSessionCounter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private uint _testSessionCounter;
+        public uint TestSessionCounter
+        {
+            get
+            {
+                return _testSessionCounter;
+            }
+            set
+            {
+                _testSessionCounter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private uint _learnAnswerCounter;
+        public uint LearnAnswerCounter
+        {
+            get
+            {
+                return _learnAnswerCounter;
+            }
+            set
+            {
+                _learnAnswerCounter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private uint _testAnswerCounter;
+        public uint TestAnswerCounter
+        {
+            get
+            {
+                return _testAnswerCounter;
+            }
+            set
+            {
+                _testAnswerCounter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTime? _lastLearnSession;
+        public DateTime? LastLearnSession
+        {
+            get
+            {
+                return _lastLearnSession;
+            }
+            set
+            {
+                _lastLearnSession = value;
+                OnPropertyChanged();
+                OnPropertyChanged("LastLearnSessionInfo");
+            }
+        }
+
+        public string LastLearnSessionInfo
+        {
+            get
+            {
+                return GetTimeInfo(_lastLearnSession);
+            }
+        }
+
+        private DateTime? _lastTestSession;
+        public DateTime? LastTestSession
+        {
+            get
+            {
+                return _lastTestSession;
+            }
+            set
+            {
+                _lastTestSession = value;
+                OnPropertyChanged();
+                OnPropertyChanged("LastTestSessionInfo");
+            }
+        }
+
+        public string LastTestSessionInfo
+        {
+            get
+            {
+                return GetTimeInfo(_lastTestSession);
+            }
+        }
         #endregion
 
         private Configuration()
@@ -159,6 +261,26 @@ namespace LangApp.WpfClient.Models
                 {
                     toast.Tag = schedule.Id.ToString();
                 });
+        }
+
+        private string GetTimeInfo(DateTime? dateTime)
+        {
+            if (dateTime == null)
+            {
+                return Application.Current.Resources["not_played"].ToString();
+            }
+
+            if (dateTime?.Date == DateTime.Now.Date)
+            {
+                return Application.Current.Resources["today"].ToString() + dateTime?.ToString(", HH:mm:ss");
+            }
+
+            if (dateTime?.Date == DateTime.Now.Date.AddDays(-1))
+            {
+                return Application.Current.Resources["yesterday"].ToString() + dateTime?.ToString(", HH:mm:ss");
+            }
+
+            return dateTime?.ToString("dd.MM.yyyy HH:mm:ss");
         }
     }
 }

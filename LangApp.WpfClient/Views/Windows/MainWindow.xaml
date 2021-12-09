@@ -9,7 +9,7 @@
         Height="650" Width="1100" MinHeight="650" MinWidth="1000" WindowStyle="None" ResizeMode="CanResizeWithGrip"
         AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen"
         MouseDown="Window_MouseDown" Title="LangApp" RenderOptions.BitmapScalingMode="HighQuality"
-        Closing="Window_Closing">
+        Closing="Window_Closing" StateChanged="Window_StateChanged">
     <Window.Resources>
         <Style x:Key="MenuButton" TargetType="RadioButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
             <Setter Property="Template">

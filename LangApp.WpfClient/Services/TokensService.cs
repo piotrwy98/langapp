@@ -8,7 +8,7 @@ namespace LangApp.WpfClient.Services
 {
     public abstract class TokensService : HttpClientService
     {
-        public async static Task<UserWithToken> GetUserWithTokenAsync(string email, string password)
+        public static async Task<UserWithToken> GetUserWithTokenAsync(string email, string password)
         {
             var logInData = new LogInData()
             {

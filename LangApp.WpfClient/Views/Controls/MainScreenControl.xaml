@@ -25,13 +25,23 @@
                 <ColumnDefinition Width="1.5*"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Margin="10" Background="{StaticResource TertiaryBackgroundColor}">
-                
-            </StackPanel>
+            <Grid Grid.Column="0" Margin="10" Background="{StaticResource TertiaryBackgroundColor}">
+                <StackPanel VerticalAlignment="Center" Margin="0 -24 0 0">
+                    <TextBlock Text="{Binding Configuration.LearnSessionCounter}" HorizontalAlignment="Center" Foreground="{StaticResource SecondaryForegroundColor}" FontWeight="Bold" FontSize="60"/>
+                    <TextBlock Text="{DynamicResource number_of_games_in_learn_mode}" HorizontalAlignment="Center" FontSize="18"/>
+                    <TextBlock Text="{Binding Configuration.LearnAnswerCounter}" HorizontalAlignment="Center" Foreground="{StaticResource SecondaryForegroundColor}" FontWeight="Bold" FontSize="60" Margin="0 10 0 0"/>
+                    <TextBlock Text="{DynamicResource number_of_answers_in_learn_mode}" HorizontalAlignment="Center" FontSize="18"/>
+                </StackPanel>
+            </Grid>
 
-            <StackPanel Grid.Column="1" Margin="10" Background="{StaticResource TertiaryBackgroundColor}">
-
-            </StackPanel>
+            <Grid Grid.Column="1" Margin="10" Background="{StaticResource TertiaryBackgroundColor}">
+                <StackPanel VerticalAlignment="Center" Margin="0 -16 0 0">
+                    <TextBlock Text="{Binding Configuration.LastLearnSessionInfo}" HorizontalAlignment="Center" Foreground="{StaticResource SecondaryForegroundColor}" FontWeight="Bold" FontSize="42"/>
+                    <TextBlock Text="{DynamicResource last_game_in_learn_mode}" HorizontalAlignment="Center" FontSize="18"/>
+                    <TextBlock Text="{Binding Configuration.LastTestSessionInfo}" HorizontalAlignment="Center" Foreground="{StaticResource SecondaryForegroundColor}" FontWeight="Bold" FontSize="42" Margin="0 30 0 0"/>
+                    <TextBlock Text="{DynamicResource last_game_in_test_mode}" HorizontalAlignment="Center" FontSize="18"/>
+                </StackPanel>
+            </Grid>
         </Grid>
 
         <Grid Grid.Row="1">
@@ -46,12 +56,12 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
                     <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource news}" FontSize="22" Margin="10 5"/>
-                <md:PackIcon Grid.Row="0" Grid.Column="1" Kind="Plus" Cursor="Hand" ToolTip="{DynamicResource add_post}" Background="Transparent" Foreground="LawnGreen" Width="34" Height="34" VerticalAlignment="Center" Visibility="{Binding IsUserAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource news}" FontSize="26" Margin="10 5 2 5"/>
+                <md:PackIcon Grid.Row="0" Grid.Column="1" Kind="Plus" Cursor="Hand" ToolTip="{DynamicResource add_post}" Background="Transparent" Foreground="LawnGreen" Width="30" Height="30" VerticalAlignment="Center" Visibility="{Binding IsUserAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseLeftButtonDown">
                             <i:InvokeCommandAction Command="{Binding AddNewsCommand}"/>
@@ -74,6 +84,12 @@
                                             <ColumnDefinition/>
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
+
+                                        <Grid.Resources>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="FontSize" Value="16"/>
+                                            </Style>
+                                        </Grid.Resources>
 
                                         <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Object.Title}" TextWrapping="Wrap" Foreground="{StaticResource SecondaryForegroundColor}" FontWeight="Bold"/>
                                         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Object.CreationDateTime, StringFormat='dd.MM.yyyy HH:mm'}" ToolTip="{DynamicResource date_added}" Foreground="{StaticResource SecondaryForegroundColor}"/>
@@ -115,9 +131,14 @@
                 </ScrollViewer>
             </Grid>
 
-            <StackPanel Grid.Column="1" Margin="10" Background="{StaticResource TertiaryBackgroundColor}">
-
-            </StackPanel>
+            <Grid Grid.Column="1" Margin="10" Background="{StaticResource TertiaryBackgroundColor}">
+                <StackPanel VerticalAlignment="Center" Margin="0 -24 0 0">
+                    <TextBlock Text="{Binding Configuration.TestSessionCounter}" HorizontalAlignment="Center" Foreground="{StaticResource SecondaryForegroundColor}" FontWeight="Bold" FontSize="60"/>
+                    <TextBlock Text="{DynamicResource number_of_games_in_test_mode}" HorizontalAlignment="Center" FontSize="18"/>
+                    <TextBlock Text="{Binding Configuration.TestAnswerCounter}" HorizontalAlignment="Center" Foreground="{StaticResource SecondaryForegroundColor}" FontWeight="Bold" FontSize="60" Margin="0 10 0 0"/>
+                    <TextBlock Text="{DynamicResource number_of_answers_in_test_mode}" HorizontalAlignment="Center" FontSize="18"/>
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

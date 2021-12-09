@@ -152,5 +152,14 @@
     <system:String x:Key="no">Nie</system:String>
     <system:String x:Key="open_context">Otwórz</system:String>
     <system:String x:Key="close">Zamknij</system:String>
+    <system:String x:Key="number_of_games_in_learn_mode">Liczba rozgrywek w trybie nauki</system:String>
+    <system:String x:Key="number_of_games_in_test_mode">Liczba rozgrywek w trybie testu</system:String>
+    <system:String x:Key="number_of_answers_in_learn_mode">Liczba odpowiedzi w trybie nauki</system:String>
+    <system:String x:Key="number_of_answers_in_test_mode">Liczba odpowiedzi w trybie testu</system:String>
+    <system:String x:Key="last_game_in_learn_mode">Ostatnia rozgrywka w trybie nauki</system:String>
+    <system:String x:Key="last_game_in_test_mode">Ostatnia rozgrywka w trybie testu</system:String>
+    <system:String x:Key="today">Dzisiaj</system:String>
+    <system:String x:Key="yesterday">Wczoraj</system:String>
+    <system:String x:Key="not_played">Nie rozegrano</system:String>
   
 </ResourceDictionary>

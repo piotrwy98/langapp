@@ -21,7 +21,7 @@ namespace LangApp.WpfClient.Services
 
         private FavouriteWordsService()
         {
-            FavouriteWords = new ObservableCollection<FavouriteWord>(GetFavouriteWordsOfUserAsync().Result);
+            FavouriteWords = new ObservableCollection<FavouriteWord>(GetFavouriteWordsAsync().Result);
         }
 
         public static FavouriteWordsService GetInstance()
@@ -34,9 +34,9 @@ namespace LangApp.WpfClient.Services
             return _instace;
         }
 
-        private async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsOfUserAsync()
+        private async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsAsync()
         {
-            var response = await HttpClient.GetAsync("http://localhost:5000/favourite-words/user/" + Configuration.User.Id).ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("http://localhost:5000/favourite-words").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {

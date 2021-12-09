@@ -366,7 +366,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         }
 
         private bool _isProcessingPronunciation;
-        public bool IsProcessingPronunciation
+        public bool IsProcessingAnswer
         {
             get
             {
@@ -383,7 +383,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         {
             get
             {
-                return (!IsRecording || CanGoFurther) && !IsProcessingPronunciation;
+                return (!IsRecording || CanGoFurther) && !IsProcessingAnswer;
             }
         }
 
@@ -429,6 +429,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
         private string _pronunciationResult;
         private int _properClosedAnswerIndex;
         private int _selectedClosedAnswerIndex;
+        private int _selectedCategoriesWordCount;
 
         private DispatcherTimer _dispatcherGeneralTimer;
         private DispatcherTimer _dispatcherRecordTimer;
@@ -457,6 +458,14 @@ namespace LangApp.WpfClient.ViewModels.Controls
             _random = new Random();
             _previousWordsIds = new List<uint>();
             _answers = new List<Answer>();
+
+            foreach(var pair in _dictionary.Dictionary)
+            {
+                if(SessionSettings.CategoriesIds.Contains(pair.Key.CategoryId))
+                {
+                    _selectedCategoriesWordCount++;
+                }
+            }
 
             /// timery
             _startTime = DateTime.Now;
@@ -519,7 +528,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             RecordPlayCommand = new RelayCommand(RecordPlay);
             StarMouseLeftButtonDownCommand = new RelayCommand(StarMouseLeftButtonDown);
             AnswerVolumeMouseLeftButtonDownCommand = new RelayCommand(AnswerVolumeMouseLeftButtonDown);
-
+            
             GetNextQuestion();
         }
 
@@ -553,12 +562,16 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         private void Skip(object obj)
         {
-            GetNextQuestion(true);
+            QuestionCounter--;
+            GetNextQuestion();
         }
 
         private async void Check(object obj)
         {
-            if(CanGoFurther)
+            IsProcessingAnswer = true;
+            Mouse.OverrideCursor = Cursors.AppStarting;
+
+            if (CanGoFurther)
             {
                 string userAnswer = null;
 
@@ -578,7 +591,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 }
 
                 // dodanie odpowiedzi
-                var answer = await Task.Run(() => AnswersService.CreateAnswerAsync(_session.Id, TranslationPair.Key.Id, (uint) _questionCounter,
+                var answer = await Task.Run(() => AnswersService.CreateAnswerAsync(_session, TranslationPair.Key.Id, (uint) _questionCounter,
                     _questionType, userAnswer, TranslationPair.Value.SecondLanguageTranslation.Value,
                     DateTime.Now - _questionAppearedTime));
 
@@ -600,6 +613,9 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     IncorrectMessage = Application.Current.Resources["incorrect_answer"].ToString();
                 }
             }
+
+            Mouse.OverrideCursor = null;
+            IsProcessingAnswer = false;
         }
 
         private async Task<string> GetPronunciationResult()
@@ -611,9 +627,6 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
             if (_pronunciationResult == null)
             {
-                IsProcessingPronunciation = true;
-                Mouse.OverrideCursor = Cursors.AppStarting;
-
                 string result = await Task.Run(() => SpeechToTextService.GetText(_audioInputStream, _language));
                 _pronunciationResult = result.Replace(".", "").ToLowerInvariant();
 
@@ -621,9 +634,6 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 {
                     _pronunciationResult = "-";
                 }
-
-                Mouse.OverrideCursor = null;
-                IsProcessingPronunciation = false;
             }
 
             return _pronunciationResult;
@@ -657,16 +667,12 @@ namespace LangApp.WpfClient.ViewModels.Controls
             _selectedClosedAnswerIndex = int.Parse((string) obj);
         }
 
-        private void GetNextQuestion(bool isSkipped = false)
+        private void GetNextQuestion()
         {
             if(QuestionCounter < SessionSettings.NumberOfQuestions)
             {
                 /// przygotowanie interfejsu
-                if(!isSkipped)
-                {
-                    QuestionCounter++;
-                }
-
+                QuestionCounter++;
                 CorrectMessage = string.Empty;
                 IncorrectMessage = string.Empty;
                 OpenAnswer = string.Empty;
@@ -751,6 +757,13 @@ namespace LangApp.WpfClient.ViewModels.Controls
             {
                 TranslationPair = words[wordIndex];
                 _previousWordsIds.Add(words[wordIndex].Key.Id);
+
+                if(_previousWordsIds.Count == _selectedCategoriesWordCount)
+                {
+                    // jeśli wyczerpaliśmy wszystkie słowa z wybranych kategorii
+                    // to pozwalamy na ponowne wylosowanie pierwszej połowy z nich
+                    _previousWordsIds.RemoveRange(0, _selectedCategoriesWordCount / 2 + 1);
+                }
             }
         }
 

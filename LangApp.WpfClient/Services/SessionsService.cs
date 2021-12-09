@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,10 @@ namespace LangApp.WpfClient.Services
         {
             Sessions = (List<Session>) GetSessionsAsync().Result;
             GenerateStats();
+            Configuration.GetInstance().LearnSessionCounter = (uint) Sessions.Count(x => x.Type == SessionType.LEARN);
+            Configuration.GetInstance().TestSessionCounter = (uint) (Sessions.Count - Configuration.GetInstance().LearnSessionCounter);
+            Configuration.GetInstance().LastLearnSession = Sessions.LastOrDefault(x => x.Type == SessionType.LEARN)?.StartDateTime;
+            Configuration.GetInstance().LastTestSession = Sessions.LastOrDefault(x => x.Type == SessionType.TEST)?.StartDateTime;
         }
 
         public static SessionsService GetInstance()
@@ -82,6 +87,17 @@ namespace LangApp.WpfClient.Services
                 GetInstance().Sessions.Add(session);
                 GetInstance().AddToStats(session);
                 AnswersService.GetInstance().AddNewSession(session);
+
+                if (session.Type == SessionType.LEARN)
+                {
+                    Configuration.GetInstance().LearnSessionCounter++;
+                    Configuration.GetInstance().LastLearnSession = session.StartDateTime;
+                }
+                else
+                {
+                    Configuration.GetInstance().TestSessionCounter++;
+                    Configuration.GetInstance().LastTestSession = session.StartDateTime;
+                }
 
                 return session;
             }

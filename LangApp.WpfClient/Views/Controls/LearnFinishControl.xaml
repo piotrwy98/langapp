@@ -45,9 +45,9 @@
             <WrapPanel HorizontalAlignment="Center" Visibility="{Binding IsTest, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock Text="{DynamicResource correctness_of_answers_equals}"/>
                 <TextBlock Text="{Binding ResultPercent, StringFormat=' {0:N2}'}" FontWeight="Bold"/>
-                <TextBlock Text=" % " FontWeight="Bold"/>
+                <TextBlock Text="% " FontWeight="Bold"/>
                 <TextBlock Text="{DynamicResource from}"/>
-                <TextBlock Text="{Binding NumberOfQuestions, StringFormat=' {0}' }"/>
+                <TextBlock Text="{Binding NumberOfQuestions, StringFormat=' {0} '}"/>
                 <TextBlock Text="{DynamicResource tasks_in}"/>
                 <TextBlock Text="{Binding Timer, StringFormat=' {0:mm\\:ss\\.fff}'}"/>
             </WrapPanel>
