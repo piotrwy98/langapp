@@ -30,6 +30,7 @@
     <system:String x:Key="dictionary">Słownik</system:String>
     <system:String x:Key="favourite_words">Ulubione słowa</system:String>
     <system:String x:Key="settings">Ustawienia</system:String>
+    <system:String x:Key="no_connection">Brak połączenia</system:String>
     
     <system:String x:Key="dictionary_colon">Słownik:</system:String>
     <system:String x:Key="search_colon">Szukaj:</system:String>

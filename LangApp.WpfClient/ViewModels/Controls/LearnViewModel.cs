@@ -571,47 +571,55 @@ namespace LangApp.WpfClient.ViewModels.Controls
             IsProcessingAnswer = true;
             Mouse.OverrideCursor = Cursors.AppStarting;
 
-            if (CanGoFurther)
+            try
             {
-                string userAnswer = null;
-
-                switch(_questionType)
+                if (CanGoFurther)
                 {
-                    case QuestionType.CLOSED:
-                        userAnswer = _closedAnswers[_selectedClosedAnswerIndex];
-                        break;
+                    string userAnswer = null;
 
-                    case QuestionType.OPEN:
-                        userAnswer = _openAnswer.Trim();
-                        break;
+                    switch (_questionType)
+                    {
+                        case QuestionType.CLOSED:
+                            userAnswer = _closedAnswers[_selectedClosedAnswerIndex];
+                            break;
 
-                    case QuestionType.PRONUNCIATION:
-                        userAnswer = await GetPronunciationResult();
-                        break;
-                }
+                        case QuestionType.OPEN:
+                            userAnswer = _openAnswer.Trim();
+                            break;
 
-                // dodanie odpowiedzi
-                var answer = await Task.Run(() => AnswersService.CreateAnswerAsync(_session, TranslationPair.Key.Id, (uint) _questionCounter,
-                    _questionType, userAnswer, TranslationPair.Value.SecondLanguageTranslation.Value,
-                    DateTime.Now - _questionAppearedTime));
+                        case QuestionType.PRONUNCIATION:
+                            userAnswer = await GetPronunciationResult();
+                            break;
+                    }
 
-                if (answer != null)
-                {
-                    _answers.Add(answer);
-                    GetNextQuestion();
-                }
-            }
-            else
-            {
-                if (await IsAnswerCorrect())
-                {
-                    CorrectMessage = Application.Current.Resources["correct_answer"].ToString();
-                    CanGoFurther = true;
+                    // dodanie odpowiedzi
+                    var answer = await Task.Run(() => AnswersService.CreateAnswerAsync(_session, TranslationPair.Key.Id, (uint)_questionCounter,
+                        _questionType, userAnswer, TranslationPair.Value.SecondLanguageTranslation.Value, DateTime.Now - _questionAppearedTime));
+
+                    if (answer != null)
+                    {
+                        _answers.Add(answer);
+                        GetNextQuestion();
+                    }
                 }
                 else
                 {
-                    IncorrectMessage = Application.Current.Resources["incorrect_answer"].ToString();
+                    Configuration.GetInstance().NoConnection = false;
+
+                    if (await IsAnswerCorrect())
+                    {
+                        CorrectMessage = Application.Current.Resources["correct_answer"].ToString();
+                        CanGoFurther = true;
+                    }
+                    else
+                    {
+                        IncorrectMessage = Application.Current.Resources["incorrect_answer"].ToString();
+                    }
                 }
+            }
+            catch
+            {
+                Configuration.GetInstance().NoConnection = true;
             }
 
             Mouse.OverrideCursor = null;

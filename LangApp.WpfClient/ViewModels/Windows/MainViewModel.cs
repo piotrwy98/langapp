@@ -42,6 +42,12 @@ namespace LangApp.WpfClient.ViewModels.Windows
             FavouriteWordsCheckedCommand = new RelayCommand(FavouriteWordsChecked);
             SettingsCheckedCommand = new RelayCommand(SettingsChecked);
 
+            Configuration.SettingsControl = new SettingsControl();
+            Configuration.LearnSettingsControl = new LearnSettingsControl(SessionType.LEARN);
+            Configuration.TestSettingsControl = new LearnSettingsControl(SessionType.TEST);
+
+            PartsOfSpeechService.GetInstance();
+
             PrepareNotifications();
             MainScreenChecked();
         }

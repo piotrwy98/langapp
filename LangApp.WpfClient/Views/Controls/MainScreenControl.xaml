@@ -11,6 +11,24 @@
              d:DesignHeight="450" d:DesignWidth="800" Foreground="{StaticResource PrimaryForegroundColor}" FontSize="14">
     <UserControl.Resources>
         <converters:UsernameConverter x:Key="UsernameConverter"/>
+
+        <Style x:Key="BigTextBlock" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource SecondaryForegroundColor}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+
+            <Style.Triggers>
+                <Trigger Property="Visibility" Value="Visible">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.0" To="1.0" Duration="0:0:3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     
     <Grid>
@@ -27,18 +45,18 @@
 
             <Grid Grid.Column="0" Margin="10" Background="{StaticResource TertiaryBackgroundColor}">
                 <StackPanel VerticalAlignment="Center" Margin="0 -24 0 0">
-                    <TextBlock Text="{Binding Configuration.LearnSessionCounter}" HorizontalAlignment="Center" Foreground="{StaticResource SecondaryForegroundColor}" FontWeight="Bold" FontSize="60"/>
+                    <TextBlock Text="{Binding Configuration.LearnSessionCounter}" Style="{StaticResource BigTextBlock}" FontSize="60"/>
                     <TextBlock Text="{DynamicResource number_of_games_in_learn_mode}" HorizontalAlignment="Center" FontSize="18"/>
-                    <TextBlock Text="{Binding Configuration.LearnAnswerCounter}" HorizontalAlignment="Center" Foreground="{StaticResource SecondaryForegroundColor}" FontWeight="Bold" FontSize="60" Margin="0 10 0 0"/>
+                    <TextBlock Text="{Binding Configuration.LearnAnswerCounter}" Style="{StaticResource BigTextBlock}" FontSize="60" Margin="0 10 0 0"/>
                     <TextBlock Text="{DynamicResource number_of_answers_in_learn_mode}" HorizontalAlignment="Center" FontSize="18"/>
                 </StackPanel>
             </Grid>
 
             <Grid Grid.Column="1" Margin="10" Background="{StaticResource TertiaryBackgroundColor}">
                 <StackPanel VerticalAlignment="Center" Margin="0 -16 0 0">
-                    <TextBlock Text="{Binding Configuration.LastLearnSessionInfo}" HorizontalAlignment="Center" Foreground="{StaticResource SecondaryForegroundColor}" FontWeight="Bold" FontSize="42"/>
+                    <TextBlock Text="{Binding Configuration.LastLearnSessionInfo}" Style="{StaticResource BigTextBlock}" FontSize="42"/>
                     <TextBlock Text="{DynamicResource last_game_in_learn_mode}" HorizontalAlignment="Center" FontSize="18"/>
-                    <TextBlock Text="{Binding Configuration.LastTestSessionInfo}" HorizontalAlignment="Center" Foreground="{StaticResource SecondaryForegroundColor}" FontWeight="Bold" FontSize="42" Margin="0 30 0 0"/>
+                    <TextBlock Text="{Binding Configuration.LastTestSessionInfo}" Style="{StaticResource BigTextBlock}" FontSize="42" Margin="0 30 0 0"/>
                     <TextBlock Text="{DynamicResource last_game_in_test_mode}" HorizontalAlignment="Center" FontSize="18"/>
                 </StackPanel>
             </Grid>
@@ -133,9 +151,9 @@
 
             <Grid Grid.Column="1" Margin="10" Background="{StaticResource TertiaryBackgroundColor}">
                 <StackPanel VerticalAlignment="Center" Margin="0 -24 0 0">
-                    <TextBlock Text="{Binding Configuration.TestSessionCounter}" HorizontalAlignment="Center" Foreground="{StaticResource SecondaryForegroundColor}" FontWeight="Bold" FontSize="60"/>
+                    <TextBlock Text="{Binding Configuration.TestSessionCounter}" Style="{StaticResource BigTextBlock}" FontSize="60"/>
                     <TextBlock Text="{DynamicResource number_of_games_in_test_mode}" HorizontalAlignment="Center" FontSize="18"/>
-                    <TextBlock Text="{Binding Configuration.TestAnswerCounter}" HorizontalAlignment="Center" Foreground="{StaticResource SecondaryForegroundColor}" FontWeight="Bold" FontSize="60" Margin="0 10 0 0"/>
+                    <TextBlock Text="{Binding Configuration.TestAnswerCounter}" Style="{StaticResource BigTextBlock}" FontSize="60" Margin="0 10 0 0"/>
                     <TextBlock Text="{DynamicResource number_of_answers_in_test_mode}" HorizontalAlignment="Center" FontSize="18"/>
                 </StackPanel>
             </Grid>

@@ -2,7 +2,11 @@
 using LangApp.WpfClient.Models;
 using LangApp.WpfClient.Services;
 using LangApp.WpfClient.Views.Windows;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace LangApp.WpfClient
 {
@@ -41,6 +45,16 @@ namespace LangApp.WpfClient
 
             var loginRegisterWindow = new LoginRegisterWindow(serverFailed);
             loginRegisterWindow.Show();
+        }
+
+        private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            if (e.Exception.GetType() == typeof(TaskCanceledException) || e.Exception.InnerException != null && 
+               (e.Exception.InnerException.GetType() == typeof(HttpRequestException) || e.Exception.InnerException.GetType() == typeof(WebException)))
+            {
+                Configuration.GetInstance().NoConnection = true;
+                e.Handled = true;
+            }
         }
     }
 }

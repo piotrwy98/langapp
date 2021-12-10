@@ -48,9 +48,9 @@ namespace LangApp.WpfClient.Models
             }
         }
 
-        public LearnSettingsControl LearnSettingsControl { get; } = new LearnSettingsControl(SessionType.LEARN);
+        public LearnSettingsControl LearnSettingsControl { get; set; }
 
-        public LearnSettingsControl TestSettingsControl { get; } = new LearnSettingsControl(SessionType.TEST);
+        public LearnSettingsControl TestSettingsControl { get; set; }
 
         public LearnControl LearnControl { get; set; }
 
@@ -80,7 +80,7 @@ namespace LangApp.WpfClient.Models
 
         public StatsControl StatsControl { get; set; }
 
-        public SettingsControl SettingsControl { get; } = new SettingsControl();
+        public SettingsControl SettingsControl { get; set; }
 
         public Schedule CurrentSchedule { get; set; }
 
@@ -213,6 +213,20 @@ namespace LangApp.WpfClient.Models
                 return GetTimeInfo(_lastTestSession);
             }
         }
+
+        private bool _noConnection;
+        public bool NoConnection
+        {
+            get
+            {
+                return _noConnection;
+            }
+            set
+            {
+                _noConnection = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
 
         private Configuration()
@@ -226,7 +240,9 @@ namespace LangApp.WpfClient.Models
         public static Configuration GetInstance()
         {
             if (_instance == null)
+            {
                 _instance = new Configuration();
+            }
 
             return _instance;
         }

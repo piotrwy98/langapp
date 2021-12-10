@@ -147,7 +147,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
             if(serverFailed)
             {
-                ResultMessage = string.Empty;
+                ResultMessage = Application.Current.Resources["no_server_connection"].ToString();
             }
         }
 

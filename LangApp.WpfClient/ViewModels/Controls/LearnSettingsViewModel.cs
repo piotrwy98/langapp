@@ -58,11 +58,25 @@ namespace LangApp.WpfClient.ViewModels.Controls
             get
             {
                 return (SessionSettings.IsClosedChosen || SessionSettings.IsOpenChosen || SessionSettings.IsPronunciationChosen) &&
-                    Categories.Count(x => x.IsChosen) > 0;
+                    Categories.Count(x => x.IsChosen) > 0 && !IsProcessingSession;
             }
         }
 
         public Func<double, string> GaugeLabelFormatter { get; }
+
+        private bool _isProcessingSession;
+        public bool IsProcessingSession
+        {
+            get
+            {
+                return _isProcessingSession;
+            }
+            set
+            {
+                _isProcessingSession = value;
+                OnPropertyChanged("CanStartLearning");
+            }
+        }
         #endregion
 
         public LearnSettingsViewModel(SessionType? sessionType, SessionSettings sessionSettings)
@@ -198,28 +212,41 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
             if (SessionType != null)
             {
-                // utworzenie sesji
-                var session = await Task.Run(() => SessionsService.CreateSessionAsync(Settings.GetInstance().InterfaceLanguageId, SessionSettings.LanguageId, SessionType.Value, SessionSettings.NumberOfQuestions));
+                IsProcessingSession = true;
+                Mouse.OverrideCursor = Cursors.AppStarting;
 
-                if (session != null)
+                try
                 {
-                    // dodanie wybranych kategori do utworzonej sesji
-                    foreach (var id in SessionSettings.CategoriesIds)
-                    {
-                        await Task.Run(() => SelectedCategoriesService.CreateSelectedCategoryAsync(session.Id, id));
-                    }
+                    // utworzenie sesji
+                    var session = await Task.Run(() => SessionsService.CreateSessionAsync(Settings.GetInstance().InterfaceLanguageId, SessionSettings.LanguageId, SessionType.Value, SessionSettings.NumberOfQuestions));
 
-                    if (SessionType == Enums.SessionType.TEST)
+                    if (session != null)
                     {
-                        Configuration.GetInstance().TestControl = new LearnControl(session, SessionSettings);
-                        Configuration.GetInstance().CurrentView = Configuration.GetInstance().TestControl;
-                    }
-                    else
-                    {
-                        Configuration.GetInstance().LearnControl = new LearnControl(session, SessionSettings);
-                        Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnControl;
+                        // dodanie wybranych kategori do utworzonej sesji
+                        foreach (var id in SessionSettings.CategoriesIds)
+                        {
+                            await Task.Run(() => SelectedCategoriesService.CreateSelectedCategoryAsync(session.Id, id));
+                        }
+
+                        if (SessionType == Enums.SessionType.TEST)
+                        {
+                            Configuration.GetInstance().TestControl = new LearnControl(session, SessionSettings);
+                            Configuration.GetInstance().CurrentView = Configuration.GetInstance().TestControl;
+                        }
+                        else
+                        {
+                            Configuration.GetInstance().LearnControl = new LearnControl(session, SessionSettings);
+                            Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnControl;
+                        }
                     }
                 }
+                catch
+                {
+                    Configuration.GetInstance().NoConnection = true;
+                }
+
+                Mouse.OverrideCursor = null;
+                IsProcessingSession = false;
             }
             else
             {

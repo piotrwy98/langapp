@@ -52,77 +52,105 @@
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0" CornerRadius="10 0 0 10" Background="{StaticResource SecondaryBackgroundColor}">
-            <StackPanel>
-                <StackPanel.Resources>
-                    <Style TargetType="md:PackIcon">
-                        <Setter Property="Width" Value="35"/>
-                        <Setter Property="Height" Value="35"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                        <Setter Property="Margin" Value="15 0"/>
-                    </Style>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                    </Style>
-                </StackPanel.Resources>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-                <Image Source="../../Resources/logo.png" Margin="20 30 20 0"/>
-                
-                <md:PackIcon Kind="UserCircle" Foreground="{StaticResource PrimaryForegroundColor}" HorizontalAlignment="Center" Height="75" Width="75" Margin="0 20 0 0"/>
-                
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 26">
-                    <TextBlock Text="{DynamicResource hello_comma}" FontSize="20" Foreground="{StaticResource PrimaryForegroundColor}"/>
-                    <TextBlock Text="{Binding Configuration.User.Username, StringFormat=' {0}'}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource SecondaryForegroundColor}"/>
+                <StackPanel Grid.Row="0">
+                    <StackPanel.Resources>
+                        <Style TargetType="md:PackIcon">
+                            <Setter Property="Width" Value="35"/>
+                            <Setter Property="Height" Value="35"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="15 0"/>
+                        </Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <Image Source="../../Resources/logo.png" Margin="20 30 20 0"/>
+
+                    <md:PackIcon Kind="UserCircle" Foreground="{StaticResource PrimaryForegroundColor}" HorizontalAlignment="Center" Height="75" Width="75" Margin="0 20 0 0"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 26">
+                        <TextBlock Text="{DynamicResource hello_comma}" FontSize="20" Foreground="{StaticResource PrimaryForegroundColor}"/>
+                        <TextBlock Text="{Binding Configuration.User.Username, StringFormat=' {0}'}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource SecondaryForegroundColor}"/>
+                    </StackPanel>
+
+                    <RadioButton Style="{StaticResource MenuButton}" Command="{Binding MainScreenCheckedCommand}" IsChecked="True">
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Home"/>
+                            <TextBlock Text="{DynamicResource home}"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource MenuButton}" Command="{Binding LearnCheckedCommand}" IsChecked="{Binding Configuration.IsLearnChecked}">
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="LearnOutline"/>
+                            <TextBlock Text="{DynamicResource learn}"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource MenuButton}" Command="{Binding TestCheckedCommand}" IsChecked="{Binding Configuration.IsTestChecked}" IsEnabled="True">
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="CheckboxMarkedCircleOutline"/>
+                            <TextBlock Text="{DynamicResource test}"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource MenuButton}" Command="{Binding StatsCheckedCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="ChartLine"/>
+                            <TextBlock Text="{DynamicResource statistics}"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource MenuButton}" Command="{Binding DictionaryCheckedCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="BookOpenPageVariant"/>
+                            <TextBlock Text="{DynamicResource dictionary}"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource MenuButton}" Command="{Binding FavouriteWordsCheckedCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Star"/>
+                            <TextBlock Text="{DynamicResource favourite_words}"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource MenuButton}" Command="{Binding SettingsCheckedCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Settings"/>
+                            <TextBlock Text="{DynamicResource settings}"/>
+                        </StackPanel>
+                    </RadioButton>
                 </StackPanel>
-                
-                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding MainScreenCheckedCommand}" IsChecked="True">
-                    <StackPanel Orientation="Horizontal">
-                        <md:PackIcon Kind="Home"/>
-                        <TextBlock Text="{DynamicResource home}"/>
-                    </StackPanel>
-                </RadioButton>
 
-                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding LearnCheckedCommand}" IsChecked="{Binding Configuration.IsLearnChecked}">
-                    <StackPanel Orientation="Horizontal">
-                        <md:PackIcon Kind="LearnOutline"/>
-                        <TextBlock Text="{DynamicResource learn}"/>
-                    </StackPanel>
-                </RadioButton>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Visibility="{Binding Configuration.NoConnection, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Center" Margin="0 0 0 18" VerticalAlignment="Bottom">
+                    <md:PackIcon Kind="AlertCircleOutline" VerticalAlignment="Center" Foreground="Red" Height="22" Width="22"/>
+                    <TextBlock Text="{DynamicResource no_connection}" Foreground="Red" FontSize="16" Margin="5 0 0 0"/>
 
-                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding TestCheckedCommand}" IsChecked="{Binding Configuration.IsTestChecked}" IsEnabled="True">
-                    <StackPanel Orientation="Horizontal">
-                        <md:PackIcon Kind="CheckboxMarkedCircleOutline"/>
-                        <TextBlock Text="{DynamicResource test}"/>
-                    </StackPanel>
-                </RadioButton>
-
-                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding StatsCheckedCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <md:PackIcon Kind="ChartLine"/>
-                        <TextBlock Text="{DynamicResource statistics}"/>
-                    </StackPanel>
-                </RadioButton>
-
-                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding DictionaryCheckedCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <md:PackIcon Kind="BookOpenPageVariant"/>
-                        <TextBlock Text="{DynamicResource dictionary}"/>
-                    </StackPanel>
-                </RadioButton>
-
-                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding FavouriteWordsCheckedCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <md:PackIcon Kind="Star"/>
-                        <TextBlock Text="{DynamicResource favourite_words}"/>
-                    </StackPanel>
-                </RadioButton>
-
-                <RadioButton Style="{StaticResource MenuButton}" Command="{Binding SettingsCheckedCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <md:PackIcon Kind="Settings"/>
-                        <TextBlock Text="{DynamicResource settings}"/>
-                    </StackPanel>
-                </RadioButton>
-            </StackPanel>
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Configuration.NoConnection}" Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.0" To="1.0" Duration="0:0:2"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
+            </Grid>
         </Border>
 
         <Border Grid.Column="1" CornerRadius="0 10 10 0" Background="{StaticResource PrimaryBackgroundColor}">

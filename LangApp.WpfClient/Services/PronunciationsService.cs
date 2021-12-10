@@ -1,4 +1,5 @@
 ﻿using LangApp.Shared.Models;
+using LangApp.WpfClient.Models;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using System;
@@ -18,13 +19,20 @@ namespace LangApp.WpfClient.Services
     {
         private static PronunciationsService _instace;
 
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClient = new HttpClient() { Timeout = TimeSpan.FromSeconds(5) };
+        protected HttpClient HttpClient
+        {
+            get
+            {
+                Configuration.GetInstance().NoConnection = false;
+                return _httpClient;
+            }
+        }
 
         public Dictionary<Translation, MemoryStream> StreamsDictionary { get; }
 
         private PronunciationsService()
         {
-            _httpClient = new HttpClient();
             StreamsDictionary = new Dictionary<Translation, MemoryStream>();
         }
 
@@ -40,7 +48,7 @@ namespace LangApp.WpfClient.Services
 
         public async Task PlayPronunciation(Translation translation)
         {
-            MemoryStream memoryStream;
+            MemoryStream memoryStream = null;
 
             if(GetInstance().StreamsDictionary.ContainsKey(translation))
             {
@@ -53,7 +61,14 @@ namespace LangApp.WpfClient.Services
                     Mouse.OverrideCursor = Cursors.AppStarting;
                 }));
 
-                memoryStream = await Task.Run(() => GetNewMemoryStream(translation));
+                try
+                {
+                    memoryStream = await Task.Run(() => GetNewMemoryStream(translation));
+                }
+                catch
+                {
+                    Configuration.GetInstance().NoConnection = true;
+                }
 
                 _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
@@ -106,7 +121,7 @@ namespace LangApp.WpfClient.Services
                 PreserveReferencesHandling = PreserveReferencesHandling.None
             };
             var content = new StringContent(JsonConvert.SerializeObject(postRequest, serializerSettings), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("https://api.soundoftext.com/sounds", content).ConfigureAwait(false);
+            var response = await HttpClient.PostAsync("https://api.soundoftext.com/sounds", content).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -142,7 +157,7 @@ namespace LangApp.WpfClient.Services
 
         private async Task<string> GetLocation(string id, JsonSerializerSettings serializerSettings)
         {
-            var response = await _httpClient.GetAsync("https://api.soundoftext.com/sounds/" + id).ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("https://api.soundoftext.com/sounds/" + id).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {
