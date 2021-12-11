@@ -7,6 +7,7 @@ using LiveCharts.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace LangApp.WpfClient.ViewModels.Controls
@@ -182,16 +183,16 @@ namespace LangApp.WpfClient.ViewModels.Controls
             Periods = new List<ObjectToChoose>();
             Periods.Add(new ObjectToChoose()
             {
-                Object = "dzienne",
+                Object = Application.Current.Resources["daily"].ToString(),
                 IsChosen = true
             });
             Periods.Add(new ObjectToChoose()
             {
-                Object = "miesięczne"
+                Object = Application.Current.Resources["monthly"].ToString()
             });
             Periods.Add(new ObjectToChoose()
             {
-                Object = "roczne"
+                Object = Application.Current.Resources["yearly"].ToString()
             });
 
             uint id = Settings.GetInstance().InterfaceLanguageId;
@@ -202,12 +203,12 @@ namespace LangApp.WpfClient.ViewModels.Controls
             {
                 Object = new LanguageName()
                 {
-                    Value = "Wszystkie",
+                    Value = Application.Current.Resources["all"].ToString(),
                     LanguageId = 0,
                     Language = new Language()
                     {
                         Id = 0,
-                        ImagePath = "../../../Resources/Flags/earth.png"
+                        ImagePath = "https://46.41.136.101/images/languages/all.png"
                     }
                 },
                 IsChosen = true

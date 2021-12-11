@@ -59,40 +59,61 @@ namespace LangApp.WpfClient.ViewModels.Windows
                 ToastArguments args = ToastArguments.Parse(toastArgs.Argument);
                 var schedule = Settings.GetInstance().Schedules.FirstOrDefault(x => x.Id.ToString() == args["id"]);
 
-                if(schedule != null)
+                if (schedule != null)
                 {
-                    // utworzenie sesji
-                    var session = await Task.Run(() => SessionsService.CreateSessionAsync(Settings.GetInstance().InterfaceLanguageId, schedule.SessionSettings.LanguageId, schedule.SessionType, schedule.SessionSettings.NumberOfQuestions));
-
-                    if (session != null)
+                    if(args.Contains("dismissed"))
                     {
-                        // dodanie wybranych kategori do utworzonej sesji
-                        foreach (var id in schedule.SessionSettings.CategoriesIds)
+                        schedule.IsActive = false;
+                        Settings.Store();
+                    }
+                    else
+                    {
+                        try
                         {
-                            await Task.Run(() => SelectedCategoriesService.CreateSelectedCategoryAsync(session.Id, id));
+                            // utworzenie sesji
+                            var session = await Task.Run(() => SessionsService.CreateSessionAsync(Settings.GetInstance().InterfaceLanguageId, schedule.SessionSettings.LanguageId, schedule.SessionType, schedule.SessionSettings.NumberOfQuestions));
+
+                            if (session != null)
+                            {
+                                // dodanie wybranych kategori do utworzonej sesji
+                                foreach (var id in schedule.SessionSettings.CategoriesIds)
+                                {
+                                    await Task.Run(() => SelectedCategoriesService.CreateSelectedCategoryAsync(session.Id, id));
+                                }
+
+                                // zapisanie w konfiguracji
+                                Configuration.CurrentSchedule = schedule;
+
+                                Application.Current.Dispatcher.Invoke(delegate
+                                {
+                                    if (schedule.SessionType == SessionType.TEST)
+                                    {
+                                        Configuration.GetInstance().TestControl = new LearnControl(session, schedule.SessionSettings);
+                                        Configuration.GetInstance().CurrentView = Configuration.GetInstance().TestControl;
+                                        Configuration.GetInstance().IsTestChecked = true;
+                                    }
+                                    else
+                                    {
+                                        Configuration.GetInstance().LearnControl = new LearnControl(session, schedule.SessionSettings);
+                                        Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnControl;
+                                        Configuration.GetInstance().IsLearnChecked = true;
+                                    }
+
+                                    Application.Current.Windows[0].Show();
+                                    Application.Current.Windows[0].WindowState = WindowState.Normal;
+                                });
+                            }
                         }
-
-                        // zapisanie w konfiguracji
-                        Configuration.CurrentSchedule = schedule;
-
-                        Application.Current.Dispatcher.Invoke(delegate
+                        catch
                         {
-                            if (schedule.SessionType == SessionType.TEST)
+                            Application.Current.Dispatcher.Invoke(delegate
                             {
-                                Configuration.GetInstance().TestControl = new LearnControl(session, schedule.SessionSettings);
-                                Configuration.GetInstance().CurrentView = Configuration.GetInstance().TestControl;
-                                Configuration.GetInstance().IsTestChecked = true;
-                            }
-                            else
-                            {
-                                Configuration.GetInstance().LearnControl = new LearnControl(session, schedule.SessionSettings);
-                                Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnControl;
-                                Configuration.GetInstance().IsLearnChecked = true;
-                            }
-
-                            Application.Current.Windows[0].Show();
-                            Application.Current.Windows[0].WindowState = WindowState.Normal;
-                        });
+                                Application.Current.Windows[0].Show();
+                                Application.Current.Windows[0].WindowState = WindowState.Normal;
+                                Configuration.GetInstance().NoConnection = true;
+                                Configuration.ArrangeSchedule(schedule);
+                            });
+                        }
                     }
                 }
             };

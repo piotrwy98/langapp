@@ -52,7 +52,7 @@ namespace LangApp.WpfClient.Services
 
         private async Task<IEnumerable<Translation>> GetTranslationsAsync()
         {
-            var response = await HttpClient.GetAsync("http://localhost:5000/translations").ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("translations").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -131,6 +131,11 @@ namespace LangApp.WpfClient.Services
             }
 
             return dictionary;
+        }
+
+        public static void NullInstance()
+        {
+            _instace = null;
         }
     }
 }

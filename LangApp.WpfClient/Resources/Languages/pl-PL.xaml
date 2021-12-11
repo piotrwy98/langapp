@@ -108,6 +108,10 @@
     <system:String x:Key="save_configuration">Zapisz konfigurację</system:String>
 
     <system:String x:Key="type_of_summary">Rodzaj podsumowania</system:String>
+    <system:String x:Key="daily">dzienne</system:String>
+    <system:String x:Key="monthly">miesięczne</system:String>
+    <system:String x:Key="yearly">roczne</system:String>
+    <system:String x:Key="all">Wszystkie</system:String>
     <system:String x:Key="number_of_games">Liczba rozgrywek</system:String>
     <system:String x:Key="number_of_answers">Liczba udzielonych odpowiedzi</system:String>
     <system:String x:Key="correctness_of_answers">Poprawność odpowiedzi</system:String>

@@ -270,11 +270,11 @@ namespace LangApp.WpfClient.Models
                                 new ToastSelectionBoxItem("60", "1 " + Application.Current.Resources["hour"].ToString())
                     }
                 })
-
                 .AddButton(new ToastButtonSnooze(Application.Current.Resources["snooze"].ToString()) { SelectionBoxId = "snoozeTime" })
                 .AddButton(new ToastButton().SetContent(Application.Current.Resources["start"].ToString()))
-                .AddButton(new ToastButtonDismiss(Application.Current.Resources["dismiss"].ToString()))
-                .Schedule(DateTime.Now.AddMinutes(schedule.IntervalMinutes), toast =>
+                .AddButton(new ToastButton().SetContent(Application.Current.Resources["dismiss"].ToString()).AddArgument("dismissed"))
+                //.AddButton(new ToastButtonDismiss(Application.Current.Resources["dismiss"].ToString()))
+                .Schedule(DateTime.Now.AddSeconds(schedule.IntervalMinutes), toast =>
                 {
                     toast.Tag = schedule.Id.ToString();
                 });

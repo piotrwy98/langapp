@@ -38,6 +38,8 @@ namespace LangApp.WpfClient.Services
             Answers = (List<Answer>) GetAnswersAsync().Result;
             GenerateStats();
 
+            Configuration.GetInstance().LearnAnswerCounter = 0;
+            Configuration.GetInstance().TestAnswerCounter = 0;
             Session session = null;
 
             foreach (var answer in Answers)
@@ -70,7 +72,7 @@ namespace LangApp.WpfClient.Services
 
         private async Task<IEnumerable<Answer>> GetAnswersAsync()
         {
-            var response = await HttpClient.GetAsync("http://localhost:5000/answers").ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("answers").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -100,7 +102,7 @@ namespace LangApp.WpfClient.Services
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(answer), Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync("http://localhost:5000/answers", content).ConfigureAwait(false);
+            var response = await HttpClient.PostAsync("answers", content).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -540,6 +542,11 @@ namespace LangApp.WpfClient.Services
                     pair.Value.TestCount++;
                 }
             }
+        }
+
+        public static void NullInstance()
+        {
+            _instace = null;
         }
     }
 }

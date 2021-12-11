@@ -13,8 +13,6 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Windows.UI.Notifications;
-using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.WpfClient.ViewModels.Controls
 {
@@ -126,6 +124,16 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
             if (confirmationWindow.DialogResult == true)
             {
+                AnswersService.NullInstance();
+                FavouriteWordsService.NullInstance();
+                SelectedCategoriesService.NullInstance();
+                SessionsService.NullInstance();
+                TranslationsService.NullInstance();
+
+                Configuration.GetInstance().LearnControl = null;
+                Configuration.GetInstance().TestControl = null;
+                Configuration.GetInstance().CurrentSchedule = null;
+
                 // usunięcie danych z zapisanych ustawień
                 Settings.GetInstance().PreviousUserEmail = null;
                 Settings.GetInstance().PreviousUserPassword = null;

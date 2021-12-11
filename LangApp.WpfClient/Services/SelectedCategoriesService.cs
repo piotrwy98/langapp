@@ -32,7 +32,7 @@ namespace LangApp.WpfClient.Services
 
         private async Task<IEnumerable<SelectedCategory>> GetSelectedCategoriesAsync()
         {
-            var response = await HttpClient.GetAsync("http://localhost:5000/selected-categories").ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("selected-categories").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -58,7 +58,7 @@ namespace LangApp.WpfClient.Services
 
             var selectedCategories = GetInstance().SelectedCategories;
             var content = new StringContent(JsonConvert.SerializeObject(selectedCategory), Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync("http://localhost:5000/selected-categories", content).ConfigureAwait(false);
+            var response = await HttpClient.PostAsync("selected-categories", content).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -74,6 +74,11 @@ namespace LangApp.WpfClient.Services
             }
 
             return null;
+        }
+
+        public static void NullInstance()
+        {
+            _instace = null;
         }
     }
 }

@@ -36,8 +36,6 @@ namespace LangApp.WpfClient.ViewModels.Controls
             {
                 _selectedDictionary = value;
                 OnPropertyChanged();
-                OnPropertyChanged("FirstLanguageFlagSource");
-                OnPropertyChanged("SecondLanguageFlagSource");
                 DictionaryCollectionView = CollectionViewSource.GetDefaultView(_selectedDictionary.Dictionary);
             }
         }
@@ -69,34 +67,6 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 _dictionaryCollectionView = value;
                 OnPropertyChanged();
                 RefreshSearching();
-            }
-        }
-
-        public BitmapImage FirstLanguageFlagSource
-        {
-            get
-            {
-                BitmapImage image = new BitmapImage();
-                image.BeginInit();
-                image.UriSource = new Uri(SelectedDictionary.FirstLanguage.ImagePath, UriKind.Relative);
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.EndInit();
-
-                return image;
-            }
-        }
-
-        public BitmapImage SecondLanguageFlagSource
-        {
-            get
-            {
-                BitmapImage image = new BitmapImage();
-                image.BeginInit();
-                image.UriSource = new Uri(SelectedDictionary.SecondLanguage.ImagePath, UriKind.Relative);
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.EndInit();
-
-                return image;
             }
         }
         #endregion

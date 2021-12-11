@@ -44,7 +44,7 @@ namespace LangApp.WpfClient.Services
 
         private async Task<IEnumerable<LanguageName>> GetLanguagesAsync()
         {
-            var response = await HttpClient.GetAsync("http://localhost:5000/languages").ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("languages").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {

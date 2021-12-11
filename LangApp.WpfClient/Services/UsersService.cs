@@ -33,7 +33,7 @@ namespace LangApp.WpfClient.Services
 
         private async Task<IEnumerable<User>> GetUsersAsync()
         {
-            var response = await HttpClient.GetAsync("http://localhost:5000/users").ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("users").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -59,7 +59,7 @@ namespace LangApp.WpfClient.Services
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync("http://localhost:5000/users", content).ConfigureAwait(false);
+            var response = await HttpClient.PostAsync("users", content).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {

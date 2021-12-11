@@ -7,7 +7,12 @@ namespace LangApp.WpfClient.Services
 {
     public abstract class HttpClientService
     {
-        private static readonly HttpClient _httpClient = new HttpClient() { Timeout = TimeSpan.FromSeconds(5) };
+        private static readonly HttpClient _httpClient = new HttpClient()
+        { 
+            Timeout = TimeSpan.FromSeconds(5),
+            BaseAddress = new Uri("https://46.41.136.101/")
+        };
+
         protected static HttpClient HttpClient
         {
             get

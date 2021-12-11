@@ -50,10 +50,10 @@
 
             <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal">
                 <RadioButton IsChecked="{Binding SearchByFirstLanguage}" Margin="10 0">
-                    <Image Source="{Binding FirstLanguageFlagSource}" Height="30"/>
+                    <Image Source="{Binding SelectedDictionary.FirstLanguage.ImagePath}" Height="30"/>
                 </RadioButton>
                 <RadioButton>
-                    <Image Source="{Binding SecondLanguageFlagSource}" Height="30"/>
+                    <Image Source="{Binding SelectedDictionary.SecondLanguage.ImagePath}" Height="30"/>
                 </RadioButton>
             </StackPanel>
         </Grid>

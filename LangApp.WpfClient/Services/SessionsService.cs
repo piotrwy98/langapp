@@ -55,7 +55,7 @@ namespace LangApp.WpfClient.Services
 
         private async Task<IEnumerable<Session>> GetSessionsAsync()
         {
-            var response = await HttpClient.GetAsync("http://localhost:5000/sessions").ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("sessions").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -83,7 +83,7 @@ namespace LangApp.WpfClient.Services
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(session), Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync("http://localhost:5000/sessions", content).ConfigureAwait(false);
+            var response = await HttpClient.PostAsync("sessions", content).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -363,6 +363,11 @@ namespace LangApp.WpfClient.Services
                 TotalYearlyAnswers[0].Last().Value += session.QuestionsNumber;
                 TotalYearlyAnswers[(int)session.SecondLanguageId].Last().Value += session.QuestionsNumber;
             }
+        }
+
+        public static void NullInstance()
+        {
+            _instace = null;
         }
     }
 }

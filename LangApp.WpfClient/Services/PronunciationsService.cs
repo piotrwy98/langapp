@@ -19,7 +19,12 @@ namespace LangApp.WpfClient.Services
     {
         private static PronunciationsService _instace;
 
-        private readonly HttpClient _httpClient = new HttpClient() { Timeout = TimeSpan.FromSeconds(5) };
+        private readonly HttpClient _httpClient = new HttpClient()
+        {
+            Timeout = TimeSpan.FromSeconds(5),
+            BaseAddress = new Uri("https://api.soundoftext.com/")
+        };
+
         protected HttpClient HttpClient
         {
             get
@@ -121,7 +126,7 @@ namespace LangApp.WpfClient.Services
                 PreserveReferencesHandling = PreserveReferencesHandling.None
             };
             var content = new StringContent(JsonConvert.SerializeObject(postRequest, serializerSettings), Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync("https://api.soundoftext.com/sounds", content).ConfigureAwait(false);
+            var response = await HttpClient.PostAsync("sounds", content).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -157,7 +162,7 @@ namespace LangApp.WpfClient.Services
 
         private async Task<string> GetLocation(string id, JsonSerializerSettings serializerSettings)
         {
-            var response = await HttpClient.GetAsync("https://api.soundoftext.com/sounds/" + id).ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("sounds/" + id).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {

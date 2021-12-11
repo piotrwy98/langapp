@@ -188,7 +188,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
             {
                 userWithToken = await TokensService.GetUserWithTokenAsync(Email.Trim(), Password);
             }
-            catch (HttpRequestException)
+            catch
             {
                 ResultMessage = Application.Current.Resources["no_server_connection"].ToString();
                 return;
@@ -262,7 +262,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
                 registerResult = await UsersService.CreateUserAsync(Email.Trim(), Username.Trim(), Password.Trim());
 
             }
-            catch (HttpRequestException)
+            catch
             {
                 ResultMessage = Application.Current.Resources["no_server_connection"].ToString();
                 return;

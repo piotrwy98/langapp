@@ -37,7 +37,7 @@ namespace LangApp.WpfClient.Services
 
         private async Task<IEnumerable<FavouriteWord>> GetFavouriteWordsAsync()
         {
-            var response = await HttpClient.GetAsync("http://localhost:5000/favourite-words").ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("favourite-words").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -63,7 +63,7 @@ namespace LangApp.WpfClient.Services
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(favouriteWord), Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync("http://localhost:5000/favourite-words", content).ConfigureAwait(false);
+            var response = await HttpClient.PostAsync("favourite-words", content).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -115,7 +115,7 @@ namespace LangApp.WpfClient.Services
                 }
             }
 
-            var response = await HttpClient.DeleteAsync("http://localhost:5000/favourite-words/" + id).ConfigureAwait(false);
+            var response = await HttpClient.DeleteAsync("favourite-words/" + id).ConfigureAwait(false);
 
             if(response.IsSuccessStatusCode)
             {
@@ -140,6 +140,11 @@ namespace LangApp.WpfClient.Services
                 await Configuration.RefreshToken();
                 await RemoveFavouriteWordAsync(id, true);
             }
+        }
+
+        public static void NullInstance()
+        {
+            _instace = null;
         }
     }
 }

@@ -30,7 +30,7 @@ namespace LangApp.WpfClient.Services
 
         private async Task<IEnumerable<CategoryName>> GetCategoriesAsync()
         {
-            var response = await HttpClient.GetAsync("http://localhost:5000/categories").ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("categories").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {

@@ -159,7 +159,6 @@
     <Compile Include="Models\SessionSettings.cs" />
     <Compile Include="Models\ObjectToChoose.cs" />
     <Compile Include="Models\Configuration.cs" />
-    <Compile Include="Converters\ImageConverter.cs" />
     <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\TranslationSet.cs" />
@@ -256,21 +255,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Flags\en.png" />
-    <Resource Include="Resources\Flags\pl.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Flags\de.png" />
-    <Resource Include="Resources\Flags\es.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Flags\earth.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\icon.ico" />
@@ -301,6 +287,7 @@
       <Version>5.0.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\LangApp.Shared\LangApp.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

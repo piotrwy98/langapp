@@ -30,7 +30,7 @@ namespace LangApp.WpfClient.Services
 
         private async Task<IEnumerable<PartOfSpeechName>> GetPartsOfSpeechAsync()
         {
-            var response = await HttpClient.GetAsync("http://localhost:5000/parts-of-speech").ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("parts-of-speech").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {

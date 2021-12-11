@@ -130,7 +130,7 @@
                     </RadioButton>
                 </StackPanel>
 
-                <StackPanel Grid.Row="1" Orientation="Horizontal" Visibility="{Binding Configuration.NoConnection, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Center" Margin="0 0 0 18" VerticalAlignment="Bottom">
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Visibility="{Binding Configuration.NoConnection, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Center" Margin="0 0 0 12" VerticalAlignment="Bottom">
                     <md:PackIcon Kind="AlertCircleOutline" VerticalAlignment="Center" Foreground="Red" Height="22" Width="22"/>
                     <TextBlock Text="{DynamicResource no_connection}" Foreground="Red" FontSize="16" Margin="5 0 0 0"/>
 

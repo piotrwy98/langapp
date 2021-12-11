@@ -11,7 +11,6 @@
              d:DesignHeight="450" d:DesignWidth="800" Foreground="{StaticResource PrimaryForegroundColor}"
              RenderOptions.BitmapScalingMode="HighQuality">
     <UserControl.Resources>
-        <converters:ImageConverter x:Key="ImageConverter"/>
         <converters:LanguageNameConverter x:Key="LanguageNameConverter"/>
     </UserControl.Resources>
     
@@ -43,7 +42,7 @@
                     <DataGridTemplateColumn Header="{DynamicResource first_language}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding FirstTranslation.Language.ImagePath, Converter={StaticResource ImageConverter}}" ToolTip="{Binding FirstTranslation.Language.Id, Converter={StaticResource LanguageNameConverter}}" Height="24"/>
+                                <Image Source="{Binding FirstTranslation.Language.ImagePath}" ToolTip="{Binding FirstTranslation.Language.Id, Converter={StaticResource LanguageNameConverter}}" Height="24"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -51,7 +50,7 @@
                     <DataGridTemplateColumn Header="{DynamicResource second_language}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding SecondTranslation.Language.ImagePath, Converter={StaticResource ImageConverter}}" ToolTip="{Binding SecondTranslation.Language.Id, Converter={StaticResource LanguageNameConverter}}" Height="24"/>
+                                <Image Source="{Binding SecondTranslation.Language.ImagePath}" ToolTip="{Binding SecondTranslation.Language.Id, Converter={StaticResource LanguageNameConverter}}" Height="24"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

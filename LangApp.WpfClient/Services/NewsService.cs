@@ -1,7 +1,6 @@
 ﻿using LangApp.Shared.Models;
 using LangApp.WpfClient.Models;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,7 +8,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace LangApp.WpfClient.Services
 {
@@ -46,7 +44,7 @@ namespace LangApp.WpfClient.Services
 
         private async Task<IEnumerable<News>> GetNewsAsync()
         {
-            var response = await HttpClient.GetAsync("http://localhost:5000/news").ConfigureAwait(false);
+            var response = await HttpClient.GetAsync("news").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -65,7 +63,7 @@ namespace LangApp.WpfClient.Services
         public static async Task<News> CreateNewsAsync(News news)
         {
             var content = new StringContent(JsonConvert.SerializeObject(news), Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync("http://localhost:5000/news", content).ConfigureAwait(false);
+            var response = await HttpClient.PostAsync("news", content).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -84,7 +82,7 @@ namespace LangApp.WpfClient.Services
         public static async Task<bool> UpdateNewsAsync(News news)
         {
             var content = new StringContent(JsonConvert.SerializeObject(news), Encoding.UTF8, "application/json");
-            var response = await HttpClient.PutAsync("http://localhost:5000/news", content).ConfigureAwait(false);
+            var response = await HttpClient.PutAsync("news", content).ConfigureAwait(false);
 
             if(response.IsSuccessStatusCode)
             {
@@ -101,7 +99,7 @@ namespace LangApp.WpfClient.Services
 
         public static async Task<bool> RemoveNewsAsync(uint id)
         {
-            var response = await HttpClient.DeleteAsync("http://localhost:5000/news/" + id).ConfigureAwait(false);
+            var response = await HttpClient.DeleteAsync("news/" + id).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {

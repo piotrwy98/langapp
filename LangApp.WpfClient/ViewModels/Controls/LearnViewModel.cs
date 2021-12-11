@@ -868,6 +868,13 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         private void Finish()
         {
+            if (Configuration.GetInstance().CurrentSchedule != null &&
+                Configuration.GetInstance().CurrentSchedule.SessionSettings == SessionSettings)
+            {
+                Configuration.ArrangeSchedule(Configuration.GetInstance().CurrentSchedule);
+                Configuration.GetInstance().CurrentSchedule = null;
+            }
+
             Configuration.GetInstance().LearnFinishControl = new LearnFinishControl(_session, DateTime.Now - _startTime, _answers);
             Configuration.GetInstance().CurrentView = Configuration.GetInstance().LearnFinishControl;
 
