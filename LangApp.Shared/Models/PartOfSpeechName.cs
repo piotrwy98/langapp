@@ -8,6 +8,5 @@
         public uint LanguageId { get; set; }
         public Language Language { get; set; }
         public string Value { get; set; }
-
     }
 }

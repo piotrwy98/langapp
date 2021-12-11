@@ -10,7 +10,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.WebApi.Api.Controllers
 {
@@ -54,14 +53,14 @@ namespace LangApp.WebApi.Api.Controllers
         private Task<string> GenerateToken(User user)
         {
             var claims = new Dictionary<string, object>();
-            claims.Add(ClaimTypes.Role, user.Role);
+            claims.Add(ClaimTypes.Role, user.Role.ToString());
             claims.Add(ClaimTypes.NameIdentifier, user.Id.ToString());
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["JWTSettings:SecretKey"]);
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
-                Expires = DateTime.UtcNow.AddMonths(2),
+                Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Claims = claims
             };
