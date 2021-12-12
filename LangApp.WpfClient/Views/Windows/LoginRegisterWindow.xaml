@@ -33,10 +33,21 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="―" Style="{StaticResource WindowStateButton}" Margin="0 10 0 0" Click="MinimizeWindow_Button_Click"/>
-                <Button Content="✕" Style="{StaticResource WindowStateButton}" Margin="5 0" Click="CloseWindow_Button_Click"/>
-            </StackPanel>
+            <Grid Grid.Row="0">
+                <ComboBox SelectedIndex="{Binding SelectedLanguageIndex}" HorizontalAlignment="Left" Width="43" Margin="10 5 0 0">
+                    <ComboBoxItem>
+                        <Image Source="../../Resources/Flags/pl.png" Width="24" ToolTip="Polski" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        <Image Source="../../Resources/Flags/en.png" Width="24" ToolTip="English" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    </ComboBoxItem>
+                </ComboBox>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="―" Style="{StaticResource WindowStateButton}" Margin="0 5 0 0" Click="MinimizeWindow_Button_Click"/>
+                    <Button Content="✕" Style="{StaticResource WindowStateButton}" Margin="5 -5 5 0" Click="CloseWindow_Button_Click"/>
+                </StackPanel>
+            </Grid>
 
             <Image Grid.Row="1" Source="../../Resources/logo.png" Margin="52 30 52 20"/>
 

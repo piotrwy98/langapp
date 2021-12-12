@@ -90,8 +90,8 @@ namespace LangApp.WpfClient.ViewModels.Controls
             PronunciationClickCommand = new RelayCommand(PronunciationClick);
             StartLearningCommand = new RelayCommand(StartLearning);
 
-            uint id = Settings.GetInstance().InterfaceLanguageId;
-            var languages = LanguagesService.GetInstance().LanguageNames.FindAll(x => x.SourceLanguageId == id && x.LanguageId != id);
+            var interfaceLanguageId = Settings.GetInstance().InterfaceLanguageId;
+            var languages = LanguagesService.GetInstance().LanguageNames.FindAll(x => x.SourceLanguageId == interfaceLanguageId && x.LanguageId != interfaceLanguageId);
             Languages = new List<ObjectToChoose>();
 
             foreach (var language in languages)
@@ -107,7 +107,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             QuestionNumbers.Add(new ObjectToChoose() { Object = (uint) 10 });
             QuestionNumbers.Add(new ObjectToChoose() { Object = (uint) 20 });
 
-            var categories = CategoriesService.GetInstance().Categories.FindAll(x => x.LanguageId == id);
+            var categories = CategoriesService.GetInstance().Categories.FindAll(x => x.LanguageId == interfaceLanguageId);
             Categories = new List<ObjectToChoose>();
 
             foreach(var category in categories)
@@ -169,6 +169,11 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 }
 
                 objectToChoose.IsChosen = true;
+
+                foreach (var category in Categories)
+                {
+                    category.OnPropertyChanged("Object");
+                }
             }
         }
 

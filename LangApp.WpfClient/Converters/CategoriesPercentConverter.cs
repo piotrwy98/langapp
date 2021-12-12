@@ -18,7 +18,7 @@ namespace LangApp.WpfClient.Converters
             var categoryId = (value as CategoryName).CategoryId;
             var dataContext = (Configuration.GetInstance().CurrentView as LearnSettingsControl).DataContext as LearnSettingsViewModel;
             var sessionType = dataContext.SessionType;
-            var secondLanguageId = (dataContext.Languages[0].Object as LanguageName).LanguageId;
+            var secondLanguageId = (dataContext.Languages.First(x => x.IsChosen).Object as LanguageName).LanguageId;
             var firstLanguageId = Settings.GetInstance().InterfaceLanguageId;
             var dictionary = TranslationsService.GetInstance().Dictionaries.First(x => x.FirstLanguage.Id == firstLanguageId && x.SecondLanguage.Id == secondLanguageId);
 

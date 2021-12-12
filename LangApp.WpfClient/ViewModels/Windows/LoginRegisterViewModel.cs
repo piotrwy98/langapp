@@ -1,8 +1,10 @@
-﻿using LangApp.Shared.Models.Controllers;
+﻿using LangApp.Shared.Models;
+using LangApp.Shared.Models.Controllers;
 using LangApp.WpfClient.Models;
 using LangApp.WpfClient.Services;
 using LangApp.WpfClient.Views.Windows;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -131,6 +133,21 @@ namespace LangApp.WpfClient.ViewModels.Windows
                     return Visibility.Hidden;
 
                 return Visibility.Visible;
+            }
+        }
+
+        public uint SelectedLanguageIndex
+        {
+            get
+            {
+                return Settings.GetInstance().InterfaceLanguageId - 1;
+            }
+            set
+            {
+                Settings.GetInstance().InterfaceLanguageId = value + 1;
+                Settings.Store();
+
+                ResultMessage = string.Empty;
             }
         }
         #endregion

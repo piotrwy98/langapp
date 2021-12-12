@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
+using System.Windows;
 
 namespace LangApp.WpfClient.Models
 {
@@ -14,7 +15,33 @@ namespace LangApp.WpfClient.Models
         
         private static Settings _instance;
 
-        public uint InterfaceLanguageId { get; set; } = 1;
+        private uint _interfaceLanguageId = 1;
+        public uint InterfaceLanguageId
+        {
+            get
+            {
+                return _interfaceLanguageId;
+            }
+            set
+            {
+                _interfaceLanguageId = value;
+
+                ResourceDictionary resourceDictionary = new ResourceDictionary();
+
+                if (_interfaceLanguageId == 1)
+                {
+                    resourceDictionary.Source = new Uri("..\\..\\Resources\\Languages\\pl-PL.xaml", UriKind.Relative);
+                }
+                else
+                {
+                    resourceDictionary.Source = new Uri("..\\..\\Resources\\Languages\\en-US.xaml", UriKind.Relative);
+                }
+
+                Application.Current.Resources.MergedDictionaries.Remove(resourceDictionary);
+                Application.Current.Resources.MergedDictionaries.Add(resourceDictionary);
+            }
+        }
+
         public string PreviousUserEmail { get; set; }
         public string PreviousUserPassword { get; set; }
         public bool StartWithSystem { get; set; }
@@ -44,13 +71,13 @@ namespace LangApp.WpfClient.Models
         public static void Store()
         {
             using (var aesManaged = new AesManaged())
-            {  
+            {
                 var encryptor = aesManaged.CreateEncryptor(AES_KEY, AES_IV);
-                
+
                 using (var memoryStream = new MemoryStream())
-                { 
+                {
                     using (CryptoStream cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
-                    {  
+                    {
                         using (var streamWriter = new StreamWriter(cryptoStream))
                         {
                             var json = JsonConvert.SerializeObject(GetInstance());

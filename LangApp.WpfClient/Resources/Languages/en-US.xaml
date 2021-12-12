@@ -1,0 +1,170 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="email">Email</system:String>
+    <system:String x:Key="username">Username</system:String>
+    <system:String x:Key="password">Password</system:String>
+    <system:String x:Key="repeat_password">Repeat password</system:String>
+    <system:String x:Key="log_in">Log in</system:String>
+    <system:String x:Key="create_account">Create account</system:String>
+    <system:String x:Key="or">or</system:String>
+    <system:String x:Key="go_back_to_log_in">Go back to log in</system:String>
+    <system:String x:Key="no_email_address_provided">No email address provided</system:String>
+    <system:String x:Key="invalid_email_format">Invalid email format</system:String>
+    <system:String x:Key="no_password_provided">No password provided</system:String>
+    <system:String x:Key="no_server_connection">No server connection</system:String>
+    <system:String x:Key="incorrect_login_details">Incorrect login details</system:String>
+    <system:String x:Key="no_username_provided">No username provided</system:String>
+    <system:String x:Key="passwords_do_not_match">Passwords do not match</system:String>
+    <system:String x:Key="account_created_successfully">Account created successfully</system:String>
+    <system:String x:Key="the_given_email_address_is_taken">Email address is taken</system:String>
+    <system:String x:Key="the_given_username_is_taken">Username is taken</system:String>
+
+    <system:String x:Key="hello_comma">Hello,</system:String>
+    <system:String x:Key="home">Home</system:String>
+    <system:String x:Key="learn">Learn</system:String>
+    <system:String x:Key="test">Test</system:String>
+    <system:String x:Key="statistics">Statistics</system:String>
+    <system:String x:Key="dictionary">Dictionary</system:String>
+    <system:String x:Key="favourite_words">Favourite words</system:String>
+    <system:String x:Key="settings">Settings</system:String>
+    <system:String x:Key="no_connection">No connection</system:String>
+    
+    <system:String x:Key="dictionary_colon">Dictionary:</system:String>
+    <system:String x:Key="search_colon">Search:</system:String>
+    <system:String x:Key="search_phrase">Search phrase</system:String>
+    <system:String x:Key="no_search_results">No search results</system:String>
+    <system:String x:Key="add_to_favourites">Add to favourites</system:String>
+    <system:String x:Key="remove_from_favourites">Remove from favourites</system:String>
+    <system:String x:Key="remove_from_favourites_confirmation_part1">Are you sure you want to remove the word</system:String>
+    <system:String x:Key="remove_from_favourites_confirmation_part2">from favourites?</system:String>
+    <system:String x:Key="pronunciation">Pronunciation</system:String>
+    <system:String x:Key="phonetic_notation">Phonetic notation</system:String>
+    <system:String x:Key="part_of_speech">Part of speech</system:String>
+    <system:String x:Key="play">Play</system:String>
+    
+    <system:String x:Key="first_language">First language</system:String>
+    <system:String x:Key="first_translation">First translation</system:String>
+    <system:String x:Key="second_language">Second language</system:String>
+    <system:String x:Key="second_translation">Second translation</system:String>
+    <system:String x:Key="date_added">Date added</system:String>
+    
+    <system:String x:Key="question">Question</system:String>
+    <system:String x:Key="whats_the_translation_of_the_word">What's the translation of the word</system:String>
+    <system:String x:Key="add_the_word_to_favourites">Add the word to the favourites</system:String>
+    <system:String x:Key="remove_the_word_from_favourites">Remove the word from favourites</system:String>
+    <system:String x:Key="translation">Translation</system:String>
+    <system:String x:Key="show_correct">Show correct</system:String>
+    <system:String x:Key="correct_answer_colon">Correct answer:</system:String>
+    <system:String x:Key="finish">Finish</system:String>
+    <system:String x:Key="learn_finish_confirmation">Are you sure you want to finish learning?</system:String>
+    <system:String x:Key="test_finish_confirmation">Are you sure you want to finish the test?</system:String>
+    <system:String x:Key="skip">Skip</system:String>
+    <system:String x:Key="check">Check</system:String>
+    <system:String x:Key="next">Next</system:String>
+    <system:String x:Key="correct_answer">Correct answer</system:String>
+    <system:String x:Key="incorrect_answer">Incorrect answer</system:String>
+    
+    <system:String x:Key="game_details">Game details</system:String>
+    <system:String x:Key="language_colon">Language:</system:String>
+    <system:String x:Key="start_date_colon">Start date:</system:String>
+    <system:String x:Key="mode_colon">Mode:</system:String>
+    <system:String x:Key="number_of_questions_colon">Questions quantity:</system:String>
+    <system:String x:Key="categories_colon">Categories:</system:String>
+    <system:String x:Key="answers_details">Answers details</system:String>
+    <system:String x:Key="no_dot">No.</system:String>
+    <system:String x:Key="result">Result</system:String>
+    <system:String x:Key="your_answer">Your answer</system:String>
+    <system:String x:Key="question_type">Question type</system:String>
+    <system:String x:Key="answer_time">Answer duration</system:String>
+    <system:String x:Key="percentage_of_answers">Percentage of answers</system:String>
+    <system:String x:Key="correct">Correct</system:String>
+    <system:String x:Key="incorrect">Incorrect</system:String>
+    <system:String x:Key="unanswered">Unanswered</system:String>
+    
+    <system:String x:Key="completed">Completed</system:String>
+    <system:String x:Key="tasks_in">tasks in</system:String>
+    <system:String x:Key="correctness_of_answers_equals">Correctness of answers equals</system:String>
+    <system:String x:Key="from">from</system:String>
+    <system:String x:Key="customize">Customize</system:String>
+    <system:String x:Key="show_details">Show details</system:String>
+    <system:String x:Key="play_again">Play again</system:String>
+    <system:String x:Key="learning_completed">Learning completed</system:String>
+    <system:String x:Key="great_job_exc">Great job!</system:String>
+    <system:String x:Key="pretty_good_exc">Pretty good!</system:String>
+    <system:String x:Key="you_can_do_better_exc">You can do better!</system:String>
+    
+    <system:String x:Key="language">Language</system:String>
+    <system:String x:Key="number_of_questions">Number of questions</system:String>
+    <system:String x:Key="question_types">Question types</system:String>
+    <system:String x:Key="closed_questions">Closed questions</system:String>
+    <system:String x:Key="open_questions">Open questions</system:String>
+    <system:String x:Key="categories">Categories</system:String>
+    <system:String x:Key="start_learning">Start learning</system:String>
+    <system:String x:Key="start_test">Start test</system:String>
+    <system:String x:Key="category_progress">Category progress</system:String>
+    <system:String x:Key="save_configuration">Save configuration</system:String>
+
+    <system:String x:Key="type_of_summary">Type of summary</system:String>
+    <system:String x:Key="daily">daily</system:String>
+    <system:String x:Key="monthly">monthly</system:String>
+    <system:String x:Key="yearly">yearly</system:String>
+    <system:String x:Key="all">All</system:String>
+    <system:String x:Key="number_of_games">Number of games</system:String>
+    <system:String x:Key="number_of_answers">Number of answers</system:String>
+    <system:String x:Key="correctness_of_answers">Correctness of answers</system:String>
+    <system:String x:Key="history_of_games">History of games</system:String>
+    <system:String x:Key="start_date">Start date</system:String>
+    <system:String x:Key="mode">Mode</system:String>
+
+    <system:String x:Key="application_settings">Application settings</system:String>
+    <system:String x:Key="interface_language">Interface language</system:String>
+    <system:String x:Key="log_out">Log out</system:String>
+    <system:String x:Key="log_out_confirmation">Are you sure you want to log out?</system:String>
+    <system:String x:Key="start_with_system">Run the application on system startup</system:String>
+    <system:String x:Key="minimize_to_system_tray">Minimze the application to system tray on close</system:String>
+    <system:String x:Key="notifications_settings">Notifications settings</system:String>
+    <system:String x:Key="add_notification">Add a notification</system:String>
+    <system:String x:Key="minutes">minutes</system:String>
+    <system:String x:Key="remove_notification">Remove the notification</system:String>
+    <system:String x:Key="remove_notification_confirmation">Are you sure you want to remove the notification?</system:String>
+    <system:String x:Key="customize_settings">Customize settings</system:String>
+    <system:String x:Key="time_to_learn">Time to learn!</system:String>
+    <system:String x:Key="time_to_test">Time to test!</system:String>
+    <system:String x:Key="minute">minute</system:String>
+    <system:String x:Key="hour">hour</system:String>
+    <system:String x:Key="snooze">Snooze</system:String>
+    <system:String x:Key="start">Start</system:String>
+    <system:String x:Key="dismiss">Finish</system:String>
+    <system:String x:Key="interval_colon">Interval:</system:String>
+
+    <system:String x:Key="correct_singular">Correct</system:String>
+    <system:String x:Key="incorrect_singular">Incorrect</system:String>
+    <system:String x:Key="closed">Closed</system:String>
+    <system:String x:Key="open">Open</system:String>
+
+    <system:String x:Key="news">News</system:String>
+    <system:String x:Key="remove_post">Remove the news</system:String>
+    <system:String x:Key="remove_post_confirmation">Are you sure you want to remove the post titled</system:String>
+    <system:String x:Key="edit_post">Edit the post</system:String>
+    <system:String x:Key="add_post">Add a post</system:String>
+    <system:String x:Key="title">Title</system:String>
+    <system:String x:Key="content">Content</system:String>
+    <system:String x:Key="save">Save</system:String>
+    <system:String x:Key="yes">Yes</system:String>
+    <system:String x:Key="no">No</system:String>
+    <system:String x:Key="open_context">Open</system:String>
+    <system:String x:Key="close">Close</system:String>
+    <system:String x:Key="number_of_games_in_learn_mode">Number of games in learn mode</system:String>
+    <system:String x:Key="number_of_games_in_test_mode">Number of games in test mode</system:String>
+    <system:String x:Key="number_of_answers_in_learn_mode">Number of answers in learn mode</system:String>
+    <system:String x:Key="number_of_answers_in_test_mode">Number of answers in test mode</system:String>
+    <system:String x:Key="last_game_in_learn_mode">Last game in learn mode</system:String>
+    <system:String x:Key="last_game_in_test_mode">Last game in test mode</system:String>
+    <system:String x:Key="today">Today</system:String>
+    <system:String x:Key="yesterday">Yesterday</system:String>
+    <system:String x:Key="not_played">Not played</system:String>
+  
+</ResourceDictionary>

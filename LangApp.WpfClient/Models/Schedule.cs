@@ -1,4 +1,5 @@
 ﻿using LangApp.WpfClient.ViewModels;
+using Newtonsoft.Json;
 using System;
 using static LangApp.Shared.Models.Enums;
 
@@ -34,6 +35,21 @@ namespace LangApp.WpfClient.Models
             set
             {
                 _isActive = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isEnabled;
+        [JsonIgnore]
+        public bool IsEnabled
+        {
+            get
+            {
+                return _isEnabled;
+            }
+            set
+            {
+                _isEnabled = value;
                 OnPropertyChanged();
             }
         }

@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using static LangApp.Shared.Models.Enums;
 
 namespace LangApp.WpfClient.ViewModels.Controls
 {
@@ -35,23 +36,36 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         public List<LanguageName> InterfaceLanguages { get; }
 
-        private LanguageName _selectedInterfaceLanguage;
         public LanguageName SelectedInterfaceLanguage
         {
             get
             {
-                return _selectedInterfaceLanguage;
+                return LanguagesService.GetInstance().LanguageNames.First(x => x.SourceLanguageId == Settings.InterfaceLanguageId && x.LanguageId == Settings.InterfaceLanguageId);
             }
             set
             {
-                _selectedInterfaceLanguage = value;
-                OnPropertyChanged();
+                Settings.InterfaceLanguageId = value.SourceLanguageId;
+                Settings.Store();
 
-                ResourceDictionary resourceDictionary = new ResourceDictionary();
-                resourceDictionary.Source = new Uri("..\\..\\Resources\\Languages\\pl-PL.xaml", UriKind.Relative);
+                Configuration.GetInstance().OnPropertyChanged("LastLearnSessionInfo");
+                Configuration.GetInstance().OnPropertyChanged("LastTestSessionInfo");
+                Configuration.GetInstance().LearnSettingsControl = new LearnSettingsControl(SessionType.LEARN);
+                Configuration.GetInstance().TestSettingsControl = new LearnSettingsControl(SessionType.TEST);
+                Configuration.GetInstance().DictionaryControl = new DictionaryControl();
+                Configuration.GetInstance().FavouriteWordsControl = new FavouriteWordsControl();
 
-                Application.Current.Resources.MergedDictionaries.Remove(resourceDictionary);
-                Application.Current.Resources.MergedDictionaries.Add(resourceDictionary);
+                foreach(var schedule in Settings.Schedules)
+                {
+                    schedule.SessionSettings.OnPropertyChanged("LanguageInfo");
+                    schedule.SessionSettings.OnPropertyChanged("CategoriesInfo");
+                    schedule.IsEnabled = schedule.SessionSettings.LanguageId != Settings.GetInstance().InterfaceLanguageId;
+
+                    if(!schedule.IsEnabled)
+                    {
+                        schedule.IsActive = false;
+                        IsActiveClick(schedule);
+                    }
+                }
             }
         }
 
@@ -110,10 +124,20 @@ namespace LangApp.WpfClient.ViewModels.Controls
             InterfaceLanguages = new List<LanguageName>();
             InterfaceLanguages.Add(LanguagesService.GetInstance().LanguageNames.First(x => x.SourceLanguageId == 1 && x.LanguageId == 1));
             InterfaceLanguages.Add(LanguagesService.GetInstance().LanguageNames.First(x => x.SourceLanguageId == 2 && x.LanguageId == 2));
-            _selectedInterfaceLanguage = LanguagesService.GetInstance().LanguageNames.First(x => x.SourceLanguageId == Settings.InterfaceLanguageId && x.LanguageId == Settings.InterfaceLanguageId);
 
             CollectionView view = (CollectionView) CollectionViewSource.GetDefaultView(Settings.Schedules);
             view.Filter = x => (x as Schedule).UserId == Configuration.User.Id;
+
+            foreach (var schedule in Settings.Schedules)
+            {
+                schedule.IsEnabled = schedule.SessionSettings.LanguageId != Settings.GetInstance().InterfaceLanguageId;
+
+                if (!schedule.IsEnabled)
+                {
+                    schedule.IsActive = false;
+                    IsActiveClick(schedule);
+                }
+            }
         }
 
         private void LogOut(object obj)

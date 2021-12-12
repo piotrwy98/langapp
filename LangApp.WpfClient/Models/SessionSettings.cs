@@ -1,9 +1,9 @@
 ﻿using LangApp.WpfClient.Converters;
 using LangApp.WpfClient.Services;
 using LangApp.WpfClient.ViewModels;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 
 namespace LangApp.WpfClient.Models
 {
@@ -56,6 +56,7 @@ namespace LangApp.WpfClient.Models
 
         public List<uint> CategoriesIds { get; set; }
 
+        [JsonIgnore]
         public string LanguageInfo
         {
             get
@@ -67,6 +68,7 @@ namespace LangApp.WpfClient.Models
             }
         }
 
+        [JsonIgnore]
         public string CategoriesInfo
         {
             get

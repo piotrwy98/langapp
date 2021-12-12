@@ -28,8 +28,6 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
         #region Controls
         private MainScreenControl _mainScreenControl = new MainScreenControl();
-        private DictionaryControl _dictionaryControl = new DictionaryControl();
-        private FavouriteWordsControl _favouriteWordsControl = new FavouriteWordsControl();
         #endregion
 
         public MainViewModel()
@@ -42,9 +40,11 @@ namespace LangApp.WpfClient.ViewModels.Windows
             FavouriteWordsCheckedCommand = new RelayCommand(FavouriteWordsChecked);
             SettingsCheckedCommand = new RelayCommand(SettingsChecked);
 
-            Configuration.SettingsControl = new SettingsControl();
             Configuration.LearnSettingsControl = new LearnSettingsControl(SessionType.LEARN);
             Configuration.TestSettingsControl = new LearnSettingsControl(SessionType.TEST);
+            Configuration.DictionaryControl = new DictionaryControl();
+            Configuration.FavouriteWordsControl = new FavouriteWordsControl();
+            Configuration.SettingsControl = new SettingsControl();
 
             PartsOfSpeechService.GetInstance();
 
@@ -169,12 +169,12 @@ namespace LangApp.WpfClient.ViewModels.Windows
 
         private void DictionaryChecked(object obj = null)
         {
-            Configuration.CurrentView = _dictionaryControl;
+            Configuration.CurrentView = Configuration.DictionaryControl;
         }
 
         private void FavouriteWordsChecked(object obj)
         {
-            Configuration.CurrentView = _favouriteWordsControl;
+            Configuration.CurrentView = Configuration.FavouriteWordsControl;
         }
 
         private void SettingsChecked(object obj)

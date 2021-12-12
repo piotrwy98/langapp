@@ -208,7 +208,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     Language = new Language()
                     {
                         Id = 0,
-                        ImagePath = "https://46.41.136.101/images/languages/all.png"
+                        ImagePath = "../../Resources/Flags/earth.png"
                     }
                 },
                 IsChosen = true

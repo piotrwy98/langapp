@@ -83,6 +83,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Resources\Languages\en-US.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\Languages\pl-PL.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -287,7 +291,13 @@
       <Version>5.0.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Flags\de.png" />
+    <Resource Include="Resources\Flags\earth.png" />
+    <Resource Include="Resources\Flags\en.png" />
+    <Resource Include="Resources\Flags\es.png" />
+    <Resource Include="Resources\Flags\pl.png" />
+  </ItemGroup>
   <Import Project="..\LangApp.Shared\LangApp.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

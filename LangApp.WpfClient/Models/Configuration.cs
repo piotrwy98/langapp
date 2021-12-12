@@ -80,6 +80,10 @@ namespace LangApp.WpfClient.Models
 
         public StatsControl StatsControl { get; set; }
 
+        public DictionaryControl DictionaryControl { get; set; }
+
+        public FavouriteWordsControl FavouriteWordsControl { get; set; }
+
         public SettingsControl SettingsControl { get; set; }
 
         public Schedule CurrentSchedule { get; set; }
@@ -273,8 +277,7 @@ namespace LangApp.WpfClient.Models
                 .AddButton(new ToastButtonSnooze(Application.Current.Resources["snooze"].ToString()) { SelectionBoxId = "snoozeTime" })
                 .AddButton(new ToastButton().SetContent(Application.Current.Resources["start"].ToString()))
                 .AddButton(new ToastButton().SetContent(Application.Current.Resources["dismiss"].ToString()).AddArgument("dismissed"))
-                //.AddButton(new ToastButtonDismiss(Application.Current.Resources["dismiss"].ToString()))
-                .Schedule(DateTime.Now.AddSeconds(schedule.IntervalMinutes), toast =>
+                .Schedule(DateTime.Now.AddMinutes(schedule.IntervalMinutes), toast =>
                 {
                     toast.Tag = schedule.Id.ToString();
                 });
