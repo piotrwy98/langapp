@@ -47,9 +47,9 @@ namespace LangApp.WebApi.Api.Controllers
                     {
                         return Unauthorized();
                     }
-                }
 
-                return selectedCategory;
+                    return selectedCategory;
+                }
             }
 
             return NotFound();

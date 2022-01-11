@@ -49,7 +49,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca NotFound kiedy nie istnieje ulubione słowo o podanym id
+        /// Zwraca NotFound, kiedy nie istnieje ulubione słowo o podanym id
         /// </summary>
         [Fact]
         public async Task GetFavouriteWordAsyncTest()
@@ -65,7 +65,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca Unauthorized kiedy autor zapytania nie jest właścicielem żądanego ulubionego słowa
+        /// Zwraca Unauthorized, kiedy autor zapytania nie jest właścicielem żądanego ulubionego słowa
         /// </summary>
         [Fact]
         public async Task GetFavouriteWordAsyncTest2()
@@ -82,7 +82,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca żądane ulubione słowo kiedy istnieje ulubione słowo o podanym id
+        /// Zwraca żądane ulubione słowo, kiedy istnieje ulubione słowo o podanym id
         /// oraz autor zapytania jest jego właścicielem
         /// </summary>
         [Fact]
@@ -100,7 +100,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca Unauthorized kiedy autor zapytania nie jest właścicielem podanego ulubionego słowa
+        /// Zwraca Unauthorized, kiedy autor zapytania nie jest właścicielem podanego ulubionego słowa
         /// </summary>
         [Fact]
         public async Task CreateFavouriteWordAsyncTest()
@@ -116,7 +116,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca utworzone ulubione słowo kiedy autor zapytania jest właścicielem podanego ulubionego słowa
+        /// Zwraca utworzone ulubione słowo, kiedy autor zapytania jest właścicielem podanego ulubionego słowa
         /// </summary>
         [Fact]
         public async Task CreateFavouriteWordAsyncTest2()
@@ -133,7 +133,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca Unauthorized kiedy autor zapytania nie jest właścicielem podanego ulubionego słowa
+        /// Zwraca Unauthorized, kiedy autor zapytania nie jest właścicielem podanego ulubionego słowa
         /// </summary>
         [Fact]
         public async Task UpdateFavouriteWordAsyncTest()
@@ -149,7 +149,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca NoContent kiedy autor zapytania jest właścicielem podanego ulubionego słowa
+        /// Zwraca NoContent, kiedy autor zapytania jest właścicielem podanego ulubionego słowa
         /// </summary>
         [Fact]
         public async Task UpdateFavouriteWordAsyncTest2()
@@ -165,7 +165,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca NotFound kiedy nie istnieje ulubione słowo o podanym id
+        /// Zwraca NotFound, kiedy nie istnieje ulubione słowo o podanym id
         /// </summary>
         [Fact]
         public async Task DeleteFavouriteWordAsyncTest()
@@ -181,7 +181,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca Unauthorized kiedy autor zapytania nie jest właścicielem żądanego ulubionego słowa
+        /// Zwraca Unauthorized, kiedy autor zapytania nie jest właścicielem żądanego ulubionego słowa
         /// </summary>
         [Fact]
         public async Task DeleteFavouriteWordAsyncTest2()
@@ -198,7 +198,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca NoContent kiedy istnieje ulubione słowo o podanym id
+        /// Zwraca NoContent, kiedy istnieje ulubione słowo o podanym id
         /// oraz autor zapytania jest jego właścicielem
         /// </summary>
         [Fact]

@@ -37,7 +37,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca NotFound kiedy nie istnieje kategoria o podanym id
+        /// Zwraca NotFound, kiedy nie istnieje kategoria o podanym id
         /// </summary>
         [Fact]
         public async Task GetCategoryAsyncTest()
@@ -53,7 +53,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca żądaną kategorię kiedy istnieje kategoria o podanym id
+        /// Zwraca żądaną kategorię, kiedy istnieje kategoria o podanym id
         /// </summary>
         [Fact]
         public async Task GetCategoryAsyncTest2()

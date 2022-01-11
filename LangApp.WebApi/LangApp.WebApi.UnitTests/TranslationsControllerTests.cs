@@ -37,7 +37,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca NotFound kiedy nie istnieje tłumaczenie o podanym id
+        /// Zwraca NotFound, kiedy nie istnieje tłumaczenie o podanym id
         /// </summary>
         [Fact]
         public async Task GetTranslationAsyncTest()
@@ -53,7 +53,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca żądane tłumaczenie kiedy istnieje tłumaczenie o podanym id
+        /// Zwraca żądane tłumaczenie, kiedy istnieje tłumaczenie o podanym id
         /// </summary>
         [Fact]
         public async Task GetTranslationAsyncTest2()

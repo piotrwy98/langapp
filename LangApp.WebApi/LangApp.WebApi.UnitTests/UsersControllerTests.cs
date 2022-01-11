@@ -53,7 +53,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca NotFound kiedy nie istnieje u퓓tkownik o podanym id
+        /// Zwraca NotFound, kiedy nie istnieje u퓓tkownik o podanym id
         /// </summary>
         [Fact]
         public async Task GetUserAsyncTest()
@@ -69,7 +69,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca 예danego u퓓tkownika z has쿮m i emailem ustawionymi na null kiedy istnieje u퓓tkownik o podanym id
+        /// Zwraca 예danego u퓓tkownika z has쿮m i emailem ustawionymi na null, kiedy istnieje u퓓tkownik o podanym id
         /// </summary>
         [Fact]
         public async Task GetUserAsyncTest2()
@@ -88,7 +88,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca BadRequestObject z RegisterResult.OCCUPIED_EMAIL kiedy istnieje u퓓tkownik o podanym emailu
+        /// Zwraca BadRequestObject z RegisterResult.OCCUPIED_EMAIL, kiedy istnieje u퓓tkownik o podanym emailu
         /// </summary>
         [Fact]
         public async Task CreateUserAsyncTest()
@@ -105,7 +105,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca BadRequestObject z RegisterResult.OCCUPIED_USERNAME kiedy istnieje u퓓tkownik o podanej nazwie
+        /// Zwraca BadRequestObject z RegisterResult.OCCUPIED_USERNAME, kiedy istnieje u퓓tkownik o podanej nazwie
         /// </summary>
         [Fact]
         public async Task CreateUserAsyncTest2()
@@ -123,7 +123,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca utworzonego u퓓tkownika z has쿮m o zmienionej postaci oraz rol� UserRole.USER
+        /// Zwraca utworzonego u퓓tkownika z has쿮m o zmienionej postaci oraz rol� UserRole.USER,
         /// kiedy nie istnieje u퓓tkownik o podanej nazwie lub emailu
         /// </summary>
         [Fact]

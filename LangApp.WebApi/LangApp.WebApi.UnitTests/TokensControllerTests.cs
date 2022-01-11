@@ -24,7 +24,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca Unauthorized kiedy nie istnieje u¿ytkownik o podanym adresie email
+        /// Zwraca Unauthorized, kiedy nie istnieje u¿ytkownik o podanym adresie email
         /// </summary>
         [Fact]
         public async Task CreateTokenAsyncTest()
@@ -40,7 +40,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca Unauthorized kiedy podane has³o nie jest prawid³owe
+        /// Zwraca Unauthorized, kiedy podane has³o nie jest prawid³owe
         /// </summary>
         [Fact]
         public async Task CreateTokenAsyncTest2()
@@ -57,7 +57,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Zwraca UserWithToken kiedy podane dane s¹ prawid³owe
+        /// Zwraca UserWithToken, kiedy podane dane s¹ prawid³owe
         /// </summary>
         [Fact]
         public async Task CreateTokenAsyncTest3()
