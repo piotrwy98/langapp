@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace LangApp.WebApi.Api.Controllers
 {
     [ApiController]
-    [Route("/tokens")]
+    [Route("tokens")]
     public class TokensController : ControllerBase
     {
         private readonly IUsersRepository _usersRepository;

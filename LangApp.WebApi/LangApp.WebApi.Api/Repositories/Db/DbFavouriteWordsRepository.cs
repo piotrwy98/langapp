@@ -39,6 +39,17 @@ namespace LangApp.WebApi.Api.Repositories.Local
             return await GetFavouriteWordAsync(entity.Entity.Id);
         }
 
+        public async Task UpdateFavouriteWordAsync(FavouriteWord favouriteWord)
+        {
+            var entity = await _context.FavouriteWords.FindAsync(favouriteWord.Id);
+
+            if (entity != null)
+            {
+                _context.Entry(entity).CurrentValues.SetValues(favouriteWord);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         public async Task DeleteFavouriteWordAsync(uint id)
         {
             var entity = await _context.FavouriteWords.FindAsync(id);

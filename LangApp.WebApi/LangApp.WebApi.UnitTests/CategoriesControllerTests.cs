@@ -1,10 +1,8 @@
 ﻿using LangApp.Shared.Models;
-using LangApp.Shared.Models.Controllers;
 using LangApp.WebApi.Api.Controllers;
 using LangApp.WebApi.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -12,135 +10,110 @@ namespace LangApp.WebApi.UnitTests
 {
     public class CategoriesControllerTests
     {
-        /*private readonly Mock<ICategoriesRepository> _categoriesRepository = new Mock<ICategoriesRepository>();
-        private readonly Random _random = new Random();
+        private readonly Mock<ICategoriesRepository> _categoriesRepository;
+        private readonly CategoriesController _categoriesController;
 
-        private Category GetRandomCategory()
+        public CategoriesControllerTests()
         {
-            return new Category()
-            {
-                Id = (uint)_random.Next(0, int.MaxValue),
-                Level = new Level()
-                {
-                    Id = (uint)_random.Next(0, int.MaxValue),
-                    Name = Guid.NewGuid().ToString()
-                },
-                Name = Guid.NewGuid().ToString(),
-                ImagePath = Guid.NewGuid().ToString()
-            };
+            _categoriesRepository = new Mock<ICategoriesRepository>();
+            _categoriesController = new CategoriesController(_categoriesRepository.Object);
         }
 
         /// <summary>
-        /// Should always return all categories
+        /// Zawsze zwraca wszystkie kategorie
         /// </summary>
         [Fact]
         public async Task GetCategoriesAsyncTest()
         {
             // Arrange
-            var expectedCategories = new Category[] { GetRandomCategory(), GetRandomCategory() };
+            var expectedCategories = new CategoryName[] { new CategoryName(), new CategoryName() };
             _categoriesRepository.Setup(x => x.GetCategoriesAsync()).ReturnsAsync(expectedCategories);
 
-            var controller = new CategoriesController(_categoriesRepository.Object);
-
             // Act
-            var actualCategories = await controller.GetCategoriesAsync();
+            var actualCategories = await _categoriesController.GetCategoriesAsync();
 
             // Assert
             Assert.Equal(expectedCategories, actualCategories);
         }
 
         /// <summary>
-        /// Should return NotFound when category does not exist
+        /// Zwraca NotFound kiedy nie istnieje kategoria o podanym id
         /// </summary>
         [Fact]
         public async Task GetCategoryAsyncTest()
         {
             // Arrange
-            _categoriesRepository.Setup(x => x.GetCategoryAsync(It.IsAny<uint>())).ReturnsAsync((Category) null);
-
-            var controller = new CategoriesController(_categoriesRepository.Object);
+            _categoriesRepository.Setup(x => x.GetCategoryAsync(It.IsAny<uint>())).ReturnsAsync((CategoryName) null);
 
             // Act
-            var result = await controller.GetCategoryAsync(uint.MinValue);
+            var result = await _categoriesController.GetCategoryAsync(It.IsAny<uint>());
 
             // Assert
             Assert.IsType<NotFoundResult>(result.Result);
         }
 
         /// <summary>
-        /// Should return category when the category exists
+        /// Zwraca żądaną kategorię kiedy istnieje kategoria o podanym id
         /// </summary>
         [Fact]
         public async Task GetCategoryAsyncTest2()
         {
             // Arrange
-            Category expectedCategory = GetRandomCategory();
+            var expectedCategory = new CategoryName();
             _categoriesRepository.Setup(x => x.GetCategoryAsync(It.IsAny<uint>())).ReturnsAsync(expectedCategory);
 
-            var controller = new CategoriesController(_categoriesRepository.Object);
-
             // Act
-            var result = await controller.GetCategoryAsync(uint.MinValue);
+            var result = await _categoriesController.GetCategoryAsync(It.IsAny<uint>());
 
             // Assert
             Assert.Equal(expectedCategory, result.Value);
         }
 
         /// <summary>
-        /// Should always return CreatedAtAction with created category
+        /// Zawsze zwraca utworzoną kategorię
         /// </summary>
         [Fact]
         public async Task CreateCategoryAsyncTest()
         {
             // Arrange
-            Category expectedCategory = GetRandomCategory();
-            var controller = new CategoriesController(_categoriesRepository.Object);
+            var expectedCategory = new CategoryName();
+            _categoriesRepository.Setup(x => x.CreateCategoryAsync(It.IsAny<CategoryName>())).ReturnsAsync(expectedCategory);
 
             // Act
-            var result = await controller.CreateCategoryAsync(expectedCategory);
+            var result = await _categoriesController.CreateCategoryAsync(expectedCategory);
 
             // Assert
-            Assert.IsType<CreatedAtActionResult>(result.Result);
-
-            var actualCategory = (result.Result as CreatedAtActionResult).Value as Category;
-
-            Assert.NotNull(actualCategory);
-            Assert.Equal(expectedCategory.Level, actualCategory.Level);
-            Assert.Equal(expectedCategory.Name, actualCategory.Name);
-            Assert.Equal(expectedCategory.ImagePath, actualCategory.ImagePath);
+            Assert.Equal(expectedCategory, result.Value);
         }
 
         /// <summary>
-        /// Should always return NoContent
+        /// Zawsze zwraca NoContent
         /// </summary>
         [Fact]
         public async Task UpdateCategoryAsyncTest()
         {
             // Arrange
-            Category expectedCategory = GetRandomCategory();
-            var controller = new CategoriesController(_categoriesRepository.Object);
 
             // Act
-            var result = await controller.UpdateCategoryAsync(expectedCategory);
+            var result = await _categoriesController.UpdateCategoryAsync(It.IsAny<CategoryName>());
 
             // Assert
             Assert.IsType<NoContentResult>(result);
         }
 
         /// <summary>
-        /// Should always return NoContent
+        /// Zawsze zwraca NoContent
         /// </summary>
         [Fact]
         public async Task DeleteCategoryAsyncTest()
         {
             // Arrange
-            var controller = new CategoriesController(_categoriesRepository.Object);
 
             // Act
-            var result = await controller.DeleteCategoryAsync(uint.MinValue);
+            var result = await _categoriesController.DeleteCategoryAsync(It.IsAny<uint>());
 
             // Assert
             Assert.IsType<NoContentResult>(result);
-        }*/
+        }
     }
 }

@@ -47,6 +47,17 @@ namespace LangApp.WebApi.Api.Repositories.Local
             return await Task.FromResult(favouriteWord);
         }
 
+        public async Task UpdateFavouriteWordAsync(FavouriteWord favouriteWord)
+        {
+            var index = _favouriteWords.FindIndex(x => x.Id == favouriteWord.Id);
+            if (index >= 0)
+            {
+                _favouriteWords[index] = favouriteWord;
+            }
+
+            await Task.CompletedTask;
+        }
+
         public async Task DeleteFavouriteWordAsync(uint id)
         {
             var index = _favouriteWords.FindIndex(x => x.Id == id);

@@ -1,10 +1,8 @@
 using LangApp.Shared.Models;
-using LangApp.Shared.Models.Controllers;
 using LangApp.WebApi.Api.Controllers;
 using LangApp.WebApi.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
 using System.Threading.Tasks;
 using Xunit;
 using static LangApp.Shared.Models.Enums;
@@ -13,43 +11,49 @@ namespace LangApp.WebApi.UnitTests
 {
     public class UsersControllerTests
     {
-        private readonly Mock<IUsersRepository> _usersRepository = new Mock<IUsersRepository>();
-        private readonly Random _random = new Random();
+        private readonly Mock<IUsersRepository> _usersRepository;
+        private readonly UsersController _usersController;
 
-        private User GetRandomUser()
+        public UsersControllerTests()
         {
-            return new User()
-            {
-                Id = (uint)_random.Next(0, int.MaxValue),
-                Email = Guid.NewGuid().ToString(),
-                Username = Guid.NewGuid().ToString(),
-                Password = Guid.NewGuid().ToString(),
-                Role = (UserRole) _random.Next(Enum.GetNames(typeof(UserRole)).Length - 1),
-                RegisterDateTime = DateTime.Now
-            };
+            _usersRepository = new Mock<IUsersRepository>();
+            _usersController = new UsersController(_usersRepository.Object);
         }
 
         /// <summary>
-        /// Should always return all existing users
+        /// Zawsze zwraca wszystkich u¿ytkowników z has³ami i emailami ustawionymi na null
         /// </summary>
         [Fact]
         public async Task GetUsersAsyncTest()
         {
             // Arrange
-            var expectedUsers = new User[] { GetRandomUser(), GetRandomUser() };
+            var expectedUsers = new User[]
+            {
+                new User() { Password = "first_password", Email = "first_email" },
+                new User() { Password = "second_password", Email = "second_email" }
+            };
             _usersRepository.Setup(x => x.GetUsersAsync()).ReturnsAsync(expectedUsers);
 
-            var controller = new UsersController(_usersRepository.Object);
-
             // Act
-            var actualUsers = await controller.GetUsersAsync();
+            var actualUsers = await _usersController.GetUsersAsync();
+            var areNull = true;
+
+            foreach (var user in actualUsers)
+            {
+                if (user.Password != null || user.Email != null)
+                {
+                    areNull = false;
+                    break;
+                }
+            }
 
             // Assert
             Assert.Equal(expectedUsers, actualUsers);
+            Assert.True(areNull);
         }
 
         /// <summary>
-        /// Should return NotFound when user does not exist
+        /// Zwraca NotFound kiedy nie istnieje u¿ytkownik o podanym id
         /// </summary>
         [Fact]
         public async Task GetUserAsyncTest()
@@ -57,36 +61,34 @@ namespace LangApp.WebApi.UnitTests
             // Arrange
             _usersRepository.Setup(x => x.GetUserByIdAsync(It.IsAny<uint>())).ReturnsAsync((User) null);
 
-            var controller = new UsersController(_usersRepository.Object);
-
             // Act
-            var result = await controller.GetUserAsync(uint.MinValue);
+            var result = await _usersController.GetUserAsync(It.IsAny<uint>());
 
             // Assert
             Assert.IsType<NotFoundResult>(result.Result);
         }
 
         /// <summary>
-        /// Should return user when the user exists
+        /// Zwraca ¿¹danego u¿ytkownika z has³em i emailem ustawionymi na null kiedy istnieje u¿ytkownik o podanym id
         /// </summary>
         [Fact]
         public async Task GetUserAsyncTest2()
         {
             // Arrange
-            User expectedUser = GetRandomUser();
+            var expectedUser = new User() { Password = "password", Email = "email" };
             _usersRepository.Setup(x => x.GetUserByIdAsync(It.IsAny<uint>())).ReturnsAsync(expectedUser);
 
-            var controller = new UsersController(_usersRepository.Object);
-
             // Act
-            var result = await controller.GetUserAsync(uint.MinValue);
+            var result = await _usersController.GetUserAsync(It.IsAny<uint>());
+            var areNull = result.Value.Password == null && result.Value.Email == null;
 
             // Assert
             Assert.Equal(expectedUser, result.Value);
+            Assert.True(areNull);
         }
 
         /// <summary>
-        /// Should return BadRequest with RegisterResult.OCCUPIED_EMAIL when given email is occupied
+        /// Zwraca BadRequestObject z RegisterResult.OCCUPIED_EMAIL kiedy istnieje u¿ytkownik o podanym emailu
         /// </summary>
         [Fact]
         public async Task CreateUserAsyncTest()
@@ -94,10 +96,8 @@ namespace LangApp.WebApi.UnitTests
             // Arrange
             _usersRepository.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync(new User());
 
-            var controller = new UsersController(_usersRepository.Object);
-
             // Act
-            var result = await controller.CreateUserAsync(new User());
+            var result = await _usersController.CreateUserAsync(new User());
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result.Result);
@@ -105,7 +105,7 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Should return BadRequest with RegisterResult.OCCUPIED_USERNAME when given username is occupied
+        /// Zwraca BadRequestObject z RegisterResult.OCCUPIED_USERNAME kiedy istnieje u¿ytkownik o podanej nazwie
         /// </summary>
         [Fact]
         public async Task CreateUserAsyncTest2()
@@ -114,10 +114,8 @@ namespace LangApp.WebApi.UnitTests
             _usersRepository.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
             _usersRepository.Setup(x => x.GetUserByUsernameAsync(It.IsAny<string>())).ReturnsAsync(new User());
 
-            var controller = new UsersController(_usersRepository.Object);
-
             // Act
-            var result = await controller.CreateUserAsync(new User());
+            var result = await _usersController.CreateUserAsync(new User());
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result.Result);
@@ -125,62 +123,53 @@ namespace LangApp.WebApi.UnitTests
         }
 
         /// <summary>
-        /// Should return CreatedAtAction with created user when given data is unique
+        /// Zwraca utworzonego u¿ytkownika z has³em o zmienionej postaci oraz rol¹ UserRole.USER
+        /// kiedy nie istnieje u¿ytkownik o podanej nazwie lub emailu
         /// </summary>
         [Fact]
         public async Task CreateUserAsyncTest3()
         {
             // Arrange
-            User expectedUser = GetRandomUser();
+            var password = "password";
+            var expectedUser = new User() { Password = password, Email = "email", Role = UserRole.ADMIN };
             _usersRepository.Setup(x => x.GetUserByEmailAsync(It.IsAny<string>())).ReturnsAsync((User) null);
             _usersRepository.Setup(x => x.GetUserByUsernameAsync(It.IsAny<string>())).ReturnsAsync((User) null);
-
-            var controller = new UsersController(_usersRepository.Object);
+            _usersRepository.Setup(x => x.CreateUserAsync(It.IsAny<User>())).ReturnsAsync(expectedUser);
 
             // Act
-            var result = await controller.CreateUserAsync(expectedUser);
+            var result = await _usersController.CreateUserAsync(expectedUser);
 
             // Assert
-            Assert.IsType<CreatedAtActionResult>(result.Result);
-
-            User actualUser = (result.Result as CreatedAtActionResult).Value as User;
-
-            Assert.NotNull(actualUser);
-            Assert.Equal(expectedUser.Email, actualUser.Email);
-            Assert.Equal(expectedUser.Username, actualUser.Username);
-            Assert.Equal(expectedUser.Password, actualUser.Password);
-            Assert.Equal(expectedUser.Role, actualUser.Role);
-            Assert.Equal(expectedUser.RegisterDateTime, actualUser.RegisterDateTime);
+            Assert.Equal(expectedUser, result.Value);
+            Assert.NotEqual(result.Value.Password, password);
+            Assert.Equal(UserRole.USER, result.Value.Role);
         }
 
         /// <summary>
-        /// Should always return NoContent
+        /// Zawsze zwraca NoContent
         /// </summary>
         [Fact]
         public async Task UpdateUserAsyncTest()
         {
             // Arrange
-            User expectedUser = GetRandomUser();
-            var controller = new UsersController(_usersRepository.Object);
 
             // Act
-            var result = await controller.UpdateUserAsync(expectedUser);
+            var result = await _usersController.UpdateUserAsync(It.IsAny<User>());
 
             // Assert
             Assert.IsType<NoContentResult>(result);
         }
 
         /// <summary>
-        /// Should always return NoContent
+        /// Zawsze zwraca NoContent
         /// </summary>
         [Fact]
         public async Task DeleteUserAsyncTest()
         {
             // Arrange
-            var controller = new UsersController(_usersRepository.Object);
 
             // Act
-            var result = await controller.DeleteUserAsync(uint.MinValue);
+            var result = await _usersController.DeleteUserAsync(It.IsAny<uint>());
 
             // Assert
             Assert.IsType<NoContentResult>(result);

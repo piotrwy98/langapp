@@ -9,6 +9,7 @@ namespace LangApp.WebApi.Api.Repositories
         Task<IEnumerable<FavouriteWord>> GetFavouriteWordsAsync(uint userId);
         Task<FavouriteWord> GetFavouriteWordAsync(uint id);
         Task<FavouriteWord> CreateFavouriteWordAsync(FavouriteWord favouriteWord);
+        Task UpdateFavouriteWordAsync(FavouriteWord favouriteWord);
         Task DeleteFavouriteWordAsync(uint id);
     }
 }

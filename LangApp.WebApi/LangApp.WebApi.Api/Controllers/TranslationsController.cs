@@ -42,11 +42,6 @@ namespace LangApp.WebApi.Api.Controllers
         [Authorize(Roles = "ADMIN")]
         public async Task<ActionResult<Translation>> CreateTranslationAsync([FromBody] Translation translation)
         {
-            if (await _translationsRepository.GetTranslationByWordAndLanguageAsync(translation.Word.Id, translation.Language.Id) != null)
-            {
-                return BadRequest();
-            }
-
             return await _translationsRepository.CreateTranslationAsync(translation);
         }
 

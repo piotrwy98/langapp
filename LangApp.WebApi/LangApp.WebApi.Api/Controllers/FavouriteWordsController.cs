@@ -62,6 +62,22 @@ namespace LangApp.WebApi.Api.Controllers
             return await _favouriteWordsRepository.CreateFavouriteWordAsync(favouriteWord);
         }
 
+        [HttpPut]
+        [Authorize]
+        public async Task<ActionResult> UpdateFavouriteWordAsync([FromBody] FavouriteWord favouriteWord)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (favouriteWord.UserId != uint.Parse(userId))
+            {
+                return Unauthorized();
+            }
+
+            await _favouriteWordsRepository.UpdateFavouriteWordAsync(favouriteWord);
+
+            return NoContent();
+        }
+
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<ActionResult> DeleteFavouriteWordAsync(uint id)
