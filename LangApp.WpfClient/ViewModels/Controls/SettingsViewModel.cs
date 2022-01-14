@@ -78,9 +78,9 @@ namespace LangApp.WpfClient.ViewModels.Controls
             set
             {
                 RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetEntryAssembly();
 
-                if (value == true)
+                if (value)
                 {
                     key.SetValue(APP_NAME, assembly.Location);
                 }
@@ -173,7 +173,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         private void AddNotification(object obj)
         {
-            Settings.Schedules.Add(new Schedule()
+            var schedule = new Schedule()
             {
                 Id = Guid.NewGuid(),
                 SessionSettings = new SessionSettings()
@@ -184,9 +184,10 @@ namespace LangApp.WpfClient.ViewModels.Controls
                     CategoriesIds = new List<uint>() { 1 }
                 },
                 UserId = Configuration.User.Id,
-            });
+            };
 
-            Settings.Store();
+            Settings.Schedules.Add(schedule);
+            IsActiveClick(schedule);
         }
 
         private void DecrementInterval(object obj)
@@ -220,8 +221,9 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
                 if (confirmationWindow.DialogResult == true)
                 {
+                    schedule.IsActive = false;
                     Settings.Schedules.Remove(schedule);
-                    Settings.Store();
+                    IsActiveClick(schedule);
                 }
             }
         }

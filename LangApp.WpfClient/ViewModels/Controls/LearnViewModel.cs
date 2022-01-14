@@ -687,6 +687,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 IsFirstClosedAnswerChecked = true;
                 _selectedClosedAnswerIndex = 0;
                 _pronunciationResult = null;
+                _waveFileWriter = null;
                 _questionAppearedTime = DateTime.Now;
                 IsAnswerVisible = false;
 
@@ -725,7 +726,7 @@ namespace LangApp.WpfClient.ViewModels.Controls
             // index wylosowanej kategorii
             var caregoryIndex = _random.Next(0, SessionSettings.CategoriesIds.Count);
 
-            // słowa należących do wylosowanej kategorii
+            // słowa należące do wylosowanej kategorii
             var words = _dictionary.Dictionary.Where(x => x.Key.CategoryId == SessionSettings.CategoriesIds[caregoryIndex]).ToList();
 
             // index wylosowanego słowa

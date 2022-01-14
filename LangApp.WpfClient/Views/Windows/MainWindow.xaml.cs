@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Windows.UI.Notifications;
 
 namespace LangApp.WpfClient.Views.Windows
 {
@@ -110,6 +109,20 @@ namespace LangApp.WpfClient.Views.Windows
             {
                 WindowState = WindowState.Normal;
             }
+        }
+
+        public void EnsureVisibility()
+        {
+            if (WindowState == WindowState.Minimized || Visibility == Visibility.Hidden)
+            {
+                Show();
+                WindowState = WindowState.Normal;
+            }
+
+            Activate();
+            Topmost = true;
+            Topmost = false;
+            Focus();
         }
     }
 }

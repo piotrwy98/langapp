@@ -128,6 +128,7 @@
     <system:String x:Key="notifications_settings">Notifications settings</system:String>
     <system:String x:Key="add_notification">Add a notification</system:String>
     <system:String x:Key="minutes">minutes</system:String>
+    <system:String x:Key="min">min</system:String>
     <system:String x:Key="remove_notification">Remove the notification</system:String>
     <system:String x:Key="remove_notification_confirmation">Are you sure you want to remove the notification?</system:String>
     <system:String x:Key="customize_settings">Customize settings</system:String>

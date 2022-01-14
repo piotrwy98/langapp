@@ -1,6 +1,7 @@
 ﻿using LangApp.WpfClient.Models;
 using LangApp.WpfClient.Services;
 using LangApp.WpfClient.Views.Controls;
+using LangApp.WpfClient.Views.Windows;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System.Linq;
 using System.Threading.Tasks;
@@ -99,8 +100,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
                                         Configuration.GetInstance().IsLearnChecked = true;
                                     }
 
-                                    Application.Current.Windows[0].Show();
-                                    Application.Current.Windows[0].WindowState = WindowState.Normal;
+                                    (Application.Current.Windows[0] as MainWindow).EnsureVisibility();
                                 });
                             }
                         }

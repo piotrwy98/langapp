@@ -68,7 +68,10 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 }
             }
 
-            SelectedCategories = SelectedCategories.Substring(0, SelectedCategories.Length - 2);
+            if (SelectedCategories != null)
+            {
+                SelectedCategories = SelectedCategories.Substring(0, SelectedCategories.Length - 2);
+            }
         }
 
         private void Return(object obj)

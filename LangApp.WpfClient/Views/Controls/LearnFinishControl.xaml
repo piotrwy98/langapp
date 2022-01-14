@@ -52,7 +52,7 @@
                 <TextBlock Text="{Binding Timer, StringFormat=' {0:mm\\:ss\\.fff}'}"/>
             </WrapPanel>
 
-            <WrapPanel Margin="0 40 0 20">
+            <WrapPanel Margin="0 40 0 20" HorizontalAlignment="Center">
                 <Button Content="{DynamicResource customize}" Command="{Binding ChangeCategoryCommand}" Background="Gray" BorderBrush="Gray"/>
                 <Button Content="{DynamicResource show_details}" Command="{Binding ShowDetailsCommand}" Margin="30 0"/>
                 <Button Content="{DynamicResource play_again}" Command="{Binding LearnAgainCommand}" Background="Gray" BorderBrush="Gray"/>

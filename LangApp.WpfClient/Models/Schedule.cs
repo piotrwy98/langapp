@@ -39,7 +39,7 @@ namespace LangApp.WpfClient.Models
             }
         }
 
-        private bool _isEnabled;
+        private bool _isEnabled = true;
         [JsonIgnore]
         public bool IsEnabled
         {
