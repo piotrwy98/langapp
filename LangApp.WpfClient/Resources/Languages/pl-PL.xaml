@@ -17,6 +17,7 @@
     <system:String x:Key="no_server_connection">Brak połączenia z serwerem</system:String>
     <system:String x:Key="incorrect_login_details">Błędne dane logowania</system:String>
     <system:String x:Key="no_username_provided">Nie podano nazwy użytkownika</system:String>
+    <system:String x:Key="password_too_easy">Hasło musi mieć co najmniej 8 znaków, zawierać małą i wielką literę, znak specjalny oraz cyfrę</system:String>
     <system:String x:Key="passwords_do_not_match">Hasła nie są zgodne</system:String>
     <system:String x:Key="account_created_successfully">Pomyślnie utworzono konto</system:String>
     <system:String x:Key="the_given_email_address_is_taken">Podany adres email jest zajęty</system:String>

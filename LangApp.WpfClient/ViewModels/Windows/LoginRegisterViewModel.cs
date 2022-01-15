@@ -6,6 +6,7 @@ using LangApp.WpfClient.Views.Windows;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
@@ -263,6 +264,13 @@ namespace LangApp.WpfClient.ViewModels.Windows
             if (String.IsNullOrEmpty(Password))
             {
                 ResultMessage = Application.Current.Resources["no_password_provided"].ToString();
+                return;
+            }
+
+            if (Password.Length < 8 || !Password.Any(char.IsLower) || !Password.Any(char.IsUpper) ||
+                !Password.Any(char.IsDigit) || !Password.Any(c => !char.IsLetterOrDigit(c)))
+            {
+                ResultMessage = Application.Current.Resources["password_too_easy"].ToString();
                 return;
             }
 

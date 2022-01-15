@@ -76,8 +76,7 @@ namespace LangApp.WpfClient
                 {
                     while (_eventWaitHandle.WaitOne())
                     {
-                        Current.Dispatcher.BeginInvoke(
-                            (Action)(() => ((MainWindow)Current.MainWindow).EnsureVisibility()));
+                        Current.Dispatcher.BeginInvoke((Action)(() => EnsureWindowVisibility(Current.Windows[0])));
                     }
                 });
 
@@ -100,6 +99,20 @@ namespace LangApp.WpfClient
                 Configuration.GetInstance().NoConnection = true;
                 e.Handled = true;
             }
+        }
+
+        public static void EnsureWindowVisibility(Window window)
+        {
+            if (window.WindowState == WindowState.Minimized || window.Visibility == Visibility.Hidden)
+            {
+                window.Show();
+                window.WindowState = WindowState.Normal;
+            }
+
+            window.Activate();
+            window.Topmost = true;
+            window.Topmost = false;
+            window.Focus();
         }
     }
 }

@@ -100,7 +100,7 @@ namespace LangApp.WpfClient.ViewModels.Windows
                                         Configuration.GetInstance().IsLearnChecked = true;
                                     }
 
-                                    (Application.Current.Windows[0] as MainWindow).EnsureVisibility();
+                                    App.EnsureWindowVisibility(Application.Current.Windows[0]);
                                 });
                             }
                         }

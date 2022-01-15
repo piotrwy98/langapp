@@ -83,7 +83,7 @@
                         </md:PackIcon.Style>
                     </md:PackIcon>
 
-                    <TextBlock Text="{Binding ResultMessage}" VerticalAlignment="Center" FontSize="14" FontWeight="Bold">
+                    <TextBlock Text="{Binding ResultMessage}" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" TextWrapping="Wrap" Width="220">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
                                 <Setter Property="Foreground" Value="Green"/>

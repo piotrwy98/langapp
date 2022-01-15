@@ -110,19 +110,5 @@ namespace LangApp.WpfClient.Views.Windows
                 WindowState = WindowState.Normal;
             }
         }
-
-        public void EnsureVisibility()
-        {
-            if (WindowState == WindowState.Minimized || Visibility == Visibility.Hidden)
-            {
-                Show();
-                WindowState = WindowState.Normal;
-            }
-
-            Activate();
-            Topmost = true;
-            Topmost = false;
-            Focus();
-        }
     }
 }

@@ -17,6 +17,7 @@
     <system:String x:Key="no_server_connection">No server connection</system:String>
     <system:String x:Key="incorrect_login_details">Incorrect login details</system:String>
     <system:String x:Key="no_username_provided">No username provided</system:String>
+    <system:String x:Key="password_too_easy">Password needs to have at least 8 chars, contain lower and upper case letter, special char and digit</system:String>
     <system:String x:Key="passwords_do_not_match">Passwords do not match</system:String>
     <system:String x:Key="account_created_successfully">Account created successfully</system:String>
     <system:String x:Key="the_given_email_address_is_taken">Email address is taken</system:String>
