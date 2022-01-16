@@ -150,11 +150,14 @@
     <system:String x:Key="news">News</system:String>
     <system:String x:Key="remove_post">Remove the news</system:String>
     <system:String x:Key="remove_post_confirmation">Are you sure you want to remove the post titled</system:String>
+    <system:String x:Key="discard_changes">Discard changes</system:String>
+    <system:String x:Key="discard_changes_confirmation">Are you sure you want to discard changes?</system:String>
     <system:String x:Key="edit_post">Edit the post</system:String>
     <system:String x:Key="add_post">Add a post</system:String>
     <system:String x:Key="title">Title</system:String>
     <system:String x:Key="content">Content</system:String>
     <system:String x:Key="save">Save</system:String>
+    <system:String x:Key="cancel">Cancel</system:String>
     <system:String x:Key="yes">Yes</system:String>
     <system:String x:Key="no">No</system:String>
     <system:String x:Key="open_context">Open</system:String>

@@ -159,6 +159,7 @@
     <Compile Include="Converters\TextBoxEnterKeyUpdateBehavior.cs" />
     <Compile Include="Models\BilingualDictionary.cs" />
     <Compile Include="Models\ChartItem.cs" />
+    <Compile Include="Models\Post.cs" />
     <Compile Include="Models\Schedule.cs" />
     <Compile Include="Models\SessionSettings.cs" />
     <Compile Include="Models\ObjectToChoose.cs" />

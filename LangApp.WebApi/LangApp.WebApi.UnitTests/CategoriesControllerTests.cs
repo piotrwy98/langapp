@@ -43,7 +43,8 @@ namespace LangApp.WebApi.UnitTests
         public async Task GetCategoryAsyncTest()
         {
             // Arrange
-            _categoriesRepository.Setup(x => x.GetCategoryAsync(It.IsAny<uint>())).ReturnsAsync((CategoryName) null);
+            _categoriesRepository.Setup(x => x.GetCategoryAsync(It.IsAny<uint>()))
+                .ReturnsAsync((CategoryName) null);
 
             // Act
             var result = await _categoriesController.GetCategoryAsync(It.IsAny<uint>());

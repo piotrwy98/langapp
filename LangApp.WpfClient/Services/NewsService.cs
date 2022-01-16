@@ -15,20 +15,17 @@ namespace LangApp.WpfClient.Services
     {
         private static NewsService _instace;
 
-        public ObservableCollection<ObjectToChoose> News { get; }
+        public ObservableCollection<Post> Posts { get; }
 
         private NewsService()
         {
             var news = GetNewsAsync().Result.ToList();
             news = news.OrderByDescending(x => x.CreationDateTime).ToList();
-            News = new ObservableCollection<ObjectToChoose>();
+            Posts = new ObservableCollection<Post>();
 
-            foreach(var post in news)
+            foreach(var element in news)
             {
-                News.Add(new ObjectToChoose()
-                {
-                    Object = post,
-                });
+                Posts.Add(new Post(element));
             }
         }
 
@@ -82,16 +79,24 @@ namespace LangApp.WpfClient.Services
         public static async Task<bool> UpdateNewsAsync(News news)
         {
             var content = new StringContent(JsonConvert.SerializeObject(news), Encoding.UTF8, "application/json");
-            var response = await HttpClient.PutAsync("news", content).ConfigureAwait(false);
 
-            if(response.IsSuccessStatusCode)
+            try
             {
-                return true;
+                var response = await HttpClient.PutAsync("news", content).ConfigureAwait(false);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await Configuration.RefreshToken();
+                    return await UpdateNewsAsync(news);
+                }
             }
-            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            catch
             {
-                await Configuration.RefreshToken();
-                return await UpdateNewsAsync(news);
+                Configuration.GetInstance().NoConnection = true;
             }
 
             return false;

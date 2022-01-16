@@ -150,11 +150,14 @@
     <system:String x:Key="news">Aktualności</system:String>
     <system:String x:Key="remove_post">Usuń wpis</system:String>
     <system:String x:Key="remove_post_confirmation">Czy na pewno chcesz usunąć wpis o tytule</system:String>
+    <system:String x:Key="discard_changes">Porzuć zmiany</system:String>
+    <system:String x:Key="discard_changes_confirmation">Czy na pewno chcesz porzucić zmiany?</system:String>
     <system:String x:Key="edit_post">Edytuj wpis</system:String>
     <system:String x:Key="add_post">Dodaj wpis</system:String>
     <system:String x:Key="title">Tytuł</system:String>
     <system:String x:Key="content">Treść</system:String>
     <system:String x:Key="save">Zapisz</system:String>
+    <system:String x:Key="cancel">Anuluj</system:String>
     <system:String x:Key="yes">Tak</system:String>
     <system:String x:Key="no">Nie</system:String>
     <system:String x:Key="open_context">Otwórz</system:String>

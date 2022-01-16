@@ -169,10 +169,19 @@ namespace LangApp.WpfClient.ViewModels.Controls
                 }
 
                 objectToChoose.IsChosen = true;
+                var configuration = Configuration.GetInstance();
 
-                foreach (var category in Categories)
+                if (IsTest == true)
                 {
-                    category.OnPropertyChanged("Object");
+                    var dataContext = configuration.TestSettingsControl.DataContext;
+                    configuration.TestSettingsControl.DataContext = null;
+                    configuration.TestSettingsControl.DataContext = dataContext;
+                }
+                else
+                {
+                    var dataContext = configuration.LearnSettingsControl.DataContext;
+                    configuration.LearnSettingsControl.DataContext = null;
+                    configuration.LearnSettingsControl.DataContext = dataContext;
                 }
             }
         }

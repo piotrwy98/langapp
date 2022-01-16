@@ -16,10 +16,11 @@ namespace LangApp.WpfClient.ViewModels.Controls
         public ICommand EditNewsCommand { get; }
         public ICommand RemoveNewsCommand { get; }
         public ICommand SaveNewsCommand { get; }
+        public ICommand CancelNewsCommand { get; }
         #endregion
 
         #region Properties
-        public ObservableCollection<ObjectToChoose> News { get; }
+        public ObservableCollection<Post> Posts { get; }
         public bool IsUserAdmin { get; }
         public Configuration Configuration { get; }
         #endregion
@@ -30,47 +31,51 @@ namespace LangApp.WpfClient.ViewModels.Controls
             EditNewsCommand = new RelayCommand(EditNews);
             RemoveNewsCommand = new RelayCommand(RemoveNews);
             SaveNewsCommand = new RelayCommand(SaveNews);
+            CancelNewsCommand = new RelayCommand(CancelNews);
 
-            News = NewsService.GetInstance().News;
+            Posts = NewsService.GetInstance().Posts;
             IsUserAdmin = Configuration.User.Role == UserRole.ADMIN;
             Configuration = Configuration.GetInstance();
         }
 
         private void AddNews(object obj)
         {
-            News.Insert(0, new ObjectToChoose()
+            var news = new News()
             {
-                Object = new News()
-                {
-                    UserId = Configuration.User.Id
-                },
-                IsChosen = true
+                UserId = Configuration.User.Id
+            };
+
+            Posts.Insert(0, new Post(news)
+            {
+                IsEditing = true
             });
         }
 
         private void EditNews(object obj)
         {
-            var news = obj as ObjectToChoose;
-            if (news != null)
+            var post = obj as Post;
+            if (post != null)
             {
-                news.IsChosen = true;
+                post.Title = post.News.Title;
+                post.Content = post.News.Content;
+                post.IsEditing = true;
             }
         }
 
         private async void RemoveNews(object obj)
         {
-            var news = obj as ObjectToChoose;
-            if (news != null)
+            var post = obj as Post;
+            if (post != null)
             {
                 var confirmationWindow = new ConfirmationWindow(Application.Current.Resources["remove_post"].ToString(),
-                    Application.Current.Resources["remove_post_confirmation"].ToString() + " " + (news.Object as News).Title + "?");
+                    Application.Current.Resources["remove_post_confirmation"].ToString() + " " + post.Title + "?");
                 confirmationWindow.ShowDialog();
 
                 if (confirmationWindow.DialogResult == true)
                 {
-                    if (await NewsService.RemoveNewsAsync((news.Object as News).Id))
+                    if (await NewsService.RemoveNewsAsync(post.News.Id))
                     {
-                        News.Remove(news);
+                        Posts.Remove(post);
                     }
                 }
             }
@@ -78,24 +83,70 @@ namespace LangApp.WpfClient.ViewModels.Controls
 
         private async void SaveNews(object obj)
         {
-            var news = obj as ObjectToChoose;
-            if (news != null)
+            var post = obj as Post;
+            if (post != null)
             {
-                if((news.Object as News).Id != 0)
+                post.IsSaving = true;
+                Mouse.OverrideCursor = Cursors.AppStarting;
+
+                if (post.News.Id != 0)
                 {
-                    if (await NewsService.UpdateNewsAsync(news.Object as News))
+                    var oldTitle = post.News.Title;
+                    var oldContent = post.News.Content;
+
+                    post.News.Title = post.Title;
+                    post.News.Content = post.Content;
+
+                    if (await NewsService.UpdateNewsAsync(post.News))
                     {
-                        news.IsChosen = false;
+                        post.IsEditing = false;
+                        post.News = post.News;
+                    }
+                    else
+                    {
+                        post.News.Title = oldTitle;
+                        post.News.Content = oldContent;
                     }
                 }
                 else
                 {
-                    var createdNews = await NewsService.CreateNewsAsync(news.Object as News);
+                    post.News.Title = post.Title;
+                    post.News.Content = post.Content;
 
-                    if(createdNews != null)
+                    var createdNews = await NewsService.CreateNewsAsync(post.News);
+
+                    if (createdNews != null)
                     {
-                        news.Object = createdNews;
-                        news.IsChosen = false;
+                        post.News = createdNews;
+                        post.IsEditing = false;
+                    }
+                }
+
+                Mouse.OverrideCursor = null;
+                post.IsSaving = false;
+            }
+        }
+
+        private void CancelNews(object obj)
+        {
+            var post = obj as Post;
+            if (post != null)
+            {
+                var confirmationWindow = new ConfirmationWindow(Application.Current.Resources["discard_changes"].ToString(),
+                    Application.Current.Resources["discard_changes_confirmation"].ToString());
+                confirmationWindow.ShowDialog();
+
+                if (confirmationWindow.DialogResult == true)
+                {
+                    if (post.News.Id != 0)
+                    {
+                        post.Title = post.News.Title;
+                        post.Content = post.News.Content;
+                        post.IsEditing = false;
+                    }
+                    else
+                    {
+                        Posts.Remove(post);
                     }
                 }
             }
